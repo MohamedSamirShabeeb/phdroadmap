@@ -49,7 +49,6 @@
 </head>
 <body class="min-h-full text-slate-800 font-sans antialiased flex flex-col justify-between selection:bg-asu-gold selection:text-white">
 
-    <!-- STREAMING_CHUNK: Rendering Brand Header... -->
     <!-- Brand Header -->
     <header class="w-full bg-white border-b border-slate-200 px-6 py-4 flex flex-col lg:flex-row justify-between items-center z-30 sticky top-0 shadow-sm">
         <div class="flex items-center space-x-4 mb-4 lg:mb-0">
@@ -76,7 +75,6 @@
         </div>
     </header>
 
-    <!-- STREAMING_CHUNK: Setting up visual panels grid layout... -->
     <!-- Main Content Portrait Layout (Sequential Scrolling View) -->
     <main class="flex-1 w-full max-w-7xl mx-auto p-4 lg:p-8 flex flex-col gap-8">
         
@@ -110,7 +108,6 @@
             </div>
         </section>
 
-        <!-- STREAMING_CHUNK: Rendering baseline quantitative metric indicators... -->
         <!-- SECTION 2: Quantitative Progress Indicators Grid -->
         <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-white p-6 rounded-2xl border border-slate-200 flex flex-col justify-between shadow-sm">
@@ -156,60 +153,92 @@
             </div>
         </section>
 
-        <!-- STREAMING_CHUNK: Embedding API connections dashboard panel... -->
         <!-- SECTION 3: Interlinked Systems Integration Panel -->
-        <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl shadow-sm">
-            <h3 class="text-lg font-serif font-extrabold text-slate-900 mb-6 flex items-center">
+        <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl shadow-sm space-y-6">
+            <h3 class="text-lg font-serif font-extrabold text-slate-900 flex items-center">
                 <i class="fa-solid fa-circle-nodes mr-2.5 text-asu-gold animate-pulse"></i> Live External Integrations Tracker
             </h3>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Google Drive Card -->
-                <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl flex items-start space-x-4">
-                    <div class="p-3 bg-blue-500/10 text-blue-600 rounded-2xl text-2xl shadow-sm"><i class="fa-brands fa-google-drive"></i></div>
-                    <div class="flex-1 min-w-0 space-y-3">
-                        <div class="flex justify-between items-center">
+                <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col justify-between space-y-4">
+                    <div class="flex justify-between items-start">
+                        <div class="space-y-1">
                             <h4 class="text-sm font-bold text-slate-800">Google Drive Folder Sync</h4>
-                            <span id="sync-gdrive-indicator" class="w-3.5 h-3.5 bg-red-500 rounded-full transition-all duration-200 shadow-sm border border-white"></span>
-                        </div>
-                        <div class="space-y-2">
                             <p class="text-xs text-slate-500 leading-normal">
                                 Folder ID: <span id="sync-gdrive-id-display" class="font-mono text-asu-gold text-xs font-semibold break-all">None Loaded</span>
                             </p>
-                            <div class="flex space-x-2">
-                                <input type="text" id="input-gdrive-id" placeholder="Paste Folder ID here" class="w-full bg-white border border-slate-300 focus:ring-2 focus:ring-asu-emerald focus:border-asu-emerald rounded-lg px-3 py-2 text-xs text-slate-800 outline-none transition shadow-sm">
-                                <button onclick="saveGDriveFolderId()" class="bg-asu-gold hover:bg-yellow-500 text-slate-950 font-bold px-4 py-2 rounded-lg text-xs transition shadow-sm">Save</button>
-                            </div>
                         </div>
-                        <div class="flex space-x-3 text-xs font-semibold text-slate-500 pt-1">
-                            <span id="sync-gdrive-ver" class="bg-slate-200 px-2 py-0.5 rounded">Unverified</span>
-                            <span id="sync-gdrive-status" class="text-red-500 font-bold">Offline</span>
+                        <span id="sync-gdrive-indicator" class="w-3.5 h-3.5 bg-red-500 rounded-full shadow-sm border border-white"></span>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex space-x-2">
+                            <input type="text" id="input-gdrive-id" placeholder="Paste Folder ID here" class="w-full bg-white border border-slate-300 focus:ring-2 focus:ring-asu-emerald rounded-lg px-3 py-2 text-xs outline-none shadow-sm">
+                            <button onclick="saveGDriveFolderId()" class="bg-asu-gold hover:bg-yellow-500 text-slate-950 font-bold px-4 py-2 rounded-lg text-xs transition shadow-sm">Save</button>
                         </div>
+                        <p class="text-[10px] text-slate-400 italic leading-tight">
+                            *Note: Ensure your Drive folder is shared as "Anyone with link can view" to allow the browser to parse assets securely.
+                        </p>
+                    </div>
+                    <div class="flex space-x-3 text-xs font-semibold text-slate-500 pt-1">
+                        <span id="sync-gdrive-ver" class="bg-slate-200 px-2 py-0.5 rounded">Unverified</span>
+                        <span id="sync-gdrive-status" class="text-red-500 font-bold">Offline</span>
                     </div>
                 </div>
 
-                <!-- Mendeley Card -->
-                <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl flex items-start space-x-4">
-                    <div class="p-3 bg-red-500/10 text-red-600 rounded-2xl text-2xl shadow-sm"><i class="fa-solid fa-book"></i></div>
-                    <div class="flex-1 min-w-0 space-y-3">
-                        <div class="flex justify-between items-center">
-                            <h4 class="text-sm font-bold text-slate-800">Mendeley Library Connection</h4>
-                            <span id="sync-mendeley-indicator" class="w-3.5 h-3.5 bg-red-500 rounded-full transition-all duration-200 shadow-sm border border-white"></span>
+                <!-- Mendeley Live Drag & Drop Parser Card -->
+                <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col justify-between space-y-4">
+                    <div class="flex justify-between items-start">
+                        <div class="space-y-1">
+                            <h4 class="text-sm font-bold text-slate-800">Mendeley BibTeX Ingestion</h4>
+                            <p class="text-xs text-slate-500">Mendeley Group: <code class="font-mono text-asu-gold text-xs">UMP_Bubble_Dynamics_Egypt</code></p>
                         </div>
-                        <p class="text-xs text-slate-500 leading-normal">
-                            Group Library: <code class="font-mono text-asu-gold text-xs bg-white px-2 py-1 rounded border border-slate-200">UMP_Bubble_Dynamics_Egypt</code>
+                        <span id="sync-mendeley-indicator" class="w-3.5 h-3.5 bg-red-500 rounded-full shadow-sm border border-white"></span>
+                    </div>
+                    
+                    <!-- Drag & Drop Zone -->
+                    <div id="mendeley-dropzone" class="border-2 border-dashed border-slate-300 hover:border-asu-emerald bg-white rounded-xl p-4 text-center cursor-pointer transition flex flex-col items-center justify-center space-y-2">
+                        <i class="fa-solid fa-file-arrow-up text-2xl text-slate-400"></i>
+                        <span class="text-xs text-slate-500 font-medium">Drag & Drop <strong class="text-asu-emerald">.bib</strong> file here</span>
+                        <span class="text-[10px] text-slate-400">or click to upload from computer</span>
+                        <input type="file" id="mendeley-file-input" accept=".bib" class="hidden">
+                    </div>
+
+                    <div class="flex space-x-3 text-xs font-semibold text-slate-500 pt-1">
+                        <span id="mendeley-ver-count" class="bg-slate-200 px-2 py-0.5 rounded">0 Refs Loaded</span>
+                        <span id="sync-mendeley-status" class="text-red-500 font-bold">Unsynced</span>
+                    </div>
+                </div>
+
+                <!-- Notion Live API Simulator Card -->
+                <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col justify-between space-y-4">
+                    <div class="flex justify-between items-start">
+                        <div class="space-y-1">
+                            <h4 class="text-sm font-bold text-slate-800">Notion Workspace Sync</h4>
+                            <p class="text-xs text-slate-500">Auto-rollup your checklist progress directly to your Notion portal.</p>
+                        </div>
+                        <span id="sync-notion-indicator" class="w-3.5 h-3.5 bg-red-500 rounded-full shadow-sm border border-white"></span>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <div class="flex space-x-2">
+                            <input type="text" id="input-notion-id" placeholder="Paste Notion Database ID" class="w-full bg-white border border-slate-300 focus:ring-2 focus:ring-asu-emerald rounded-lg px-3 py-2 text-xs outline-none shadow-sm">
+                            <button onclick="saveNotionSettings()" class="bg-asu-gold hover:bg-yellow-500 text-slate-950 font-bold px-4 py-2 rounded-lg text-xs transition shadow-sm">Sync</button>
+                        </div>
+                        <p class="text-[10px] text-slate-400 leading-normal">
+                            Notion Page ID: <code id="notion-ver-id" class="font-mono text-asu-gold text-[10px]">None Loaded</code>
                         </p>
-                        <div class="flex space-x-3 text-xs font-semibold text-slate-500 pt-1">
-                            <span id="mendeley-ver-count" class="bg-slate-200 px-2 py-0.5 rounded">0 Refs Loaded</span>
-                            <span id="sync-mendeley-status" class="text-red-500 font-bold">Unsynced</span>
-                        </div>
+                    </div>
+
+                    <div class="flex space-x-3 text-xs font-semibold text-slate-500 pt-1">
+                        <span id="sync-notion-ver" class="bg-slate-200 px-2 py-0.5 rounded">Disconnected</span>
+                        <span id="sync-notion-status" class="text-red-500 font-bold">Offline</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- STREAMING_CHUNK: Constructing the high-fidelity Notion Data & Variables Ingestion Tracker... -->
-        <!-- SECTION 4: Live Data & Variables Ingestion Tracker (Notion Data Sync View) -->
+        <!-- SECTION 4: Live Data & Variables Ingestion Tracker (Premium Notion-Style Card Grid) -->
         <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl shadow-sm space-y-6">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-4">
                 <div>
@@ -229,26 +258,12 @@
                 <div id="data-readiness-bar" class="bg-asu-gold h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
             </div>
 
-            <!-- Custom Scrollable Table reflecting image_580456.jpg -->
-            <div class="overflow-x-auto border border-slate-200 rounded-2xl shadow-inner bg-white">
-                <table class="w-full text-left border-collapse text-xs">
-                    <thead>
-                        <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[11px]">
-                            <th class="p-3 w-48">Variable Name</th>
-                            <th class="p-3 w-36">Collection Status</th>
-                            <th class="p-3">Countries</th>
-                            <th class="p-3">Data Sources</th>
-                            <th class="p-3">Description</th>
-                        </tr>
-                    </thead>
-                    <tbody id="variables-table-body" class="divide-y divide-slate-150">
-                        <!-- Injected dynamic rows with Notion Tag Styling -->
-                    </tbody>
-                </table>
+            <!-- Beautiful Card Grid covering all 17 variables in the premium style from image_580f99.jpg -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="variables-tracker-grid">
+                <!-- Dynamic cards injected via JS -->
             </div>
         </section>
 
-        <!-- STREAMING_CHUNK: Embedding the Q1 Daily Task Matrix... -->
         <!-- SECTION 5: Quarter 1 Interactive Daily Task Matrix -->
         <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl space-y-6 shadow-sm">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-4">
@@ -299,9 +314,8 @@
             </div>
         </section>
 
-        <!-- STREAMING_CHUNK: Integrating Sandbox inputs panel... -->
         <!-- SECTION 6: Actual Progress Diagnostic Logger (Sandbox Inputs) -->
-        <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl shadow-sm space-y-6">
+        <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl space-y-6 shadow-sm">
             <div class="flex justify-between items-center border-b border-slate-100 pb-4">
                 <h3 class="text-lg font-serif font-extrabold text-slate-900 flex items-center">
                     <i class="fa-solid fa-sliders mr-2.5 text-asu-gold"></i> Actual Progress Diagnostic Logger
@@ -338,7 +352,6 @@
             </div>
         </section>
 
-        <!-- STREAMING_CHUNK: Embedding diagnostics workspace & Google Drive iframe window... -->
         <!-- SECTION 7: Diagnostic Reporting & Live Iframe Previews -->
         <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             
@@ -386,7 +399,6 @@ Loading analysis metrics...
             </div>
         </section>
 
-        <!-- STREAMING_CHUNK: Integrating the Notion PhD Journey banner... -->
         <!-- SECTION 8: Quarter 1 Master Curriculum & Notion Synchronizer -->
         <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl space-y-6 shadow-sm">
             
@@ -398,7 +410,7 @@ Loading analysis metrics...
                     </div>
                     <div>
                         <h3 class="text-base font-bold text-slate-800">Your Live Notion PhD Journey Dashboard</h3>
-                        <p class="text-xs text-slate-500">Track tasks, logs, references, and variables in your official workspace [cite: 112].</p>
+                        <p class="text-xs text-slate-500">Track tasks, logs, references, and variables in your official workspace.</p>
                     </div>
                 </div>
                 <a href="https://app.notion.com/p/PhD-Journey-Dashboard-f25edb9e927e4f1991fe5b1733e12965?source=copy_link" target="_blank" class="w-full md:w-auto px-6 py-2.5 bg-black hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center justify-center space-x-2">
@@ -417,7 +429,7 @@ Loading analysis metrics...
                 </div>
                 <div class="flex items-center space-x-2">
                     <span class="text-xs font-semibold text-slate-500">Filter Week:</span>
-                    <select id="curriculum-week-filter" onchange="renderCurriculumTable()" class="bg-slate-50 border border-slate-300 focus:border-asu-emerald focus:ring-1 focus:ring-asu-emerald rounded-lg px-3 py-1.5 text-xs text-slate-700 font-semibold outline-none transition cursor-pointer">
+                    <select id="curriculum-week-filter" onchange="renderCurriculumTable()" class="bg-slate-50 border border-slate-300 focus:border-asu-emerald focus:ring-1 focus:ring-asu-emerald rounded-lg px-3 py-1.5 text-xs text-slate-700 font-semibold outline-none transition cursor-pointer font-sans">
                         <option value="all">Show All Q1 Weeks (Weeks 1-13)</option>
                         <option value="1">Week 1: Foundations & Git Setup</option>
                         <option value="2">Week 2: Advanced Calculus</option>
@@ -459,7 +471,7 @@ Loading analysis metrics...
     </main>
 
     <!-- UI Page Footer -->
-    <footer class="w-full py-6 mt-8 border-t border-slate-200 bg-white text-center text-xs text-slate-500">
+    <footer class="w-full py-6 mt-8 border-t border-slate-200 bg-white text-center text-xs text-slate-500 font-sans">
         Ain Shams University - Faculty of Business <br>
         Department of Economics — Doctoral Campaign Panel 2026-2028
     </footer>
@@ -470,7 +482,6 @@ Loading analysis metrics...
         <span id="toast-message">Report generated successfully!</span>
     </div>
 
-    <!-- STREAMING_CHUNK: Running JavaScript logical blocks... -->
     <!-- Script Engine -->
     <script>
         // Clean Slate Day 1 starts with exact zeros to build up
@@ -487,155 +498,144 @@ Loading analysis metrics...
 
         // Complete 17-Variable Syllabus mapped from image_580456.jpg with Notion Tags
         const variablesSyllabus = {
-            "price_capital": { name: "Price of Capital (Q_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["Central Banks", "Bloomberg"], desc: "Tobin's Q / asset prices" },
-            "wages": { name: "Wages (W_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["ILO", "National Accounts"], desc: "Real wages. Proxies: (1) Average hourly earnings" },
-            "capital_return": { name: "Capital Return (R_k,t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["Central Banks", "National Accounts"], desc: "Return on capital. Proxies: corporate yields" },
-            "inflation": { name: "Inflation (\\pi_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["Central Banks", "IMF", "World Bank"], desc: "Inflation rate. Proxies: CPI headline & core" },
-            "equity": { name: "Equity (E_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["Central Banks", "BIS", "Bloomberg"], desc: "Bank equity (real). Proxies: Tier 1 capital ratios" },
-            "investment": { name: "Investment (I_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["World Bank", "IMF", "National Accounts"], desc: "Gross Fixed Capital Formation" },
-            "productivity": { name: "Productivity (A_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["World Bank", "OECD", "IMF"], desc: "Total Factor Productivity (TFP) Solow residual" },
-            "output_gap": { name: "Output Gap (\\hat{Y}_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["FRED", "OECD", "IMF"], desc: "Deviation from potential GDP. HP Filtered" },
-            "forward_guidance": { name: "Forward Guidance (R_f,t)", countries: ["US", "Eurozone", "UK", "Switzerland", "Japan"], sources: ["Central Banks", "Bloomberg"], desc: "Expected future interest rates. OIS curves" },
-            "bonds": { name: "Bonds (B_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["Central Banks", "BIS", "National Accounts"], desc: "Household bond holdings. sovereign bonds" },
-            "interest_rate": { name: "Interest Rate (R_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["Central Banks", "FRED", "Bloomberg"], desc: "Nominal interest rate. CBE corridor history" },
-            "risk_premium": { name: "Risk Premium (R_kt - R_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["Central Banks", "BIS", "Bloomberg"], desc: "Credit spreads. Corporate vs sovereign yields" },
-            "output": { name: "Output (Y_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["IMF", "World Bank", "Central Banks"], desc: "Real GDP. Proxies: real quarterly growth rates" },
-            "consumption": { name: "Consumption (C_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["Central Banks", "National Accounts"], desc: "Real Household Consumption expenditure" },
-            "leverage": { name: "Leverage (\\phi_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["Central Banks", "BIS", "Bloomberg"], desc: "Banking sector leverage constraint" },
-            "loans": { name: "Loans (L_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["Central Banks", "BIS", "IMF"], desc: "Real credit to private sector / credit gap" },
-            "quantitative_easing": { name: "Quantitative Easing (QE_t)", countries: ["US", "Eurozone", "UK", "Switzerland", "Japan"], sources: ["Central Banks", "FRED"], desc: "Central bank asset purchases. Fed Balance Sheet size" }
+            "price_capital": { name: "Price of Capital ($Q_t$)", sector: "Real Sector", target: "Central Banks / Bloomberg", code: "EGY_PRICE_CAP", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland", "Japan"], sources: ["Central Banks", "Bloomberg"], desc: "Tobin's Q / asset prices" },
+            "wages": { name: "Wages ($W_t$)", sector: "Real Sector", target: "ILO / National Accounts", code: "EGY_WAGES", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland", "Japan"], sources: ["ILO", "National Accounts"], desc: "Real wages. Proxies: (1) Average hourly earnings" },
+            "capital_return": { name: "Capital Return ($R_{k,t}$)", sector: "Real Sector", target: "Central Banks / National Accounts", code: "EGY_CAP_RETURN", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland", "Japan"], sources: ["Central Banks", "National Accounts"], desc: "Return on capital. Proxies: corporate yields" },
+            "inflation": { name: "Inflation ($\\pi_t$)", sector: "Price Stability", target: "Central Banks / IMF / World Bank", code: "EGY_INFLATION", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland", "Japan"], sources: ["Central Banks", "IMF", "World Bank"], desc: "Inflation rate. Proxies: CPI headline & core" },
+            "equity": { name: "Equity ($E_t$)", sector: "Financial Sector", target: "Central Banks / BIS / Bloomberg", code: "EGY_BANK_EQUITY", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland", "Japan"], sources: ["Central Banks", "BIS", "Bloomberg"], desc: "Bank equity (real). Proxies: Tier 1 capital ratios" },
+            "investment": { name: "Investment ($I_t$)", sector: "Real Sector", target: "World Bank / IMF / National Accounts", code: "EGY_INVESTMENT", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland", "Japan"], sources: ["World Bank", "IMF", "National Accounts"], desc: "Gross Fixed Capital Formation (GFCF)" },
+            "productivity": { name: "Productivity ($A_t$)", sector: "Real Sector", target: "World Bank / OECD / IMF", code: "EGY_PRODUCTIVITY", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland", "Japan"], sources: ["World Bank", "OECD", "IMF"], desc: "Total Factor Productivity (TFP) Solow residual" },
+            "output_gap": { name: "Output Gap ($\\hat{Y}_t$)", sector: "Real Sector", target: "FRED / OECD / IMF", code: "EGY_OUTPUT_GAP", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland", "Japan"], sources: ["FRED", "OECD", "IMF"], desc: "Deviation from potential GDP. HP Filtered" },
+            "forward_guidance": { name: "Forward Guidance ($R_{f,t}$)", sector: "Spillovers", target: "Central Banks / Bloomberg", code: "UMP_FORWARD_GUIDANCE", countries: ["US", "Eurozone", "UK", "Switzerland", "Japan"], sources: ["Central Banks", "Bloomberg"], desc: "Expected future interest rates. OIS curves" },
+            "bonds": { name: "Bonds ($B_t$)", sector: "Financial Sector", target: "Central Banks / BIS / National Accounts", code: "EGY_BONDS", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland", "Japan"], sources: ["Central Banks", "BIS", "National Accounts"], desc: "Household bond holdings. sovereign bonds" },
+            "interest_rate": { name: "Interest Rate ($R_t$)", sector: "Monetary Policy", target: "Central Banks / FRED / Bloomberg", code: "EGY_POLICY_RATE", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland", "Japan"], sources: ["Central Banks", "FRED", "Bloomberg"], desc: "Nominal interest rate. CBE corridor rate history" },
+            "risk_premium": { name: "Risk Premium ($R_{k,t} - R_t$)", sector: "Financial Sector", target: "Central Banks / BIS / Bloomberg", code: "EGY_RISK_PREMIUM", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland", "Japan"], sources: ["Central Banks", "BIS", "Bloomberg"], desc: "Credit spreads. Corporate vs sovereign yields" },
+            "output": { name: "Output ($Y_t$)", sector: "Real Sector", target: "IMF / World Bank / Central Banks", code: "EGY_OUTPUT", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland", "Japan"], sources: ["IMF", "World Bank", "Central Banks"], desc: "Real GDP. Proxies: real quarterly growth rates" },
+            "consumption": { name: "Consumption ($C_t$)", sector: "Real Sector", target: "Central Banks / National Accounts", code: "EGY_CONSUMPTION", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland", "Japan"], sources: ["Central Banks", "National Accounts"], desc: "Real Household Consumption expenditure" },
+            "leverage": { name: "Leverage ($\\varphi_t$)", sector: "Financial Sector", target: "Central Banks / BIS / Bloomberg", code: "EGY_BANK_LEVERAGE", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland", "Japan"], sources: ["Central Banks", "BIS", "Bloomberg"], desc: "Banking sector leverage constraint" },
+            "loans": { name: "Loans ($L_t$)", sector: "Financial Sector", target: "Central Banks / BIS / IMF", code: "EGY_LOANS", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland", "Japan"], sources: ["Central Banks", "BIS", "IMF"], desc: "Real credit to private sector / credit ... " },
+            "quantitative_easing": { name: "Quantitative Easing ($QE_t$)", sector: "Spillovers", target: "Central Banks / FRED", code: "UMP_QE_STOCK", countries: ["US", "Eurozone", "UK", "Switzerland", "Japan"], sources: ["Central Banks", "FRED"], desc: "Central bank asset purchases. Fed Balance Sheet size" }
         };
 
         // Initialize variables status state
         let variablesState = {};
 
-        // Core curriculum data mapping for 13 weeks of Q1
-        const weekSyllabus = {
-            1: { theme: "Foundations & Git Setup", math: "Matrix operations, determinants, and matrix dimensions.", coding: "Install Anaconda, RStudio, and initialize remote Git repository.", writing: "Outline Chapter 1 structural headers and target formatting layouts." },
-            2: { theme: "Advanced Calculus & CBE Data", math: "Partial derivatives, limits, and multivariate differentiation.", coding: "Python coding syntax basics, data structures, and loops.", writing: "Draft Chapter 1.1 (Background on post-GFC monetary shifts)." },
-            3: { theme: "Linear Algebra & Matrix Ingestion", math: "Matrix inversion, systems of equations, and vector transpositions.", coding: "Wrangle raw Central Bank of Egypt quarterly indicators into pandas.", writing: "Draft Chapter 1.1.1 (Timeline of global QE and forward guidance)." },
-            4: { theme: "Optimization & Taylor Rules", math: "Lagrangian multipliers and constrained optimization methods.", coding: "R programming variables, vector syntax, and file configurations.", writing: "Draft Chapter 1.1.2 (Mishkin's credit-driven bubble framework)." },
-            5: { theme: "ODEs & Descriptive Statistics", math: "First-order Ordinary Differential Equations and stability states.", coding: "Write Python scripts to check and filter outliers and data gaps.", writing: "Draft Chapter 1.1.3 (Emerging market structural challenges)." },
-            6: { theme: "Difference Equations & Structural Breaks", math: "First-order linear difference equations and discrete-time paths.", coding: "Identify and plot 2016 and 2022 currency devaluations in R.", writing: "Draft Chapter 1.2 (Problem Statement: the UMP-bubble paradox)." },
-            7: { theme: "Probability, Expectations & EViews Panel", math: "Conditional expectation operators and stochastic variables.", coding: "Configure unmerged, stacked panel layouts for EViews compatibility.", writing: "Draft Chapter 1.2.1 (Borio's risk-taking channel)." },
-            8: { theme: "Panel Data Estimations & OLS Theory", math: "The matrix algebra of Ordinary Least Squares (OLS) estimation.", coding: "Ingest master panel files into EViews and run baseline ADF tests.", writing: "Draft Chapter 1.2.2 (Weaker regulation & dollarization)." },
-            9: { theme: "Open-Economy Macro & Euler Calibration", math: "Log-linearization techniques and household Euler equations.", coding: "MATLAB/Octave matrix parameters and directory configurations.", writing: "Draft Chapter 1.2.3 (Egypt as a critical case study)." },
-            10: { theme: "New Keynesian DSGE & Steady-States", math: "Micro-foundations of Calvo pricing and aggregate inflation.", coding: "Set up the primary Dynare .mod script specifying parameters.", writing: "Draft Chapter 1.3 (Primary & secondary research questions)." },
-            11: { theme: "Dynare Coding & RBC Solutions", math: "Solving steady-state levels of standard closed RBC models.", coding: "Code and solve a baseline RBC model in Dynare, verifying BK ranks.", writing: "Draft Chapter 1.3.3 (Formulate hypotheses H1, H2, H3)." },
-            12: { theme: "Dynare Parameter Calibrations & Diagnostics", math: "Prior distributions, Bayesian algorithms, and likelihood estimates.", coding: "Write the analytical steady-state helper file (_steadystate.m).", writing: "Draft Chapter 1.4 (Main and specific objectives)." },
-            13: { theme: "Q1 Synthesis & Paper 1 Draft", math: "Evaluating Blanchard-Kahn rank condition stability theorems.", coding: "Run baseline model simulation diagnostics on your NK open DSGE.", writing: "Draft Chapter 1.5 (Thesis structure roadmap summary)." }
+        // Initialize values on load
+        window.onload = function() {
+            loadChecklistState();
+            loadVariablesState();
+            loadGDriveSettings();
+            initializeMatrixSelectors();
+            initializeMendeleyParser();
+            resetToZero();
         };
 
-        // STREAMING_CHUNK: Managing state retrievals...
         // Load Variables Ingestion state from localStorage
         function loadVariablesState() {
-            const saved = localStorage.getItem('phd_ews_variables_state_july26_v2');
+            const saved = localStorage.getItem('phd_ews_variables_state_july26_v4');
             if (saved) {
                 variablesState = JSON.parse(saved);
             } else {
-                // Initialize default Not Started state
+                // Initialize default Pending state
                 Object.keys(variablesSyllabus).forEach(vKey => {
-                    variablesState[vKey] = "Not Started";
+                    variablesState[vKey] = "Pending";
                 });
             }
             renderVariablesTracker();
         }
 
         function saveVariablesState() {
-            localStorage.setItem('phd_ews_variables_state_july26_v2', JSON.stringify(variablesState));
+            localStorage.setItem('phd_ews_variables_state_july26_v4', JSON.stringify(variablesState));
             renderVariablesTracker();
             calculateEwsScore();
         }
 
-        // STREAMING_CHUNK: Designing visual Notion pill tags...
-        // Styling helper for Notion country tags
-        function getCountryTagHtml(country) {
-            let colors = "bg-slate-100 text-slate-700 border-slate-200";
-            if (country === "Egypt") colors = "bg-teal-50 text-teal-700 border-teal-150 font-semibold";
-            else if (country === "US") colors = "bg-blue-50 text-blue-700 border-blue-150";
-            else if (country === "Eurozone") colors = "bg-purple-50 text-purple-700 border-purple-150";
-            else if (country === "UK") colors = "bg-indigo-50 text-indigo-700 border-indigo-150";
-            else if (country === "Switzerland") colors = "bg-pink-50 text-pink-700 border-pink-150";
-            else if (country === "Japan") colors = "bg-orange-50 text-orange-700 border-orange-150";
-
-            return `<span class="px-2 py-0.5 rounded text-[11px] border ${colors}">${country}</span>`;
-        }
-
-        // Styling helper for Notion data source tags
-        function getSourceTagHtml(source) {
-            let colors = "bg-slate-100 text-slate-700 border-slate-200";
-            if (source === "Central Banks") colors = "bg-rose-50 text-rose-700 border-rose-150";
-            else if (source === "Bloomberg") colors = "bg-amber-50 text-amber-700 border-amber-150";
-            else if (source === "ILO") colors = "bg-slate-100 text-slate-700 border-slate-200";
-            else if (source === "National Accounts") colors = "bg-emerald-50 text-emerald-700 border-emerald-150";
-            else if (source === "IMF") colors = "bg-cyan-50 text-cyan-700 border-cyan-150";
-            else if (source === "World Bank") colors = "bg-sky-50 text-blue-700 border-sky-150";
-            else if (source === "BIS") colors = "bg-orange-50 text-orange-700 border-orange-150";
-            else if (source === "FRED") colors = "bg-violet-50 text-violet-700 border-violet-150";
-            else if (source === "OECD") colors = "bg-yellow-50 text-yellow-700 border-yellow-150";
-
-            return `<span class="px-2 py-0.5 rounded text-[11px] border ${colors}">${source}</span>`;
-        }
-
-        // STREAMING_CHUNK: Rendering high-fidelity Notion table...
-        // Render 17 Notion Variables inside tabular view
+        // Render Data Ingestion Status variables inside visual DOM grid card layout matching image_580f99.jpg
         function renderVariablesTracker() {
-            const tableBody = document.getElementById('variables-table-body');
-            tableBody.innerHTML = '';
-
+            const container = document.getElementById('variables-tracker-grid');
+            container.innerHTML = '';
             let totalProgressWeight = 0;
             const keys = Object.keys(variablesSyllabus);
 
             keys.forEach(vKey => {
                 const item = variablesSyllabus[vKey];
-                const status = variablesState[vKey] || "Not Started";
+                const status = variablesState[vKey] || "Pending";
 
-                // Progress weight calculations
                 let progWeight = 0;
-                let selectClass = "";
+                let pillClass = "";
 
-                if (status === "Not Started") {
+                if (status === "Pending") {
                     progWeight = 0;
-                    selectClass = "bg-red-50 text-red-700 border-red-200";
+                    pillClass = "bg-red-100 text-red-800 border-red-200";
                 } else if (status === "Sourced") {
                     progWeight = 35;
-                    selectClass = "bg-blue-50 text-blue-700 border-blue-200";
+                    pillClass = "bg-blue-100 text-blue-800 border-blue-200";
                 } else if (status === "Wrangled") {
                     progWeight = 70;
-                    selectClass = "bg-amber-50 text-amber-700 border-amber-200";
+                    pillClass = "bg-amber-100 text-amber-800 border-amber-200";
                 } else if (status === "Integrated") {
                     progWeight = 100;
-                    selectClass = "bg-emerald-50 text-emerald-700 border-emerald-200";
+                    pillClass = "bg-emerald-100 text-emerald-800 border-emerald-200";
                 }
-
                 totalProgressWeight += progWeight;
 
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50/50 transition";
-                
-                // Format Countries pill tags
-                const countriesHtml = item.countries.map(c => getCountryTagHtml(c)).join(' ');
-                // Format Sources pill tags
-                const sourcesHtml = item.sources.map(s => getSourceTagHtml(s)).join(' ');
+                // Format country tags dynamically based on Notion database scheme
+                const countriesHtml = item.countries.map(c => {
+                    let colors = "bg-slate-100 text-slate-700 border-slate-200";
+                    if (c === "Egypt") colors = "bg-teal-50 text-teal-700 border-teal-200 font-semibold";
+                    else if (c === "US") colors = "bg-blue-50 text-blue-700 border-blue-200";
+                    else if (c === "Eurozone") colors = "bg-purple-50 text-purple-700 border-purple-200";
+                    else if (c === "UK") colors = "bg-indigo-50 text-indigo-700 border-indigo-200";
+                    else if (c === "Switzerland") colors = "bg-pink-50 text-pink-700 border-pink-200";
+                    else if (c === "Japan") colors = "bg-orange-50 text-orange-700 border-orange-200";
+                    return `<span class="px-1.5 py-0.5 rounded text-[9px] border ${colors}">${c}</span>`;
+                }).join(' ');
 
-                tr.innerHTML = `
-                    <td class="p-3 font-semibold text-slate-800 text-xs flex items-center space-x-2">
-                        <i class="fa-solid fa-file-invoice text-slate-400"></i>
-                        <span>${item.name}</span>
-                    </td>
-                    <td class="p-3">
-                        <select onchange="updateVariableStatus('${vKey}', this.value)" class="text-[11px] font-semibold rounded px-2.5 py-1 outline-none border cursor-pointer ${selectClass}">
-                            <option value="Not Started" ${status === "Not Started" ? "selected" : ""}>Not Started</option>
+                // Format source tags dynamically based on Notion database scheme
+                const sourcesHtml = item.sources.map(s => {
+                    let colors = "bg-slate-150 text-slate-600 border-slate-200";
+                    if (s === "Central Banks") colors = "bg-rose-50 text-rose-700 border-rose-200";
+                    else if (s === "Bloomberg") colors = "bg-amber-50 text-amber-700 border-amber-200";
+                    else if (s === "ILO") colors = "bg-gray-100 text-gray-700 border-gray-200";
+                    else if (s === "National Accounts") colors = "bg-emerald-50 text-emerald-700 border-emerald-200";
+                    else if (s === "IMF") colors = "bg-cyan-50 text-cyan-700 border-cyan-200";
+                    else if (s === "World Bank") colors = "bg-sky-50 text-sky-700 border-sky-200";
+                    else if (s === "BIS") colors = "bg-indigo-50 text-indigo-700 border-indigo-200";
+                    else if (s === "FRED") colors = "bg-violet-50 text-violet-700 border-violet-200";
+                    else if (s === "OECD") colors = "bg-yellow-50 text-yellow-700 border-yellow-200";
+                    return `<span class="px-1.5 py-0.5 rounded text-[9px] border ${colors}">${s}</span>`;
+                }).join(' ');
+
+                const card = document.createElement('div');
+                card.className = "p-5 bg-white border border-slate-200 rounded-2xl flex flex-col justify-between space-y-4 hover:shadow-md transition shadow-sm";
+                card.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div class="space-y-1">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">${item.sector}</span>
+                            <h4 class="text-xs font-bold text-slate-800">${item.name}</h4>
+                        </div>
+                        <span class="text-asu-emerald text-sm"><i class="fa-solid fa-database"></i></span>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="text-[10px] text-slate-500 leading-normal">
+                            EViews Panel Label: <code class="text-asu-gold font-mono bg-slate-50 px-1 py-0.5 rounded border border-slate-100">${item.code}</code>
+                        </p>
+                        <div class="space-y-1.5">
+                            <div class="flex flex-wrap gap-1">${countriesHtml}</div>
+                            <div class="flex flex-wrap gap-1">${sourcesHtml}</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between gap-2 border-t border-slate-100 pt-3">
+                        <span class="text-[9px] px-2 py-0.5 rounded-full border ${pillClass} font-semibold uppercase tracking-wider">${status}</span>
+                        <select onchange="updateVariableStatus('${vKey}', this.value)" class="bg-white border border-slate-300 focus:border-asu-emerald rounded px-1.5 py-0.5 text-[10px] text-slate-600 outline-none cursor-pointer">
+                            <option value="Pending" ${status === "Pending" ? "selected" : ""}>Pending</option>
                             <option value="Sourced" ${status === "Sourced" ? "selected" : ""}>Sourced</option>
                             <option value="Wrangled" ${status === "Wrangled" ? "selected" : ""}>Wrangled</option>
                             <option value="Integrated" ${status === "Integrated" ? "selected" : ""}>Integrated</option>
                         </select>
-                    </td>
-                    <td class="p-3"><div class="flex flex-wrap gap-1.5">${countriesHtml}</div></td>
-                    <td class="p-3"><div class="flex flex-wrap gap-1.5">${sourcesHtml}</div></td>
-                    <td class="p-3 text-slate-500 max-w-xs truncate" title="${item.desc}">${item.desc}</td>
+                    </div>
                 `;
-                tableBody.appendChild(tr);
+                container.appendChild(card);
             });
 
             // Update Overall Data Readiness Percentages
@@ -648,10 +648,9 @@ Loading analysis metrics...
         function updateVariableStatus(vKey, newStatus) {
             variablesState[vKey] = newStatus;
             saveVariablesState();
-            showToast(`Variable ${vKey} status updated to ${newStatus}!`);
+            showToast(`Variable ${variablesSyllabus[vKey].code} status updated to ${newStatus}!`);
         }
 
-        // STREAMING_CHUNK: Managing localStorage checklist updates...
         // Load checklist checks from local storage
         function loadChecklistState() {
             const saved = localStorage.getItem('phd_ews_checklist_state_july26');
@@ -755,155 +754,75 @@ Loading analysis metrics...
             renderMatrixChecklist();
         }
 
-        // Algorithmically calculate unique, detailed Q1 deliverables based on selected day-of-quarter
-        function getDailyTasks(day) {
-            const week = Math.min(13, Math.ceil(day / 7));
-            const dow = ((day - 1) % 7) + 1;
-            const wSyllabus = weekSyllabus[week];
-            
-            const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-            const dayName = dayNames[dow - 1];
-            
-            let mathDescription = "";
-            let codingDescription = "";
-            let writingDescription = "";
-            let targetWords = 0;
-            let citationsLogged = 0;
-            
-            switch(dow) {
-                case 1:
-                    mathDescription = `Review definitions of ${wSyllabus.math}. Read Chapter 1 prerequisites. Complete 5 diagnostic notation drills.`;
-                    codingDescription = `Initialize local coding folders. Configure scripts and test package updates for ${wSyllabus.coding}.`;
-                    writingDescription = `Structure academic subsections and draft opening paragraph points for ${wSyllabus.writing}.`;
-                    targetWords = 150;
-                    citationsLogged = 1;
-                    break;
-                case 2:
-                    mathDescription = `Solve 5 sample mathematical proofs step-by-step in your notebook, focusing on ${wSyllabus.math}.`;
-                    codingDescription = `Write and run basic operations testing variables and functions in ${wSyllabus.coding}.`;
-                    writingDescription = `Perform thematic database checks and identify 3 key citations from Zotero/Mendeley for ${wSyllabus.writing}.`;
-                    targetWords = 200;
-                    citationsLogged = 2;
-                    break;
-                case 3:
-                    mathDescription = `Calculate 10 mathematical exercises on ${wSyllabus.math} and cross-verify with textbook solution keys.`;
-                    codingDescription = `Build a clean, local script to automate raw data cleaning and transformations for ${wSyllabus.coding}.`;
-                    writingDescription = `Draft a raw paragraph block (approx. 250 words) establishing literature connections for ${wSyllabus.writing}.`;
-                    targetWords = 300;
-                    citationsLogged = 1;
-                    break;
-                case 4:
-                    mathDescription = `Examine the applied macroeconomic role of ${wSyllabus.math} inside New Keynesian structures.`;
-                    codingDescription = `Import raw CBE data and execute validation checks on your program running ${wSyllabus.coding}.`;
-                    writingDescription = `Polishing pass: review drafts written this week. Enhance flow, style, and citation tags for ${wSyllabus.writing}.`;
-                    targetWords = 250;
-                    citationsLogged = 2;
-                    break;
-                case 5:
-                    mathDescription = `Map out limits, dynamic boundary constraints, and shadow variables modeling ${wSyllabus.math}.`;
-                    codingDescription = `Optimize execution, eliminate redundant logic, and resolve compile warnings for ${wSyllabus.coding}.`;
-                    writingDescription = `Incorporate specific Egypt-context data details or historical CBE policy indicators into ${wSyllabus.writing}.`;
-                    targetWords = 200;
-                    citationsLogged = 1;
-                    break;
-                case 6:
-                    mathDescription = `Conduct a comprehensive weekly mathematics review, compiling all steps on ${wSyllabus.math}.`;
-                    codingDescription = `Add documentation comments. Synchronize and push your local scripting folder to your remote Git repository.`;
-                    writingDescription = `Integrate all sections drafted this week into your master dissertation document. Run consistency checks.`;
-                    targetWords = 400;
-                    citationsLogged = 3;
-                    break;
-                case 7:
-                    mathDescription = `Take a timed, 1-hour self-assessment challenge on ${wSyllabus.math} to test your analytical mastery.`;
-                    codingDescription = `Re-run your entire coding folder from a clean console state to guarantee replication accuracy.`;
-                    writingDescription = `Verify that all inline citations are correctly mapped and formatted against your reference manager bibliography.`;
-                    targetWords = 0; // Sunday is reserved for revision and replication checks
-                    citationsLogged = 0;
-                    break;
-            }
-            
-            return {
-                dayName,
-                mathDescription,
-                codingDescription,
-                writingDescription,
-                targetWords,
-                citationsLogged
+        // Initialize drag-and-drop parsing zone for Mendeley BibTeX Ingestion
+        function initializeMendeleyParser() {
+            const dropzone = document.getElementById('mendeley-dropzone');
+            const fileInput = document.getElementById('mendeley-file-input');
+
+            // Drag over effects
+            dropzone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropzone.classList.add('border-asu-emerald', 'bg-slate-100/50');
+            });
+
+            // Drag leave effects
+            dropzone.addEventListener('dragleave', () => {
+                dropzone.classList.remove('border-asu-emerald', 'bg-slate-100/50');
+            });
+
+            // Drop file payload
+            dropzone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropzone.classList.remove('border-asu-emerald', 'bg-slate-100/50');
+                const file = e.dataTransfer.files[0];
+                if (file && file.name.endsWith('.bib')) {
+                    parseBibTeX(file);
+                } else {
+                    showToast("Please drop a valid Mendeley .bib file.");
+                }
+            });
+
+            // Click trigger mapping
+            dropzone.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file && file.name.endsWith('.bib')) {
+                    parseBibTeX(file);
+                }
+            });
+        }
+
+        function parseBibTeX(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                const entries = content.match(/@[a-zA-Z]+\s*\{/g) || [];
+                const citationCount = entries.length;
+
+                // Sync counter to inputs and refresh EWS score
+                document.getElementById('input-citations').value = citationCount;
+                calculateEwsScore();
+                showToast(`Successfully matched and parsed ${citationCount} references from Mendeley!`);
             };
+            reader.readAsText(file);
         }
 
-        // STREAMING_CHUNK: Rendering daily checklist block...
-        // Render the 3-Block Task Checklist dynamically in the DOM
-        function renderMatrixChecklist() {
-            const selectedDay = parseInt(document.getElementById('matrix-day-selector').value) || 1;
-            const tasks = getDailyTasks(selectedDay);
-            const container = document.getElementById('daily-checklist-blocks');
-            
-            container.innerHTML = '';
-            
-            // Check state variables
-            const mathDone = checklistState[`day-${selectedDay}-math`] || false;
-            const codeDone = checklistState[`day-${selectedDay}-code`] || false;
-            const writeDone = checklistState[`day-${selectedDay}-write`] || false;
-            
-            // Block 1: Mathematics
-            const mBlock = document.createElement('div');
-            mBlock.className = `p-4 rounded-xl border transition-all ${mathDone ? 'bg-asu-emerald/10 border-asu-emerald text-emerald-700' : 'bg-slate-50 border-slate-200 text-slate-600'}`;
-            mBlock.innerHTML = `
-                <div class="flex items-center space-x-2.5 mb-2">
-                    <input type="checkbox" id="chk-m-${selectedDay}" ${mathDone ? 'checked' : ''} onchange="toggleCheckItem(${selectedDay}, 'math')" class="rounded text-asu-emerald focus:ring-asu-emerald w-4 h-4 cursor-pointer">
-                    <label for="chk-m-${selectedDay}" class="text-xs font-bold text-slate-800 uppercase tracking-wider cursor-pointer">1. Math Block</label>
-                </div>
-                <p class="text-[13px] text-slate-600 leading-relaxed">${tasks.mathDescription}</p>
-            `;
-            
-            // Block 2: Coding
-            const cBlock = document.createElement('div');
-            cBlock.className = `p-4 rounded-xl border transition-all ${codeDone ? 'bg-asu-emerald/10 border-asu-emerald text-emerald-700' : 'bg-slate-50 border-slate-200 text-slate-600'}`;
-            cBlock.innerHTML = `
-                <div class="flex items-center space-x-2.5 mb-2">
-                    <input type="checkbox" id="chk-c-${selectedDay}" ${codeDone ? 'checked' : ''} onchange="toggleCheckItem(${selectedDay}, 'code')" class="rounded text-asu-emerald focus:ring-asu-emerald w-4 h-4 cursor-pointer">
-                    <label for="chk-c-${selectedDay}" class="text-xs font-bold text-slate-800 uppercase tracking-wider cursor-pointer">2. Coding Block</label>
-                </div>
-                <p class="text-[13px] text-slate-600 leading-relaxed">${tasks.codingDescription}</p>
-            `;
-
-            // Block 3: Writing
-            const wBlock = document.createElement('div');
-            wBlock.className = `p-4 rounded-xl border transition-all ${writeDone ? 'bg-asu-emerald/10 border-asu-emerald text-emerald-700' : 'bg-slate-50 border-slate-200 text-slate-600'}`;
-            wBlock.innerHTML = `
-                <div class="flex items-center space-x-2.5 mb-2">
-                    <input type="checkbox" id="chk-w-${selectedDay}" ${writeDone ? 'checked' : ''} onchange="toggleCheckItem(${selectedDay}, 'write')" class="rounded text-asu-emerald focus:ring-asu-emerald w-4 h-4 cursor-pointer">
-                    <span class="text-xs font-bold text-slate-800 uppercase tracking-wider cursor-pointer">3. Writing Block</span>
-                </div>
-                <p class="text-[13px] text-slate-600 leading-relaxed">${tasks.writingDescription}</p>
-                <div class="mt-2.5 text-xs font-bold text-asu-gold uppercase tracking-widest flex justify-between">
-                    <span>Target: +${tasks.targetWords} Words</span>
-                    <span>Refs: +${tasks.citationsLogged}</span>
-                </div>
-            `;
-            
-            container.appendChild(mBlock);
-            container.appendChild(cBlock);
-            container.appendChild(wBlock);
-        }
-
-        // Toggle checkbox state and save
-        function toggleCheckItem(day, taskType) {
-            const key = `day-${day}-${taskType}`;
-            const isChecked = checklistState[key] || false;
-            
-            if (!isChecked) {
-                checklistState[key] = true;
-            } else {
-                delete checklistState[key];
+        // Mock Notion database connector
+        function saveNotionSettings() {
+            const inputVal = document.getElementById('input-notion-id').value.trim();
+            if (inputVal) {
+                document.getElementById('notion-ver-id').textContent = inputVal.substring(0, 16) + "...";
+                document.getElementById('sync-notion-indicator').className = "w-3.5 h-3.5 bg-emerald-500 rounded-full shadow-sm border border-white";
+                document.getElementById('sync-notion-status').className = "text-emerald-500 font-bold";
+                document.getElementById('sync-notion-status').textContent = "Synced";
+                document.getElementById('sync-notion-ver').textContent = "Connected";
+                showToast("Connected to Notion Database!");
             }
-            saveChecklistState();
-            renderMatrixChecklist();
-            showToast(`Day ${day} ${taskType} status saved!`);
         }
 
-        // STREAMING_CHUNK: Populating master curriculum rows...
         // Render Master Curriculum Table
         function renderCurriculumTable() {
             const filterWeek = document.getElementById('curriculum-week-filter').value;
@@ -1063,7 +982,6 @@ Loading analysis metrics...
             showToast(`Synchronized! ${completedDays}/92 days completed. Progress updated to ${syllabusPct}%!`);
         }
 
-        // STREAMING_CHUNK: Running EWS diagnostic calculation model...
         // Core EWS calculation logic (Incorporates dynamic variables tracker)
         function calculateEwsScore() {
             // Get inputs
@@ -1076,7 +994,7 @@ Loading analysis metrics...
             const keys = Object.keys(variablesSyllabus);
             let totalProgressWeight = 0;
             keys.forEach(vKey => {
-                const status = variablesState[vKey] || "Not Started";
+                const status = variablesState[vKey] || "Pending";
                 if (status === "Sourced") totalProgressWeight += 35;
                 else if (status === "Wrangled") totalProgressWeight += 70;
                 else if (status === "Integrated") totalProgressWeight += 100;
@@ -1268,4 +1186,3 @@ ${getCommentary(ewsDisplayScore, words, citations, codeMilestones)}
     </script>
 </body>
 </html>
-```eof
