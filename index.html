@@ -6,7 +6,7 @@
     <title>PhD Mission Control & Supervisor Diagnostic Hub</title>
     <!-- Tailwind CSS for high-fidelity design -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700;800&family=Playfair+Display:ital,wght=0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght=0,600;0,700;1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script>
@@ -49,6 +49,7 @@
 </head>
 <body class="min-h-full text-slate-800 font-sans antialiased flex flex-col justify-between selection:bg-asu-gold selection:text-white">
 
+    <!-- STREAMING_CHUNK: Rendering Brand Header... -->
     <!-- Brand Header -->
     <header class="w-full bg-white border-b border-slate-200 px-6 py-4 flex flex-col lg:flex-row justify-between items-center z-30 sticky top-0 shadow-sm">
         <div class="flex items-center space-x-4 mb-4 lg:mb-0">
@@ -75,6 +76,7 @@
         </div>
     </header>
 
+    <!-- STREAMING_CHUNK: Setting up visual panels grid layout... -->
     <!-- Main Content Portrait Layout (Sequential Scrolling View) -->
     <main class="flex-1 w-full max-w-7xl mx-auto p-4 lg:p-8 flex flex-col gap-8">
         
@@ -108,6 +110,7 @@
             </div>
         </section>
 
+        <!-- STREAMING_CHUNK: Rendering baseline quantitative metric indicators... -->
         <!-- SECTION 2: Quantitative Progress Indicators Grid -->
         <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-white p-6 rounded-2xl border border-slate-200 flex flex-col justify-between shadow-sm">
@@ -153,6 +156,7 @@
             </div>
         </section>
 
+        <!-- STREAMING_CHUNK: Embedding API connections dashboard panel... -->
         <!-- SECTION 3: Interlinked Systems Integration Panel -->
         <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl shadow-sm">
             <h3 class="text-lg font-serif font-extrabold text-slate-900 mb-6 flex items-center">
@@ -204,14 +208,15 @@
             </div>
         </section>
 
-        <!-- SECTION 4: Data & Variables Tracker -->
+        <!-- STREAMING_CHUNK: Constructing the high-fidelity Notion Data & Variables Ingestion Tracker... -->
+        <!-- SECTION 4: Live Data & Variables Ingestion Tracker (Notion Data Sync View) -->
         <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl shadow-sm space-y-6">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-4">
                 <div>
                     <h3 class="text-lg font-serif font-extrabold text-slate-900 flex items-center">
-                        <i class="fa-solid fa-database mr-2.5 text-asu-gold animate-pulse"></i> Live Data & Variables Ingestion Tracker
+                        <i class="fa-solid fa-database mr-2.5 text-asu-gold animate-pulse"></i> Data Collection Status — Data & Variables Tracker
                     </h3>
-                    <p class="text-xs text-slate-500 mt-1">Monitor the sourcing, cleaning, and model-integration status of Egypt-specific and international panel variables [cite: 2, 4].</p>
+                    <p class="text-xs text-slate-500 mt-1">Directly mirrors the structural, country-specific parameters from your personal Notion workspace.</p>
                 </div>
                 <div class="bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 flex items-center space-x-3 shadow-inner">
                     <span class="text-xs font-bold text-slate-500 uppercase">Ready Rate:</span>
@@ -224,12 +229,26 @@
                 <div id="data-readiness-bar" class="bg-asu-gold h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
             </div>
 
-            <!-- Variables Status Ingestion Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="variables-tracker-grid">
-                <!-- Dynamic Variable Cards injected by JS -->
+            <!-- Custom Scrollable Table reflecting image_580456.jpg -->
+            <div class="overflow-x-auto border border-slate-200 rounded-2xl shadow-inner bg-white">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[11px]">
+                            <th class="p-3 w-48">Variable Name</th>
+                            <th class="p-3 w-36">Collection Status</th>
+                            <th class="p-3">Countries</th>
+                            <th class="p-3">Data Sources</th>
+                            <th class="p-3">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody id="variables-table-body" class="divide-y divide-slate-150">
+                        <!-- Injected dynamic rows with Notion Tag Styling -->
+                    </tbody>
+                </table>
             </div>
         </section>
 
+        <!-- STREAMING_CHUNK: Embedding the Q1 Daily Task Matrix... -->
         <!-- SECTION 5: Quarter 1 Interactive Daily Task Matrix -->
         <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl space-y-6 shadow-sm">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-4">
@@ -280,6 +299,7 @@
             </div>
         </section>
 
+        <!-- STREAMING_CHUNK: Integrating Sandbox inputs panel... -->
         <!-- SECTION 6: Actual Progress Diagnostic Logger (Sandbox Inputs) -->
         <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl shadow-sm space-y-6">
             <div class="flex justify-between items-center border-b border-slate-100 pb-4">
@@ -318,6 +338,7 @@
             </div>
         </section>
 
+        <!-- STREAMING_CHUNK: Embedding diagnostics workspace & Google Drive iframe window... -->
         <!-- SECTION 7: Diagnostic Reporting & Live Iframe Previews -->
         <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             
@@ -365,6 +386,7 @@ Loading analysis metrics...
             </div>
         </section>
 
+        <!-- STREAMING_CHUNK: Integrating the Notion PhD Journey banner... -->
         <!-- SECTION 8: Quarter 1 Master Curriculum & Notion Synchronizer -->
         <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl space-y-6 shadow-sm">
             
@@ -448,6 +470,7 @@ Loading analysis metrics...
         <span id="toast-message">Report generated successfully!</span>
     </div>
 
+    <!-- STREAMING_CHUNK: Running JavaScript logical blocks... -->
     <!-- Script Engine -->
     <script>
         // Clean Slate Day 1 starts with exact zeros to build up
@@ -462,17 +485,25 @@ Loading analysis metrics...
         let checklistState = {};
         let gdriveFolderId = "";
 
-        // Core variables dataset mapping representing Egypt and comparator panel variables
+        // Complete 17-Variable Syllabus mapped from image_580456.jpg with Notion Tags
         const variablesSyllabus = {
-            "real_gdp": { name: "Egypt Real GDP Growth", sector: "Real Sector", target: "CBE / CAPMAS Quarterly", code: "EGY_RGDP" },
-            "cpi_inflation": { name: "Egypt Headline CPI Inflation", sector: "Price Stability", target: "CAPMAS Monthly / Quarterly", code: "EGY_CPI" },
-            "m2_supply": { name: "Egypt Broad Money (M2) Stock", sector: "Monetary Sector", target: "Central Bank of Egypt", code: "EGY_M2" },
-            "policy_rate": { name: "CBE Corridor Interest Rate", sector: "Monetary Policy", target: "CBE Corridor Rate History", code: "EGY_POLICY_RATE" },
-            "dollarization_ratio": { name: "Egyptian Bank Dollarization Ratio", sector: "Intermediary Block", target: "CBE Bank Balance Sheets", code: "EGY_DOLLARIZATION" },
-            "npl_ratio": { name: "Egypt Non-Performing Loans (NPLs)", sector: "Intermediary Block", target: "World Bank / CBE Bulletin", code: "EGY_NPLS" },
-            "property_index": { name: "Egyptian Asset Price Index (Property Proxy)", sector: "Speculative Bubbles", target: "JLL Real Estate Indexes", code: "EGY_PROPERTY_VAL" },
-            "us_fed_balance_sheet": { name: "US Federal Reserve Balance Sheet Size", sector: "UMP Spillovers (Treatment)", target: "FRED Quarterly Database", code: "US_FED_BS" },
-            "ecb_balance_sheet": { name: "European Central Bank Balance Sheet Size", sector: "UMP Spillovers (Treatment)", target: "ECB Statistical Data Warehouse", code: "ECB_BS" },
+            "price_capital": { name: "Price of Capital (Q_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["Central Banks", "Bloomberg"], desc: "Tobin's Q / asset prices" },
+            "wages": { name: "Wages (W_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["ILO", "National Accounts"], desc: "Real wages. Proxies: (1) Average hourly earnings" },
+            "capital_return": { name: "Capital Return (R_k,t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["Central Banks", "National Accounts"], desc: "Return on capital. Proxies: corporate yields" },
+            "inflation": { name: "Inflation (\\pi_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["Central Banks", "IMF", "World Bank"], desc: "Inflation rate. Proxies: CPI headline & core" },
+            "equity": { name: "Equity (E_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["Central Banks", "BIS", "Bloomberg"], desc: "Bank equity (real). Proxies: Tier 1 capital ratios" },
+            "investment": { name: "Investment (I_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["World Bank", "IMF", "National Accounts"], desc: "Gross Fixed Capital Formation" },
+            "productivity": { name: "Productivity (A_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["World Bank", "OECD", "IMF"], desc: "Total Factor Productivity (TFP) Solow residual" },
+            "output_gap": { name: "Output Gap (\\hat{Y}_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["FRED", "OECD", "IMF"], desc: "Deviation from potential GDP. HP Filtered" },
+            "forward_guidance": { name: "Forward Guidance (R_f,t)", countries: ["US", "Eurozone", "UK", "Switzerland", "Japan"], sources: ["Central Banks", "Bloomberg"], desc: "Expected future interest rates. OIS curves" },
+            "bonds": { name: "Bonds (B_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["Central Banks", "BIS", "National Accounts"], desc: "Household bond holdings. sovereign bonds" },
+            "interest_rate": { name: "Interest Rate (R_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["Central Banks", "FRED", "Bloomberg"], desc: "Nominal interest rate. CBE corridor history" },
+            "risk_premium": { name: "Risk Premium (R_kt - R_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["Central Banks", "BIS", "Bloomberg"], desc: "Credit spreads. Corporate vs sovereign yields" },
+            "output": { name: "Output (Y_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["IMF", "World Bank", "Central Banks"], desc: "Real GDP. Proxies: real quarterly growth rates" },
+            "consumption": { name: "Consumption (C_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["Central Banks", "National Accounts"], desc: "Real Household Consumption expenditure" },
+            "leverage": { name: "Leverage (\\phi_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["Central Banks", "BIS", "Bloomberg"], desc: "Banking sector leverage constraint" },
+            "loans": { name: "Loans (L_t)", countries: ["Egypt", "US", "Eurozone", "UK", "Switzerland"], sources: ["Central Banks", "BIS", "IMF"], desc: "Real credit to private sector / credit gap" },
+            "quantitative_easing": { name: "Quantitative Easing (QE_t)", countries: ["US", "Eurozone", "UK", "Switzerland", "Japan"], sources: ["Central Banks", "FRED"], desc: "Central bank asset purchases. Fed Balance Sheet size" }
         };
 
         // Initialize variables status state
@@ -495,94 +526,116 @@ Loading analysis metrics...
             13: { theme: "Q1 Synthesis & Paper 1 Draft", math: "Evaluating Blanchard-Kahn rank condition stability theorems.", coding: "Run baseline model simulation diagnostics on your NK open DSGE.", writing: "Draft Chapter 1.5 (Thesis structure roadmap summary)." }
         };
 
-        // Initialize values on load
-        window.onload = function() {
-            loadChecklistState();
-            loadVariablesState();
-            loadGDriveSettings();
-            initializeMatrixSelectors();
-            resetToZero();
-        };
-
+        // STREAMING_CHUNK: Managing state retrievals...
         // Load Variables Ingestion state from localStorage
         function loadVariablesState() {
-            const saved = localStorage.getItem('phd_ews_variables_state_july26');
+            const saved = localStorage.getItem('phd_ews_variables_state_july26_v2');
             if (saved) {
                 variablesState = JSON.parse(saved);
             } else {
-                // Initialize default Pending state
+                // Initialize default Not Started state
                 Object.keys(variablesSyllabus).forEach(vKey => {
-                    variablesState[vKey] = "Pending";
+                    variablesState[vKey] = "Not Started";
                 });
             }
             renderVariablesTracker();
         }
 
         function saveVariablesState() {
-            localStorage.setItem('phd_ews_variables_state_july26', JSON.stringify(variablesState));
+            localStorage.setItem('phd_ews_variables_state_july26_v2', JSON.stringify(variablesState));
             renderVariablesTracker();
             calculateEwsScore();
         }
 
-        // Render Data Ingestion Status variables inside visual DOM grid
+        // STREAMING_CHUNK: Designing visual Notion pill tags...
+        // Styling helper for Notion country tags
+        function getCountryTagHtml(country) {
+            let colors = "bg-slate-100 text-slate-700 border-slate-200";
+            if (country === "Egypt") colors = "bg-teal-50 text-teal-700 border-teal-150 font-semibold";
+            else if (country === "US") colors = "bg-blue-50 text-blue-700 border-blue-150";
+            else if (country === "Eurozone") colors = "bg-purple-50 text-purple-700 border-purple-150";
+            else if (country === "UK") colors = "bg-indigo-50 text-indigo-700 border-indigo-150";
+            else if (country === "Switzerland") colors = "bg-pink-50 text-pink-700 border-pink-150";
+            else if (country === "Japan") colors = "bg-orange-50 text-orange-700 border-orange-150";
+
+            return `<span class="px-2 py-0.5 rounded text-[11px] border ${colors}">${country}</span>`;
+        }
+
+        // Styling helper for Notion data source tags
+        function getSourceTagHtml(source) {
+            let colors = "bg-slate-100 text-slate-700 border-slate-200";
+            if (source === "Central Banks") colors = "bg-rose-50 text-rose-700 border-rose-150";
+            else if (source === "Bloomberg") colors = "bg-amber-50 text-amber-700 border-amber-150";
+            else if (source === "ILO") colors = "bg-slate-100 text-slate-700 border-slate-200";
+            else if (source === "National Accounts") colors = "bg-emerald-50 text-emerald-700 border-emerald-150";
+            else if (source === "IMF") colors = "bg-cyan-50 text-cyan-700 border-cyan-150";
+            else if (source === "World Bank") colors = "bg-sky-50 text-blue-700 border-sky-150";
+            else if (source === "BIS") colors = "bg-orange-50 text-orange-700 border-orange-150";
+            else if (source === "FRED") colors = "bg-violet-50 text-violet-700 border-violet-150";
+            else if (source === "OECD") colors = "bg-yellow-50 text-yellow-700 border-yellow-150";
+
+            return `<span class="px-2 py-0.5 rounded text-[11px] border ${colors}">${source}</span>`;
+        }
+
+        // STREAMING_CHUNK: Rendering high-fidelity Notion table...
+        // Render 17 Notion Variables inside tabular view
         function renderVariablesTracker() {
-            const container = document.getElementById('variables-tracker-grid');
-            container.innerHTML = '';
+            const tableBody = document.getElementById('variables-table-body');
+            tableBody.innerHTML = '';
 
             let totalProgressWeight = 0;
             const keys = Object.keys(variablesSyllabus);
 
             keys.forEach(vKey => {
                 const item = variablesSyllabus[vKey];
-                const status = variablesState[vKey] || "Pending";
+                const status = variablesState[vKey] || "Not Started";
 
-                // Progress weighting based on completion status
+                // Progress weight calculations
                 let progWeight = 0;
-                let pillClass = "";
+                let selectClass = "";
 
-                if (status === "Pending") {
+                if (status === "Not Started") {
                     progWeight = 0;
-                    pillClass = "bg-red-100 text-red-800 border-red-200";
+                    selectClass = "bg-red-50 text-red-700 border-red-200";
                 } else if (status === "Sourced") {
                     progWeight = 35;
-                    pillClass = "bg-blue-100 text-blue-800 border-blue-200";
+                    selectClass = "bg-blue-50 text-blue-700 border-blue-200";
                 } else if (status === "Wrangled") {
                     progWeight = 70;
-                    pillClass = "bg-amber-100 text-amber-800 border-amber-200";
+                    selectClass = "bg-amber-50 text-amber-700 border-amber-200";
                 } else if (status === "Integrated") {
                     progWeight = 100;
-                    pillClass = "bg-emerald-100 text-emerald-800 border-emerald-200";
+                    selectClass = "bg-emerald-50 text-emerald-700 border-emerald-200";
                 }
 
                 totalProgressWeight += progWeight;
 
-                const card = document.createElement('div');
-                card.className = "p-4 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col justify-between space-y-3 hover:shadow-sm transition";
-                card.innerHTML = `
-                    <div class="flex justify-between items-start">
-                        <div class="space-y-1">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">${item.sector}</span>
-                            <h4 class="text-xs font-bold text-slate-800">${item.name}</h4>
-                        </div>
-                        <span class="text-asu-emerald text-sm"><i class="fa-solid fa-database"></i></span>
-                    </div>
-                    <div class="space-y-2">
-                        <p class="text-[10px] text-slate-500">
-                            Source: <strong class="text-slate-700">${item.target}</strong><br>
-                            EViews Panel Label: <code class="text-asu-gold font-mono">${item.code}</code>
-                        </p>
-                        <div class="flex items-center justify-between gap-2 border-t border-slate-200/60 pt-2">
-                            <span class="text-[10px] px-2 py-0.5 rounded-full border ${pillClass} font-semibold uppercase tracking-wider">${status}</span>
-                            <select onchange="updateVariableStatus('${vKey}', this.value)" class="bg-white border border-slate-300 focus:border-asu-emerald rounded px-1.5 py-0.5 text-[10px] text-slate-600 outline-none cursor-pointer">
-                                <option value="Pending" ${status === "Pending" ? "selected" : ""}>Pending</option>
-                                <option value="Sourced" ${status === "Sourced" ? "selected" : ""}>Sourced</option>
-                                <option value="Wrangled" ${status === "Wrangled" ? "selected" : ""}>Wrangled</option>
-                                <option value="Integrated" ${status === "Integrated" ? "selected" : ""}>Integrated</option>
-                            </select>
-                        </div>
-                    </div>
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50/50 transition";
+                
+                // Format Countries pill tags
+                const countriesHtml = item.countries.map(c => getCountryTagHtml(c)).join(' ');
+                // Format Sources pill tags
+                const sourcesHtml = item.sources.map(s => getSourceTagHtml(s)).join(' ');
+
+                tr.innerHTML = `
+                    <td class="p-3 font-semibold text-slate-800 text-xs flex items-center space-x-2">
+                        <i class="fa-solid fa-file-invoice text-slate-400"></i>
+                        <span>${item.name}</span>
+                    </td>
+                    <td class="p-3">
+                        <select onchange="updateVariableStatus('${vKey}', this.value)" class="text-[11px] font-semibold rounded px-2.5 py-1 outline-none border cursor-pointer ${selectClass}">
+                            <option value="Not Started" ${status === "Not Started" ? "selected" : ""}>Not Started</option>
+                            <option value="Sourced" ${status === "Sourced" ? "selected" : ""}>Sourced</option>
+                            <option value="Wrangled" ${status === "Wrangled" ? "selected" : ""}>Wrangled</option>
+                            <option value="Integrated" ${status === "Integrated" ? "selected" : ""}>Integrated</option>
+                        </select>
+                    </td>
+                    <td class="p-3"><div class="flex flex-wrap gap-1.5">${countriesHtml}</div></td>
+                    <td class="p-3"><div class="flex flex-wrap gap-1.5">${sourcesHtml}</div></td>
+                    <td class="p-3 text-slate-500 max-w-xs truncate" title="${item.desc}">${item.desc}</td>
                 `;
-                container.appendChild(card);
+                tableBody.appendChild(tr);
             });
 
             // Update Overall Data Readiness Percentages
@@ -595,9 +648,10 @@ Loading analysis metrics...
         function updateVariableStatus(vKey, newStatus) {
             variablesState[vKey] = newStatus;
             saveVariablesState();
-            showToast(`Variable ${variablesSyllabus[vKey].code} status updated to ${newStatus}!`);
+            showToast(`Variable ${vKey} status updated to ${newStatus}!`);
         }
 
+        // STREAMING_CHUNK: Managing localStorage checklist updates...
         // Load checklist checks from local storage
         function loadChecklistState() {
             const saved = localStorage.getItem('phd_ews_checklist_state_july26');
@@ -778,6 +832,7 @@ Loading analysis metrics...
             };
         }
 
+        // STREAMING_CHUNK: Rendering daily checklist block...
         // Render the 3-Block Task Checklist dynamically in the DOM
         function renderMatrixChecklist() {
             const selectedDay = parseInt(document.getElementById('matrix-day-selector').value) || 1;
@@ -819,7 +874,7 @@ Loading analysis metrics...
             wBlock.innerHTML = `
                 <div class="flex items-center space-x-2.5 mb-2">
                     <input type="checkbox" id="chk-w-${selectedDay}" ${writeDone ? 'checked' : ''} onchange="toggleCheckItem(${selectedDay}, 'write')" class="rounded text-asu-emerald focus:ring-asu-emerald w-4 h-4 cursor-pointer">
-                    <label_form for="chk-w-${selectedDay}" class="text-xs font-bold text-slate-800 uppercase tracking-wider cursor-pointer">3. Writing Block</label_form>
+                    <span class="text-xs font-bold text-slate-800 uppercase tracking-wider cursor-pointer">3. Writing Block</span>
                 </div>
                 <p class="text-[13px] text-slate-600 leading-relaxed">${tasks.writingDescription}</p>
                 <div class="mt-2.5 text-xs font-bold text-asu-gold uppercase tracking-widest flex justify-between">
@@ -848,6 +903,7 @@ Loading analysis metrics...
             showToast(`Day ${day} ${taskType} status saved!`);
         }
 
+        // STREAMING_CHUNK: Populating master curriculum rows...
         // Render Master Curriculum Table
         function renderCurriculumTable() {
             const filterWeek = document.getElementById('curriculum-week-filter').value;
@@ -1007,6 +1063,7 @@ Loading analysis metrics...
             showToast(`Synchronized! ${completedDays}/92 days completed. Progress updated to ${syllabusPct}%!`);
         }
 
+        // STREAMING_CHUNK: Running EWS diagnostic calculation model...
         // Core EWS calculation logic (Incorporates dynamic variables tracker)
         function calculateEwsScore() {
             // Get inputs
@@ -1019,7 +1076,7 @@ Loading analysis metrics...
             const keys = Object.keys(variablesSyllabus);
             let totalProgressWeight = 0;
             keys.forEach(vKey => {
-                const status = variablesState[vKey] || "Pending";
+                const status = variablesState[vKey] || "Not Started";
                 if (status === "Sourced") totalProgressWeight += 35;
                 else if (status === "Wrangled") totalProgressWeight += 70;
                 else if (status === "Integrated") totalProgressWeight += 100;
@@ -1211,3 +1268,4 @@ ${getCommentary(ewsDisplayScore, words, citations, codeMilestones)}
     </script>
 </body>
 </html>
+```eof
