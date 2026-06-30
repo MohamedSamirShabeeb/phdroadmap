@@ -6,7 +6,7 @@
     <title>PhD Mission Control & Supervisor Diagnostic Hub</title>
     <!-- Tailwind CSS for high-fidelity design -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700;800&family=Playfair+Display:ital,wght=0,600;0,700;1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script>
@@ -49,7 +49,6 @@
 </head>
 <body class="min-h-full text-slate-800 font-sans antialiased flex flex-col justify-between selection:bg-asu-gold selection:text-white">
 
-    <!-- STREAMING_CHUNK: Building academic brand header... -->
     <!-- Brand Header -->
     <header class="w-full bg-white border-b border-slate-200 px-6 py-4 flex flex-col lg:flex-row justify-between items-center z-30 sticky top-0 shadow-sm">
         <div class="flex items-center space-x-4 mb-4 lg:mb-0">
@@ -76,7 +75,6 @@
         </div>
     </header>
 
-    <!-- STREAMING_CHUNK: Setting up portrait scrolling workspace... -->
     <!-- Main Content Portrait Layout (Sequential Scrolling View) -->
     <main class="flex-1 w-full max-w-7xl mx-auto p-4 lg:p-8 flex flex-col gap-8">
         
@@ -110,7 +108,6 @@
             </div>
         </section>
 
-        <!-- STREAMING_CHUNK: Rendering metrics grid... -->
         <!-- SECTION 2: Quantitative Progress Indicators Grid -->
         <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-white p-6 rounded-2xl border border-slate-200 flex flex-col justify-between shadow-sm">
@@ -156,93 +153,57 @@
             </div>
         </section>
 
-        <!-- STREAMING_CHUNK: Integrating the live Mendeley drag-drop connector... -->
         <!-- SECTION 3: Interlinked Systems Integration Panel -->
-        <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl shadow-sm space-y-6">
-            <h3 class="text-lg font-serif font-extrabold text-slate-900 flex items-center">
+        <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl shadow-sm">
+            <h3 class="text-lg font-serif font-extrabold text-slate-900 mb-6 flex items-center">
                 <i class="fa-solid fa-circle-nodes mr-2.5 text-asu-gold animate-pulse"></i> Live External Integrations Tracker
             </h3>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Google Drive Card -->
-                <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col justify-between space-y-4">
-                    <div class="flex justify-between items-start">
-                        <div class="space-y-1">
+                <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl flex items-start space-x-4">
+                    <div class="p-3 bg-blue-500/10 text-blue-600 rounded-2xl text-2xl shadow-sm"><i class="fa-brands fa-google-drive"></i></div>
+                    <div class="flex-1 min-w-0 space-y-3">
+                        <div class="flex justify-between items-center">
                             <h4 class="text-sm font-bold text-slate-800">Google Drive Folder Sync</h4>
+                            <span id="sync-gdrive-indicator" class="w-3.5 h-3.5 bg-red-500 rounded-full transition-all duration-200 shadow-sm border border-white"></span>
+                        </div>
+                        <div class="space-y-2">
                             <p class="text-xs text-slate-500 leading-normal">
                                 Folder ID: <span id="sync-gdrive-id-display" class="font-mono text-asu-gold text-xs font-semibold break-all">None Loaded</span>
                             </p>
+                            <div class="flex space-x-2">
+                                <input type="text" id="input-gdrive-id" placeholder="Paste Folder ID here" class="w-full bg-white border border-slate-300 focus:ring-2 focus:ring-asu-emerald focus:border-asu-emerald rounded-lg px-3 py-2 text-xs text-slate-800 outline-none transition shadow-sm">
+                                <button onclick="saveGDriveFolderId()" class="bg-asu-gold hover:bg-yellow-500 text-slate-950 font-bold px-4 py-2 rounded-lg text-xs transition shadow-sm">Save</button>
+                            </div>
                         </div>
-                        <span id="sync-gdrive-indicator" class="w-3.5 h-3.5 bg-red-500 rounded-full shadow-sm border border-white"></span>
-                    </div>
-                    <div class="space-y-2">
-                        <div class="flex space-x-2">
-                            <input type="text" id="input-gdrive-id" placeholder="Paste Folder ID here" class="w-full bg-white border border-slate-300 focus:ring-2 focus:ring-asu-emerald rounded-lg px-3 py-2 text-xs outline-none shadow-sm">
-                            <button onclick="saveGDriveFolderId()" class="bg-asu-gold hover:bg-yellow-500 text-slate-950 font-bold px-4 py-2 rounded-lg text-xs transition shadow-sm">Save</button>
+                        <div class="flex space-x-3 text-xs font-semibold text-slate-500 pt-1">
+                            <span id="sync-gdrive-ver" class="bg-slate-200 px-2 py-0.5 rounded">Unverified</span>
+                            <span id="sync-gdrive-status" class="text-red-500 font-bold">Offline</span>
                         </div>
-                        <p class="text-[10px] text-slate-400 italic leading-tight">
-                            *Note: Ensure your Drive folder is shared as "Anyone with link can view" to allow the browser to parse assets securely.
-                        </p>
-                    </div>
-                    <div class="flex space-x-3 text-xs font-semibold text-slate-500 pt-1">
-                        <span id="sync-gdrive-ver" class="bg-slate-200 px-2 py-0.5 rounded">Unverified</span>
-                        <span id="sync-gdrive-status" class="text-red-500 font-bold">Offline</span>
                     </div>
                 </div>
 
-                <!-- Mendeley Live Drag & Drop Parser Card -->
-                <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col justify-between space-y-4">
-                    <div class="flex justify-between items-start">
-                        <div class="space-y-1">
-                            <h4 class="text-sm font-bold text-slate-800">Mendeley BibTeX Ingestion</h4>
-                            <p class="text-xs text-slate-500">Mendeley Group: <code class="font-mono text-asu-gold text-xs">UMP_Bubble_Dynamics_Egypt</code></p>
+                <!-- Mendeley Card -->
+                <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl flex items-start space-x-4">
+                    <div class="p-3 bg-red-500/10 text-red-600 rounded-2xl text-2xl shadow-sm"><i class="fa-solid fa-book"></i></div>
+                    <div class="flex-1 min-w-0 space-y-3">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-sm font-bold text-slate-800">Mendeley Library Connection</h4>
+                            <span id="sync-mendeley-indicator" class="w-3.5 h-3.5 bg-red-500 rounded-full transition-all duration-200 shadow-sm border border-white"></span>
                         </div>
-                        <span id="sync-mendeley-indicator" class="w-3.5 h-3.5 bg-red-500 rounded-full shadow-sm border border-white"></span>
-                    </div>
-                    
-                    <!-- Drag & Drop Zone -->
-                    <div id="mendeley-dropzone" class="border-2 border-dashed border-slate-300 hover:border-asu-emerald bg-white rounded-xl p-4 text-center cursor-pointer transition flex flex-col items-center justify-center space-y-2">
-                        <i class="fa-solid fa-file-arrow-up text-2xl text-slate-400"></i>
-                        <span class="text-xs text-slate-500 font-medium">Drag & Drop <strong class="text-asu-emerald">.bib</strong> file here</span>
-                        <span class="text-[10px] text-slate-400">or click to upload from computer</span>
-                        <input type="file" id="mendeley-file-input" accept=".bib" class="hidden">
-                    </div>
-
-                    <div class="flex space-x-3 text-xs font-semibold text-slate-500 pt-1">
-                        <span id="mendeley-ver-count" class="bg-slate-200 px-2 py-0.5 rounded">0 Refs Loaded</span>
-                        <span id="sync-mendeley-status" class="text-red-500 font-bold">Unsynced</span>
-                    </div>
-                </div>
-
-                <!-- Notion Live API Simulator Card -->
-                <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col justify-between space-y-4">
-                    <div class="flex justify-between items-start">
-                        <div class="space-y-1">
-                            <h4 class="text-sm font-bold text-slate-800">Notion Workspace Sync</h4>
-                            <p class="text-xs text-slate-500">Auto-rollup your checklist progress directly to your Notion portal.</p>
-                        </div>
-                        <span id="sync-notion-indicator" class="w-3.5 h-3.5 bg-red-500 rounded-full shadow-sm border border-white"></span>
-                    </div>
-                    
-                    <div class="space-y-2">
-                        <div class="flex space-x-2">
-                            <input type="text" id="input-notion-id" placeholder="Paste Notion Database ID" class="w-full bg-white border border-slate-300 focus:ring-2 focus:ring-asu-emerald rounded-lg px-3 py-2 text-xs outline-none shadow-sm">
-                            <button onclick="saveNotionSettings()" class="bg-asu-gold hover:bg-yellow-500 text-slate-950 font-bold px-4 py-2 rounded-lg text-xs transition shadow-sm">Sync</button>
-                        </div>
-                        <p class="text-[10px] text-slate-400 leading-normal">
-                            Notion Page ID: <code id="notion-ver-id" class="font-mono text-asu-gold text-[10px]">None Loaded</code>
+                        <p class="text-xs text-slate-500 leading-normal">
+                            Group Library: <code class="font-mono text-asu-gold text-xs bg-white px-2 py-1 rounded border border-slate-200">UMP_Bubble_Dynamics_Egypt</code>
                         </p>
-                    </div>
-
-                    <div class="flex space-x-3 text-xs font-semibold text-slate-500 pt-1">
-                        <span id="sync-notion-ver" class="bg-slate-200 px-2 py-0.5 rounded">Disconnected</span>
-                        <span id="sync-notion-status" class="text-red-500 font-bold">Offline</span>
+                        <div class="flex space-x-3 text-xs font-semibold text-slate-500 pt-1">
+                            <span id="mendeley-ver-count" class="bg-slate-200 px-2 py-0.5 rounded">0 Refs Loaded</span>
+                            <span id="sync-mendeley-status" class="text-red-500 font-bold">Unsynced</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- STREAMING_CHUNK: Integrating the Live Variables Ingestion Tracker... -->
         <!-- SECTION 4: Data & Variables Tracker -->
         <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl shadow-sm space-y-6">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-4">
@@ -269,7 +230,6 @@
             </div>
         </section>
 
-        <!-- STREAMING_CHUNK: Integrating interactive Q1 Matrix... -->
         <!-- SECTION 5: Quarter 1 Interactive Daily Task Matrix -->
         <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl space-y-6 shadow-sm">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-4">
@@ -320,7 +280,6 @@
             </div>
         </section>
 
-        <!-- STREAMING_CHUNK: Integrating Sandbox Diagnostic Logger... -->
         <!-- SECTION 6: Actual Progress Diagnostic Logger (Sandbox Inputs) -->
         <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl shadow-sm space-y-6">
             <div class="flex justify-between items-center border-b border-slate-100 pb-4">
@@ -359,7 +318,6 @@
             </div>
         </section>
 
-        <!-- STREAMING_CHUNK: Integrating the Supervisor Diagnostics Center & Google Drive file viewer... -->
         <!-- SECTION 7: Diagnostic Reporting & Live Iframe Previews -->
         <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             
@@ -407,7 +365,6 @@ Loading analysis metrics...
             </div>
         </section>
 
-        <!-- STREAMING_CHUNK: Integrating the Complete Q1 Syllabus Matrix Table & Notion link banner... -->
         <!-- SECTION 8: Quarter 1 Master Curriculum & Notion Synchronizer -->
         <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl space-y-6 shadow-sm">
             
@@ -491,7 +448,6 @@ Loading analysis metrics...
         <span id="toast-message">Report generated successfully!</span>
     </div>
 
-    <!-- STREAMING_CHUNK: Running local JavaScript configurations... -->
     <!-- Script Engine -->
     <script>
         // Clean Slate Day 1 starts with exact zeros to build up
@@ -522,13 +478,29 @@ Loading analysis metrics...
         // Initialize variables status state
         let variablesState = {};
 
+        // Core curriculum data mapping for 13 weeks of Q1
+        const weekSyllabus = {
+            1: { theme: "Foundations & Git Setup", math: "Matrix operations, determinants, and matrix dimensions.", coding: "Install Anaconda, RStudio, and initialize remote Git repository.", writing: "Outline Chapter 1 structural headers and target formatting layouts." },
+            2: { theme: "Advanced Calculus & CBE Data", math: "Partial derivatives, limits, and multivariate differentiation.", coding: "Python coding syntax basics, data structures, and loops.", writing: "Draft Chapter 1.1 (Background on post-GFC monetary shifts)." },
+            3: { theme: "Linear Algebra & Matrix Ingestion", math: "Matrix inversion, systems of equations, and vector transpositions.", coding: "Wrangle raw Central Bank of Egypt quarterly indicators into pandas.", writing: "Draft Chapter 1.1.1 (Timeline of global QE and forward guidance)." },
+            4: { theme: "Optimization & Taylor Rules", math: "Lagrangian multipliers and constrained optimization methods.", coding: "R programming variables, vector syntax, and file configurations.", writing: "Draft Chapter 1.1.2 (Mishkin's credit-driven bubble framework)." },
+            5: { theme: "ODEs & Descriptive Statistics", math: "First-order Ordinary Differential Equations and stability states.", coding: "Write Python scripts to check and filter outliers and data gaps.", writing: "Draft Chapter 1.1.3 (Emerging market structural challenges)." },
+            6: { theme: "Difference Equations & Structural Breaks", math: "First-order linear difference equations and discrete-time paths.", coding: "Identify and plot 2016 and 2022 currency devaluations in R.", writing: "Draft Chapter 1.2 (Problem Statement: the UMP-bubble paradox)." },
+            7: { theme: "Probability, Expectations & EViews Panel", math: "Conditional expectation operators and stochastic variables.", coding: "Configure unmerged, stacked panel layouts for EViews compatibility.", writing: "Draft Chapter 1.2.1 (Borio's risk-taking channel)." },
+            8: { theme: "Panel Data Estimations & OLS Theory", math: "The matrix algebra of Ordinary Least Squares (OLS) estimation.", coding: "Ingest master panel files into EViews and run baseline ADF tests.", writing: "Draft Chapter 1.2.2 (Weaker regulation & dollarization)." },
+            9: { theme: "Open-Economy Macro & Euler Calibration", math: "Log-linearization techniques and household Euler equations.", coding: "MATLAB/Octave matrix parameters and directory configurations.", writing: "Draft Chapter 1.2.3 (Egypt as a critical case study)." },
+            10: { theme: "New Keynesian DSGE & Steady-States", math: "Micro-foundations of Calvo pricing and aggregate inflation.", coding: "Set up the primary Dynare .mod script specifying parameters.", writing: "Draft Chapter 1.3 (Primary & secondary research questions)." },
+            11: { theme: "Dynare Coding & RBC Solutions", math: "Solving steady-state levels of standard closed RBC models.", coding: "Code and solve a baseline RBC model in Dynare, verifying BK ranks.", writing: "Draft Chapter 1.3.3 (Formulate hypotheses H1, H2, H3)." },
+            12: { theme: "Dynare Parameter Calibrations & Diagnostics", math: "Prior distributions, Bayesian algorithms, and likelihood estimates.", coding: "Write the analytical steady-state helper file (_steadystate.m).", writing: "Draft Chapter 1.4 (Main and specific objectives)." },
+            13: { theme: "Q1 Synthesis & Paper 1 Draft", math: "Evaluating Blanchard-Kahn rank condition stability theorems.", coding: "Run baseline model simulation diagnostics on your NK open DSGE.", writing: "Draft Chapter 1.5 (Thesis structure roadmap summary)." }
+        };
+
         // Initialize values on load
         window.onload = function() {
             loadChecklistState();
             loadVariablesState();
             loadGDriveSettings();
             initializeMatrixSelectors();
-            initializeMendeleyParser();
             resetToZero();
         };
 
@@ -729,74 +701,81 @@ Loading analysis metrics...
             renderMatrixChecklist();
         }
 
-        // STREAMING_CHUNK: Setting up the file uploader for Mendeley/BibTeX...
-        function initializeMendeleyParser() {
-            const dropzone = document.getElementById('mendeley-dropzone');
-            const fileInput = document.getElementById('mendeley-file-input');
-
-            // Drag over
-            dropzone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                dropzone.classList.add('border-asu-emerald', 'bg-slate-100/50');
-            });
-
-            // Drag leave
-            dropzone.addEventListener('dragleave', () => {
-                dropzone.classList.remove('border-asu-emerald', 'bg-slate-100/50');
-            });
-
-            // Drop file
-            dropzone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                dropzone.classList.remove('border-asu-emerald', 'bg-slate-100/50');
-                const file = e.dataTransfer.files[0];
-                if (file && file.name.endsWith('.bib')) {
-                    parseBibTeX(file);
-                } else {
-                    showToast("Please drop a valid .bib file from Mendeley.");
-                }
-            });
-
-            // Click to upload
-            dropzone.addEventListener('click', () => {
-                fileInput.click();
-            });
-
-            fileInput.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file && file.name.endsWith('.bib')) {
-                    parseBibTeX(file);
-                }
-            });
-        }
-
-        function parseBibTeX(file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const content = e.target.result;
-                // Simple regex to match BibTeX entries like @article, @book, etc.
-                const entries = content.match(/@[a-zA-Z]+\s*\{/g) || [];
-                const citationCount = entries.length;
-
-                // Update input directly and recalculate EWS
-                document.getElementById('input-citations').value = citationCount;
-                calculateEwsScore();
-                showToast(`Success! Found and loaded ${citationCount} references from your BibTeX file.`);
-            };
-            reader.readAsText(file);
-        }
-
-        // Notion link builder simulation
-        function saveNotionSettings() {
-            const inputVal = document.getElementById('input-notion-id').value.trim();
-            if (inputVal) {
-                document.getElementById('notion-ver-id').textContent = inputVal.substring(0, 16) + "...";
-                document.getElementById('sync-notion-indicator').className = "w-3.5 h-3.5 bg-emerald-500 rounded-full shadow-sm border border-white";
-                document.getElementById('sync-notion-status').className = "text-emerald-500 font-bold";
-                document.getElementById('sync-notion-status').textContent = "Synced";
-                document.getElementById('sync-notion-ver').textContent = "Connected";
-                showToast("Connected to Notion Database!");
+        // Algorithmically calculate unique, detailed Q1 deliverables based on selected day-of-quarter
+        function getDailyTasks(day) {
+            const week = Math.min(13, Math.ceil(day / 7));
+            const dow = ((day - 1) % 7) + 1;
+            const wSyllabus = weekSyllabus[week];
+            
+            const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+            const dayName = dayNames[dow - 1];
+            
+            let mathDescription = "";
+            let codingDescription = "";
+            let writingDescription = "";
+            let targetWords = 0;
+            let citationsLogged = 0;
+            
+            switch(dow) {
+                case 1:
+                    mathDescription = `Review definitions of ${wSyllabus.math}. Read Chapter 1 prerequisites. Complete 5 diagnostic notation drills.`;
+                    codingDescription = `Initialize local coding folders. Configure scripts and test package updates for ${wSyllabus.coding}.`;
+                    writingDescription = `Structure academic subsections and draft opening paragraph points for ${wSyllabus.writing}.`;
+                    targetWords = 150;
+                    citationsLogged = 1;
+                    break;
+                case 2:
+                    mathDescription = `Solve 5 sample mathematical proofs step-by-step in your notebook, focusing on ${wSyllabus.math}.`;
+                    codingDescription = `Write and run basic operations testing variables and functions in ${wSyllabus.coding}.`;
+                    writingDescription = `Perform thematic database checks and identify 3 key citations from Zotero/Mendeley for ${wSyllabus.writing}.`;
+                    targetWords = 200;
+                    citationsLogged = 2;
+                    break;
+                case 3:
+                    mathDescription = `Calculate 10 mathematical exercises on ${wSyllabus.math} and cross-verify with textbook solution keys.`;
+                    codingDescription = `Build a clean, local script to automate raw data cleaning and transformations for ${wSyllabus.coding}.`;
+                    writingDescription = `Draft a raw paragraph block (approx. 250 words) establishing literature connections for ${wSyllabus.writing}.`;
+                    targetWords = 300;
+                    citationsLogged = 1;
+                    break;
+                case 4:
+                    mathDescription = `Examine the applied macroeconomic role of ${wSyllabus.math} inside New Keynesian structures.`;
+                    codingDescription = `Import raw CBE data and execute validation checks on your program running ${wSyllabus.coding}.`;
+                    writingDescription = `Polishing pass: review drafts written this week. Enhance flow, style, and citation tags for ${wSyllabus.writing}.`;
+                    targetWords = 250;
+                    citationsLogged = 2;
+                    break;
+                case 5:
+                    mathDescription = `Map out limits, dynamic boundary constraints, and shadow variables modeling ${wSyllabus.math}.`;
+                    codingDescription = `Optimize execution, eliminate redundant logic, and resolve compile warnings for ${wSyllabus.coding}.`;
+                    writingDescription = `Incorporate specific Egypt-context data details or historical CBE policy indicators into ${wSyllabus.writing}.`;
+                    targetWords = 200;
+                    citationsLogged = 1;
+                    break;
+                case 6:
+                    mathDescription = `Conduct a comprehensive weekly mathematics review, compiling all steps on ${wSyllabus.math}.`;
+                    codingDescription = `Add documentation comments. Synchronize and push your local scripting folder to your remote Git repository.`;
+                    writingDescription = `Integrate all sections drafted this week into your master dissertation document. Run consistency checks.`;
+                    targetWords = 400;
+                    citationsLogged = 3;
+                    break;
+                case 7:
+                    mathDescription = `Take a timed, 1-hour self-assessment challenge on ${wSyllabus.math} to test your analytical mastery.`;
+                    codingDescription = `Re-run your entire coding folder from a clean console state to guarantee replication accuracy.`;
+                    writingDescription = `Verify that all inline citations are correctly mapped and formatted against your reference manager bibliography.`;
+                    targetWords = 0; // Sunday is reserved for revision and replication checks
+                    citationsLogged = 0;
+                    break;
             }
+            
+            return {
+                dayName,
+                mathDescription,
+                codingDescription,
+                writingDescription,
+                targetWords,
+                citationsLogged
+            };
         }
 
         // Render the 3-Block Task Checklist dynamically in the DOM
@@ -840,7 +819,7 @@ Loading analysis metrics...
             wBlock.innerHTML = `
                 <div class="flex items-center space-x-2.5 mb-2">
                     <input type="checkbox" id="chk-w-${selectedDay}" ${writeDone ? 'checked' : ''} onchange="toggleCheckItem(${selectedDay}, 'write')" class="rounded text-asu-emerald focus:ring-asu-emerald w-4 h-4 cursor-pointer">
-                    <label for="chk-w-${selectedDay}" class="text-xs font-bold text-slate-800 uppercase tracking-wider cursor-pointer">3. Writing Block</label>
+                    <label_form for="chk-w-${selectedDay}" class="text-xs font-bold text-slate-800 uppercase tracking-wider cursor-pointer">3. Writing Block</label_form>
                 </div>
                 <p class="text-[13px] text-slate-600 leading-relaxed">${tasks.writingDescription}</p>
                 <div class="mt-2.5 text-xs font-bold text-asu-gold uppercase tracking-widest flex justify-between">
@@ -1218,10 +1197,10 @@ ${getCommentary(ewsDisplayScore, words, citations, codeMilestones)}
         function showToast(message) {
             const toast = document.getElementById('toast');
             document.getElementById('toast-message').textContent = message;
-            toast.className = "fixed bottom-5 right-5 bg-white border border-slate-200 text-slate-800 px-5 py-4 rounded-xl shadow-xl flex items-center space-x-3 transform translate-y-0 opacity-100 transition-all duration-300 z-50 text-xs md:text-sm font-semibold";
+            toast.className = "fixed bottom-5 right-5 bg-white border border-slate-200 text-slate-800 px-5 py-4 rounded-xl shadow-xl flex items-center space-x-3 transform translate-y-0 opacity-100 transition-all duration-300 z-50 text-xs md:text-sm font-semibold shadow-2xl";
             
             setTimeout(() => {
-                toast.className = "fixed bottom-5 right-5 bg-white border border-slate-200 text-slate-800 px-5 py-4 rounded-xl shadow-xl flex items-center space-x-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50 text-xs md:text-sm font-semibold";
+                toast.className = "fixed bottom-5 right-5 bg-white border border-slate-200 text-slate-800 px-5 py-4 rounded-xl shadow-xl flex items-center space-x-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50 text-xs md:text-sm font-semibold shadow-2xl";
             }, 3000);
         }
 
@@ -1232,4 +1211,3 @@ ${getCommentary(ewsDisplayScore, words, citations, codeMilestones)}
     </script>
 </body>
 </html>
-```eof
