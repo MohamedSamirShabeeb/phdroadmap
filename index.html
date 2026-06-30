@@ -204,7 +204,33 @@
             </div>
         </section>
 
-        <!-- SECTION 4: Quarter 1 Interactive Daily Task Matrix -->
+        <!-- SECTION 4: Data & Variables Tracker -->
+        <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl shadow-sm space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-4">
+                <div>
+                    <h3 class="text-lg font-serif font-extrabold text-slate-900 flex items-center">
+                        <i class="fa-solid fa-database mr-2.5 text-asu-gold animate-pulse"></i> Live Data & Variables Ingestion Tracker
+                    </h3>
+                    <p class="text-xs text-slate-500 mt-1">Monitor the sourcing, cleaning, and model-integration status of Egypt-specific and international panel variables [cite: 2, 4].</p>
+                </div>
+                <div class="bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 flex items-center space-x-3 shadow-inner">
+                    <span class="text-xs font-bold text-slate-500 uppercase">Ready Rate:</span>
+                    <span id="data-readiness-percent" class="font-mono text-sm font-bold text-asu-emerald">0%</span>
+                </div>
+            </div>
+
+            <!-- Ingestion Progress Bar -->
+            <div class="w-full bg-slate-100 rounded-full h-2">
+                <div id="data-readiness-bar" class="bg-asu-gold h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+
+            <!-- Variables Status Ingestion Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="variables-tracker-grid">
+                <!-- Dynamic Variable Cards injected by JS -->
+            </div>
+        </section>
+
+        <!-- SECTION 5: Quarter 1 Interactive Daily Task Matrix -->
         <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl space-y-6 shadow-sm">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-4">
                 <div>
@@ -254,7 +280,7 @@
             </div>
         </section>
 
-        <!-- SECTION 5: Actual Progress Diagnostic Logger (Sandbox Inputs) -->
+        <!-- SECTION 6: Actual Progress Diagnostic Logger (Sandbox Inputs) -->
         <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl space-y-6 shadow-sm">
             <div class="flex justify-between items-center border-b border-slate-100 pb-4">
                 <h3 class="text-lg font-serif font-extrabold text-slate-900 flex items-center">
@@ -292,7 +318,7 @@
             </div>
         </section>
 
-        <!-- SECTION 6: Diagnostic Reporting & Live Iframe Previews -->
+        <!-- SECTION 7: Diagnostic Reporting & Live Iframe Previews -->
         <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             
             <!-- Left Side: Supervisor Diagnostic Reporter -->
@@ -339,7 +365,7 @@ Loading analysis metrics...
             </div>
         </section>
 
-        <!-- SECTION 7: Quarter 1 Master Curriculum & Notion Synchronizer (Replaces old Setup Guides) -->
+        <!-- SECTION 8: Quarter 1 Master Curriculum & Notion Synchronizer -->
         <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl space-y-6 shadow-sm">
             
             <!-- Notion Link Banner -->
@@ -350,7 +376,7 @@ Loading analysis metrics...
                     </div>
                     <div>
                         <h3 class="text-base font-bold text-slate-800">Your Live Notion PhD Journey Dashboard</h3>
-                        <p class="text-xs text-slate-500">Track tasks, logs, references, and milestones in your official workspace [cite: 112].</p>
+                        <p class="text-xs text-slate-500">Track tasks, logs, references, and variables in your official workspace [cite: 112].</p>
                     </div>
                 </div>
                 <a href="https://app.notion.com/p/PhD-Journey-Dashboard-f25edb9e927e4f1991fe5b1733e12965?source=copy_link" target="_blank" class="w-full md:w-auto px-6 py-2.5 bg-black hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center justify-center space-x-2">
@@ -382,7 +408,7 @@ Loading analysis metrics...
                         <option value="9">Week 9: Open-Economy Macro</option>
                         <option value="10">Week 10: New Keynesian DSGE</option>
                         <option value="11">Week 11: Dynare Coding RBC</option>
-                        <option value="12">@Week 12: Dynare Bayesian</option>
+                        <option value="12">Week 12: Dynare Bayesian</option>
                         <option value="13">Week 13: Synthesis & Draft</option>
                     </select>
                 </div>
@@ -436,6 +462,22 @@ Loading analysis metrics...
         let checklistState = {};
         let gdriveFolderId = "";
 
+        // Core variables dataset mapping representing Egypt and comparator panel variables
+        const variablesSyllabus = {
+            "real_gdp": { name: "Egypt Real GDP Growth", sector: "Real Sector", target: "CBE / CAPMAS Quarterly", code: "EGY_RGDP" },
+            "cpi_inflation": { name: "Egypt Headline CPI Inflation", sector: "Price Stability", target: "CAPMAS Monthly / Quarterly", code: "EGY_CPI" },
+            "m2_supply": { name: "Egypt Broad Money (M2) Stock", sector: "Monetary Sector", target: "Central Bank of Egypt", code: "EGY_M2" },
+            "policy_rate": { name: "CBE Corridor Interest Rate", sector: "Monetary Policy", target: "CBE Corridor Rate History", code: "EGY_POLICY_RATE" },
+            "dollarization_ratio": { name: "Egyptian Bank Dollarization Ratio", sector: "Intermediary Block", target: "CBE Bank Balance Sheets", code: "EGY_DOLLARIZATION" },
+            "npl_ratio": { name: "Egypt Non-Performing Loans (NPLs)", sector: "Intermediary Block", target: "World Bank / CBE Bulletin", code: "EGY_NPLS" },
+            "property_index": { name: "Egyptian Asset Price Index (Property Proxy)", sector: "Speculative Bubbles", target: "JLL Real Estate Indexes", code: "EGY_PROPERTY_VAL" },
+            "us_fed_balance_sheet": { name: "US Federal Reserve Balance Sheet Size", sector: "UMP Spillovers (Treatment)", target: "FRED Quarterly Database", code: "US_FED_BS" },
+            "ecb_balance_sheet": { name: "European Central Bank Balance Sheet Size", sector: "UMP Spillovers (Treatment)", target: "ECB Statistical Data Warehouse", code: "ECB_BS" },
+        };
+
+        // Initialize variables status state
+        let variablesState = {};
+
         // Core curriculum data mapping for 13 weeks of Q1
         const weekSyllabus = {
             1: { theme: "Foundations & Git Setup", math: "Matrix operations, determinants, and matrix dimensions.", coding: "Install Anaconda, RStudio, and initialize remote Git repository.", writing: "Outline Chapter 1 structural headers and target formatting layouts." },
@@ -456,10 +498,105 @@ Loading analysis metrics...
         // Initialize values on load
         window.onload = function() {
             loadChecklistState();
+            loadVariablesState();
             loadGDriveSettings();
             initializeMatrixSelectors();
             resetToZero();
         };
+
+        // Load Variables Ingestion state from localStorage
+        function loadVariablesState() {
+            const saved = localStorage.getItem('phd_ews_variables_state_july26');
+            if (saved) {
+                variablesState = JSON.parse(saved);
+            } else {
+                // Initialize default Pending state
+                Object.keys(variablesSyllabus).forEach(vKey => {
+                    variablesState[vKey] = "Pending";
+                });
+            }
+            renderVariablesTracker();
+        }
+
+        function saveVariablesState() {
+            localStorage.setItem('phd_ews_variables_state_july26', JSON.stringify(variablesState));
+            renderVariablesTracker();
+            calculateEwsScore();
+        }
+
+        // Render Data Ingestion Status variables inside visual DOM grid
+        function renderVariablesTracker() {
+            const container = document.getElementById('variables-tracker-grid');
+            container.innerHTML = '';
+
+            let totalProgressWeight = 0;
+            const keys = Object.keys(variablesSyllabus);
+
+            keys.forEach(vKey => {
+                const item = variablesSyllabus[vKey];
+                const status = variablesState[vKey] || "Pending";
+
+                // Progress weighting based on completion status
+                let progWeight = 0;
+                let pillClass = "";
+
+                if (status === "Pending") {
+                    progWeight = 0;
+                    pillClass = "bg-red-100 text-red-800 border-red-200";
+                } else if (status === "Sourced") {
+                    progWeight = 35;
+                    pillClass = "bg-blue-100 text-blue-800 border-blue-200";
+                } else if (status === "Wrangled") {
+                    progWeight = 70;
+                    pillClass = "bg-amber-100 text-amber-800 border-amber-200";
+                } else if (status === "Integrated") {
+                    progWeight = 100;
+                    pillClass = "bg-emerald-100 text-emerald-800 border-emerald-200";
+                }
+
+                totalProgressWeight += progWeight;
+
+                const card = document.createElement('div');
+                card.className = "p-4 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col justify-between space-y-3 hover:shadow-sm transition";
+                card.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div class="space-y-1">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">${item.sector}</span>
+                            <h4 class="text-xs font-bold text-slate-800">${item.name}</h4>
+                        </div>
+                        <span class="text-asu-emerald text-sm"><i class="fa-solid fa-database"></i></span>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="text-[10px] text-slate-500">
+                            Source: <strong class="text-slate-700">${item.target}</strong><br>
+                            EViews Panel Label: <code class="text-asu-gold font-mono">${item.code}</code>
+                        </p>
+                        <div class="flex items-center justify-between gap-2 border-t border-slate-200/60 pt-2">
+                            <span class="text-[10px] px-2 py-0.5 rounded-full border ${pillClass} font-semibold uppercase tracking-wider">${status}</span>
+                            <select onchange="updateVariableStatus('${vKey}', this.value)" class="bg-white border border-slate-300 focus:border-asu-emerald rounded px-1.5 py-0.5 text-[10px] text-slate-600 outline-none cursor-pointer">
+                                <option value="Pending" ${status === "Pending" ? "selected" : ""}>Pending</option>
+                                <option value="Sourced" ${status === "Sourced" ? "selected" : ""}>Sourced</option>
+                                <option value="Wrangled" ${status === "Wrangled" ? "selected" : ""}>Wrangled</option>
+                                <option value="Integrated" ${status === "Integrated" ? "selected" : ""}>Integrated</option>
+                            </select>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            // Update Overall Data Readiness Percentages
+            const avgReadiness = Math.round(totalProgressWeight / keys.length);
+            document.getElementById('data-readiness-percent').textContent = `${avgReadiness}%`;
+            document.getElementById('data-readiness-bar').style.width = `${avgReadiness}%`;
+        }
+
+        // Toggle separate variable ingestion status
+        function updateVariableStatus(vKey, newStatus) {
+            variablesState[vKey] = newStatus;
+            saveVariablesState();
+            showToast(`Variable ${variablesSyllabus[vKey].code} status updated to ${newStatus}!`);
+        }
 
         // Load checklist checks from local storage
         function loadChecklistState() {
@@ -562,83 +699,6 @@ Loading analysis metrics...
 
         function onMatrixDayChange() {
             renderMatrixChecklist();
-        }
-
-        // Algorithmically calculate unique, detailed Q1 deliverables based on selected day-of-quarter
-        function getDailyTasks(day) {
-            const week = Math.min(13, Math.ceil(day / 7));
-            const dow = ((day - 1) % 7) + 1;
-            const wSyllabus = weekSyllabus[week];
-            
-            const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-            const dayName = dayNames[dow - 1];
-            
-            let mathDescription = "";
-            let codingDescription = "";
-            let writingDescription = "";
-            let targetWords = 0;
-            let citationsLogged = 0;
-            
-            switch(dow) {
-                case 1:
-                    mathDescription = `Review definitions of ${wSyllabus.math} Read Ch 1 guidelines. Complete 5 notation drills.`;
-                    codingDescription = `Initialize directory folders. Configure python packages for ${wSyllabus.coding}`;
-                    writingDescription = `Outline Chapter 1 headings & structures mapping out ${wSyllabus.writing}`;
-                    targetWords = 150;
-                    citationsLogged = 1;
-                    break;
-                case 2:
-                    mathDescription = `Derive 5 detailed calculus equations step-by-step for ${wSyllabus.math}`;
-                    codingDescription = `Write python variables and functions testing script logic for ${wSyllabus.coding}`;
-                    writingDescription = `Identify 3 critical bibliography elements from citation manager on ${wSyllabus.writing}`;
-                    targetWords = 200;
-                    citationsLogged = 2;
-                    break;
-                case 3:
-                    mathDescription = `Calculate 10 advanced algebraic metrics for ${wSyllabus.math} and verify answers.`;
-                    codingDescription = `Automate local spreadsheet data cleaning pipelines executing ${wSyllabus.coding}`;
-                    writingDescription = `Draft 250 words outlining literature consensus points for ${wSyllabus.writing}`;
-                    targetWords = 300;
-                    citationsLogged = 1;
-                    break;
-                case 4:
-                    mathDescription = `Examine applied macroeconomic relevance of ${wSyllabus.math} to financial loops.`;
-                    codingDescription = `Wrangle raw CBE Excel worksheets to EViews format running ${wSyllabus.coding}`;
-                    writingDescription = `Draft 300 words justifying research objectives on ${wSyllabus.writing}`;
-                    targetWords = 250;
-                    citationsLogged = 2;
-                    break;
-                case 5:
-                    mathDescription = `Evaluate limits, dynamic boundaries, and shadow constraints for ${wSyllabus.math}`;
-                    codingDescription = `Eliminate memory leaks and check matrix calculations in ${wSyllabus.coding}`;
-                    writingDescription = `Incorporate domestic policy dates into text body drafts for ${wSyllabus.writing}`;
-                    targetWords = 200;
-                    citationsLogged = 1;
-                    break;
-                case 6:
-                    mathDescription = `Conduct detailed weekly reviews and synthesize notations for ${wSyllabus.math}`;
-                    codingDescription = `Document variable types and execute push commands to local git repository.`;
-                    writingDescription = `Combine all sections written this week into unified document drafts.`;
-                    targetWords = 400;
-                    citationsLogged = 3;
-                    break;
-                case 7:
-                    mathDescription = `Complete 1-hour mathematical self-assessment examining ${wSyllabus.math}`;
-                    codingDescription = `Verify complete directory compile processes in a clean workspace environment.`;
-                    writingDescription = `Verify bibliography styling alignment against APA standards.`;
-                    targetWords = 0;
-                    citationsLogged = 0;
-                    break;
-            }
-            
-            return {
-                dayName,
-                mathDescription,
-                codingDescription,
-                writingDescription,
-                targetWords,
-                citationsLogged
-            };
         }
 
         // Render the 3-Block Task Checklist dynamically in the DOM
@@ -870,7 +930,7 @@ Loading analysis metrics...
             showToast(`Synchronized! ${completedDays}/92 days completed. Progress updated to ${syllabusPct}%!`);
         }
 
-        // Core EWS calculation logic
+        // Core EWS calculation logic (Incorporates dynamic variables tracker)
         function calculateEwsScore() {
             // Get inputs
             const words = Math.min(60000, Math.max(0, parseInt(document.getElementById('input-word-count').value) || 0));
@@ -878,13 +938,30 @@ Loading analysis metrics...
             const syllabus = Math.min(100, Math.max(0, parseInt(document.getElementById('input-syllabus').value) || 0));
             const codeMilestones = parseInt(document.getElementById('input-code-milestones').value) || 0;
 
-            // 1. Calculate absolute targets (representing cumulative thesis progression)
-            const wordWeight = (words / 60000) * 35;
-            const citationWeight = Math.min(25, (citations / 111) * 25); // Target 111 references
-            const syllabusWeight = (syllabus / 100) * 20;
-            const codeWeight = (codeMilestones / 5) * 20;
+            // Calculate Variable Ingestion completion percentage
+            const keys = Object.keys(variablesSyllabus);
+            let totalProgressWeight = 0;
+            keys.forEach(vKey => {
+                const status = variablesState[vKey] || "Pending";
+                if (status === "Sourced") totalProgressWeight += 35;
+                else if (status === "Wrangled") totalProgressWeight += 70;
+                else if (status === "Integrated") totalProgressWeight += 100;
+            });
+            const dataReadyPct = Math.round(totalProgressWeight / keys.length);
 
-            const totalScore = Math.min(100, Math.round(wordWeight + citationWeight + syllabusWeight + codeWeight));
+            // Re-allocate weighted performance scoring:
+            // 1. Data & Variables Ingestion: 20%
+            // 2. Drafted Words Progress: 30%
+            // 3. Lit Citations: 20%
+            // 4. Syllabus Adherence: 15%
+            // 5. Code Milestones: 15%
+            const dataWeight = (dataReadyPct / 100) * 20;
+            const wordWeight = (words / 60000) * 30;
+            const citationWeight = Math.min(20, (citations / 111) * 20); // target 111 priority papers
+            const syllabusWeight = (syllabus / 100) * 15;
+            const codeWeight = (codeMilestones / 5) * 15;
+
+            const totalScore = Math.min(100, Math.round(dataWeight + wordWeight + citationWeight + syllabusWeight + codeWeight));
 
             // Update Progress indicators
             document.getElementById('stat-words').textContent = `${words.toLocaleString()} / 60,000`;
@@ -996,10 +1073,11 @@ Overall Performance Score : ${ewsDisplayScore} / 100
 Evaluation Diagnostics    : ${alertLevel}
 
 CURRENT METRICS SUMMARY:
-1. Written Word Count     : ${words.toLocaleString()} / 60,000 words
-2. Mendeley Library Sync  : ${citations} verified structural references
-3. Roadmap Adherence      : ${syllabus}% syllabus task completion rate
-4. Codebase Milestones    : Phase ${codeMilestones} validation level
+1. Sourced Data Readiness : ${dataReadyPct}% variable parameters mapped
+2. Written Word Count     : ${words.toLocaleString()} / 60,000 words
+3. Mendeley Library Sync  : ${citations} verified structural references
+4. Roadmap Adherence      : ${syllabus}% syllabus task completion rate
+5. Codebase Milestones    : Phase ${codeMilestones} validation level
 
 INTEGRATION AUDIT DIRECTORIES:
 - Google Drive Sync Path  : /My Drive/PhD_Thesis_Core/
@@ -1042,10 +1120,10 @@ ${getCommentary(ewsDisplayScore, words, citations, codeMilestones)}
         function showToast(message) {
             const toast = document.getElementById('toast');
             document.getElementById('toast-message').textContent = message;
-            toast.className = "fixed bottom-5 right-5 bg-white border border-slate-200 text-slate-800 px-4 py-3 rounded-xl shadow-xl flex items-center space-x-3 transform translate-y-0 opacity-100 transition-all duration-300 z-50 text-xs md:text-sm font-semibold shadow-2xl";
+            toast.className = "fixed bottom-5 right-5 bg-white border border-slate-200 text-slate-800 px-5 py-4 rounded-xl shadow-xl flex items-center space-x-3 transform translate-y-0 opacity-100 transition-all duration-300 z-50 text-xs md:text-sm font-semibold shadow-2xl";
             
             setTimeout(() => {
-                toast.className = "fixed bottom-5 right-5 bg-white border border-slate-200 text-slate-800 px-4 py-3 rounded-xl shadow-xl flex items-center space-x-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50 text-xs md:text-sm font-semibold shadow-2xl";
+                toast.className = "fixed bottom-5 right-5 bg-white border border-slate-200 text-slate-800 px-5 py-4 rounded-xl shadow-xl flex items-center space-x-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50 text-xs md:text-sm font-semibold shadow-2xl";
             }, 3000);
         }
 
