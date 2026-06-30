@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-slate-950">
+<html lang="en" class="h-full bg-slate-50">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,8 +18,9 @@
                             gold: '#C5A059',
                             emerald: '#0F5132',
                             darkGreen: '#0A3622',
-                            lightGreen: '#D1E7DD',
-                            accent: '#198754'
+                            lightGreen: '#E2EFE0',
+                            accent: '#198754',
+                            border: '#E2E8F0'
                         }
                     },
                     fontFamily: {
@@ -36,24 +37,25 @@
             height: 6px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.03);
+            background: #F1F5F9;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
             background: #C5A059;
             border-radius: 4px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #D1E7DD;
+            background: #0F5132;
         }
     </style>
 </head>
-<body class="h-full text-slate-100 font-sans antialiased flex flex-col justify-between selection:bg-asu-gold selection:text-slate-950">
+<body class="h-full text-slate-800 font-sans antialiased flex flex-col justify-between selection:bg-asu-gold selection:text-white">
 
+    <!-- STREAMING_CHUNK: Rendering Header... -->
     <!-- Brand Header -->
-    <header class="w-full bg-slate-900/80 backdrop-blur-md border-b border-asu-emerald/30 px-6 py-4 flex flex-col lg:flex-row justify-between items-center z-30 sticky top-0 shadow-xl">
+    <header class="w-full bg-white/95 backdrop-blur-md border-b border-slate-200 px-6 py-4 flex flex-col lg:flex-row justify-between items-center z-30 sticky top-0 shadow-sm">
         <div class="flex items-center space-x-4 mb-4 lg:mb-0">
-            <div class="bg-white p-2 rounded-full flex items-center justify-center w-11 h-11 shadow-inner shadow-slate-400">
-                <svg class="w-7 h-7 text-asu-emerald" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div class="bg-asu-darkGreen p-2 rounded-full flex items-center justify-center w-11 h-11 shadow-md">
+                <svg class="w-7 h-7 text-white" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="6"/>
                     <path d="M50 20 L50 80 M20 50 L80 50" stroke="currentColor" stroke-width="3" stroke-dasharray="3 3"/>
                     <polygon points="50,30 58,48 42,48" fill="currentColor"/>
@@ -61,20 +63,21 @@
                 </svg>
             </div>
             <div>
-                <h1 class="text-base font-serif font-extrabold text-asu-gold tracking-wide uppercase">Ain Shams University</h1>
-                <p class="text-xs text-slate-300 font-semibold tracking-wider">Faculty of Business — Supervisor Portal & Performance EWS</p>
+                <h1 class="text-base font-serif font-extrabold text-asu-emerald tracking-wide uppercase">Ain Shams University</h1>
+                <p class="text-xs text-slate-500 font-semibold tracking-wider">Faculty of Business — Supervisor Portal & Performance EWS</p>
             </div>
         </div>
         <div class="flex items-center space-x-3">
-            <span class="text-xs bg-asu-darkGreen border border-asu-emerald/30 text-asu-lightGreen font-bold px-3 py-1.5 rounded-full flex items-center shadow shadow-black">
-                <i class="fa-solid fa-signal mr-1.5 text-asu-gold"></i> Live Tracking Dashboard
+            <span class="text-xs bg-asu-lightGreen border border-asu-emerald/20 text-asu-emerald font-bold px-3 py-1.5 rounded-full flex items-center shadow-sm">
+                <i class="fa-solid fa-signal mr-1.5 text-asu-gold"></i> Live Tracking Portal
             </span>
-            <button onclick="exportDiagnostics()" class="text-xs bg-asu-gold hover:bg-yellow-500 text-slate-950 font-bold px-3.5 py-1.5 rounded-lg transition duration-150 flex items-center space-x-1 shadow-lg shadow-asu-gold/10">
+            <button onclick="exportDiagnostics()" class="text-xs bg-asu-emerald hover:bg-asu-darkGreen text-white font-bold px-3.5 py-1.5 rounded-lg transition duration-150 flex items-center space-x-1 shadow-md shadow-asu-emerald/10">
                 <i class="fa-solid fa-file-export"></i> <span>Share Diagnostic PDF</span>
             </button>
         </div>
     </header>
 
+    <!-- STREAMING_CHUNK: Structuring Left and Right split panels... -->
     <!-- Main Content Split -->
     <main class="flex-1 w-full p-4 lg:p-8 flex flex-col lg:flex-row gap-8 overflow-hidden">
         
@@ -82,11 +85,11 @@
         <section class="flex-1 flex flex-col gap-6 lg:overflow-y-auto custom-scrollbar lg:pr-2">
             
             <!-- Strategic Performance EWS Dial Box -->
-            <div class="bg-gradient-to-br from-slate-900 to-slate-950 border border-asu-emerald/20 p-6 rounded-3xl shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
                 <div class="space-y-3 max-w-md">
-                    <span class="text-[10px] font-bold text-asu-gold uppercase tracking-widest bg-asu-gold/10 px-2.5 py-1 rounded-full border border-asu-gold/20 inline-block">Supervisor Dashboard</span>
-                    <h2 class="text-xl md:text-2xl font-serif font-extrabold text-white">Performance EWS Monitor</h2>
-                    <p class="text-xs text-slate-400 leading-relaxed">
+                    <span class="text-[10px] font-bold text-asu-emerald uppercase tracking-widest bg-asu-lightGreen px-2.5 py-1 rounded-full border border-asu-emerald/20 inline-block">Supervisor Dashboard</span>
+                    <h2 class="text-xl md:text-2xl font-serif font-extrabold text-slate-800">Performance EWS Monitor</h2>
+                    <p class="text-xs text-slate-500 leading-relaxed">
                         This diagnostic monitor calculates your performance index against the locked 24-month roadmap, evaluating your data, programming progress, and citation health in real time [cite: 2, 4].
                     </p>
                 </div>
@@ -96,12 +99,12 @@
                     <div class="relative w-36 h-36 flex items-center justify-center">
                         <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
                             <!-- Background track -->
-                            <circle cx="50" cy="50" r="40" stroke="#1e293b" stroke-width="8" fill="none" />
+                            <circle cx="50" cy="50" r="40" stroke="#f1f5f9" stroke-width="8" fill="none" />
                             <!-- Variable path -->
                             <circle id="ews-progress-ring" cx="50" cy="50" r="40" stroke="#0F5132" stroke-width="8" fill="none" stroke-dasharray="251.2" stroke-dashoffset="251.2" class="transition-all duration-500" />
                         </svg>
                         <div class="absolute flex flex-col items-center text-center">
-                            <span id="ews-score-display" class="text-2xl font-bold font-mono tracking-tighter text-white">0%</span>
+                            <span id="ews-score-display" class="text-2xl font-bold font-mono tracking-tighter text-slate-800">0%</span>
                             <span id="ews-label-display" class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Loading</span>
                         </div>
                     </div>
@@ -111,132 +114,280 @@
                 </div>
             </div>
 
+            <!-- STREAMING_CHUNK: Quantifying general progress metrics... -->
             <!-- Quantitative Progress Indicators Grid -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                <div class="bg-slate-950/40 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 flex flex-col justify-between shadow-sm">
                     <div class="flex justify-between items-start mb-2">
                         <span class="text-[10px] font-extrabold tracking-wider text-slate-400 uppercase">1. Drafting Progress</span>
-                        <span class="text-asu-gold text-lg"><i class="fa-solid fa-pen-fancy"></i></span>
+                        <span class="text-asu-emerald text-lg"><i class="fa-solid fa-pen-fancy"></i></span>
                     </div>
                     <div>
-                        <h4 class="text-xs font-bold text-white">Chapter Word Counts</h4>
-                        <p class="text-xl font-mono font-bold text-white mt-1" id="stat-words">0 / 60,000</p>
+                        <h4 class="text-xs font-bold text-slate-700">Chapter Word Counts</h4>
+                        <p class="text-xl font-mono font-bold text-slate-800 mt-1" id="stat-words">0 / 60,000</p>
                     </div>
-                    <div class="w-full bg-slate-800 rounded-full h-1 mt-3">
+                    <div class="w-full bg-slate-100 rounded-full h-1 mt-3">
                         <div id="bar-words" class="bg-asu-gold h-1 rounded-full transition-all duration-300" style="width: 0%"></div>
                     </div>
                 </div>
 
-                <div class="bg-slate-950/40 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 flex flex-col justify-between shadow-sm">
                     <div class="flex justify-between items-start mb-2">
                         <span class="text-[10px] font-extrabold tracking-wider text-slate-400 uppercase">2. Research Library</span>
-                        <span class="text-asu-gold text-lg"><i class="fa-solid fa-folder-open"></i></span>
+                        <span class="text-asu-emerald text-lg"><i class="fa-solid fa-folder-open"></i></span>
                     </div>
                     <div>
-                        <h4 class="text-xs font-bold text-white">Verified Lit Citations</h4>
-                        <p class="text-xl font-mono font-bold text-white mt-1" id="stat-papers">0 Papers</p>
+                        <h4 class="text-xs font-bold text-slate-700">Verified Lit Citations</h4>
+                        <p class="text-xl font-mono font-bold text-slate-800 mt-1" id="stat-papers">0 Papers</p>
                     </div>
-                    <div class="w-full bg-slate-800 rounded-full h-1 mt-3">
+                    <div class="w-full bg-slate-100 rounded-full h-1 mt-3">
                         <div id="bar-papers" class="bg-asu-emerald h-1 rounded-full transition-all duration-300" style="width: 0%"></div>
                     </div>
                 </div>
 
-                <div class="bg-slate-950/40 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 flex flex-col justify-between shadow-sm">
                     <div class="flex justify-between items-start mb-2">
                         <span class="text-[10px] font-extrabold tracking-wider text-slate-400 uppercase">3. Technical Checkpoint</span>
-                        <span class="text-asu-gold text-lg"><i class="fa-solid fa-code-branch"></i></span>
+                        <span class="text-asu-emerald text-lg"><i class="fa-solid fa-code-branch"></i></span>
                     </div>
                     <div>
-                        <h4 class="text-xs font-bold text-white">Code Milestones</h4>
-                        <p class="text-xl font-mono font-bold text-white mt-1" id="stat-code">0 / 5 Completed</p>
+                        <h4 class="text-xs font-bold text-slate-700">Code Milestones</h4>
+                        <p class="text-xl font-mono font-bold text-slate-800 mt-1" id="stat-code">0 / 5 Completed</p>
                     </div>
-                    <div class="w-full bg-slate-800 rounded-full h-1 mt-3">
-                        <div id="bar-code" class="bg-asu-accent h-1 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    <div class="w-full bg-slate-100 rounded-full h-1 mt-3">
+                        <div id="bar-code" class="bg-emerald-600 h-1 rounded-full transition-all duration-300" style="width: 0%"></div>
                     </div>
                 </div>
             </div>
 
+            <!-- STREAMING_CHUNK: Integrating the PhD Learning Milestones Tracker... -->
+            <!-- PhD Learning Milestones Tracker (Technical & Academic Foundations) -->
+            <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-4">
+                <h3 class="text-sm font-serif font-extrabold text-slate-800 flex items-center">
+                    <i class="fa-solid fa-graduation-cap mr-2 text-asu-gold"></i> PhD Roadmap Learning Milestones
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+                    <!-- Column 1: Academic & Math Prerequisites -->
+                    <div class="space-y-4">
+                        <h4 class="font-bold text-asu-emerald uppercase tracking-wider text-[10px] border-b pb-1 border-slate-100">🧠 Mathematics & Theory Progress</h4>
+                        <div class="space-y-3">
+                            <div>
+                                <div class="flex justify-between text-[11px] mb-1">
+                                    <span class="text-slate-600 font-medium">Linear Algebra & Matrix Systems</span>
+                                    <span id="math-val-la" class="font-bold text-slate-800">0%</span>
+                                </div>
+                                <input type="range" id="slider-math-la" min="0" max="100" value="0" oninput="updateRoadmapMilestones()" class="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-asu-emerald">
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-[11px] mb-1">
+                                    <span class="text-slate-600 font-medium">Calculus & Optimization (FOCs)</span>
+                                    <span id="math-val-calc" class="font-bold text-slate-800">0%</span>
+                                </div>
+                                <input type="range" id="slider-math-calc" min="0" max="100" value="0" oninput="updateRoadmapMilestones()" class="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-asu-emerald">
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-[11px] mb-1">
+                                    <span class="text-slate-600 font-medium">Ordinary Differential Equations</span>
+                                    <span id="math-val-ode" class="font-bold text-slate-800">0%</span>
+                                </div>
+                                <input type="range" id="slider-math-ode" min="0" max="100" value="0" oninput="updateRoadmapMilestones()" class="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-asu-emerald">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Software & Tool Skills -->
+                    <div class="space-y-3">
+                        <h4 class="font-bold text-asu-emerald uppercase tracking-wider text-[10px] border-b pb-1 border-slate-100">💻 Programming & Software Checkpoints</h4>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="flex items-center space-x-2 bg-slate-50 p-2 rounded-lg border border-slate-100 cursor-pointer">
+                                <input type="checkbox" id="chk-tool-git" onchange="updateRoadmapMilestones()" class="rounded text-asu-emerald focus:ring-asu-emerald w-4 h-4">
+                                <span class="text-[11px] font-medium text-slate-600">Git/GitHub Setup</span>
+                            </label>
+                            <label class="flex items-center space-x-2 bg-slate-50 p-2 rounded-lg border border-slate-100 cursor-pointer">
+                                <input type="checkbox" id="chk-tool-python" onchange="updateRoadmapMilestones()" class="rounded text-asu-emerald focus:ring-asu-emerald w-4 h-4">
+                                <span class="text-[11px] font-medium text-slate-600">Python (Pandas)</span>
+                            </label>
+                            <label class="flex items-center space-x-2 bg-slate-50 p-2 rounded-lg border border-slate-100 cursor-pointer">
+                                <input type="checkbox" id="chk-tool-r" onchange="updateRoadmapMilestones()" class="rounded text-asu-emerald focus:ring-asu-emerald w-4 h-4">
+                                <span class="text-[11px] font-medium text-slate-600">R (Matching/DiD)</span>
+                            </label>
+                            <label class="flex items-center space-x-2 bg-slate-50 p-2 rounded-lg border border-slate-100 cursor-pointer">
+                                <input type="checkbox" id="chk-tool-matlab" onchange="updateRoadmapMilestones()" class="rounded text-asu-emerald focus:ring-asu-emerald w-4 h-4">
+                                <span class="text-[11px] font-medium text-slate-600">MATLAB/Octave</span>
+                            </label>
+                            <label class="flex items-center space-x-2 bg-slate-50 p-2 rounded-lg border border-slate-100 cursor-pointer">
+                                <input type="checkbox" id="chk-tool-eviews" onchange="updateRoadmapMilestones()" class="rounded text-asu-emerald focus:ring-asu-emerald w-4 h-4">
+                                <span class="text-[11px] font-medium text-slate-600">EViews Panel VAR</span>
+                            </label>
+                            <label class="flex items-center space-x-2 bg-slate-50 p-2 rounded-lg border border-slate-100 cursor-pointer">
+                                <input type="checkbox" id="chk-tool-dynare" onchange="updateRoadmapMilestones()" class="rounded text-asu-emerald focus:ring-asu-emerald w-4 h-4">
+                                <span class="text-[11px] font-medium text-slate-600">Dynare Coding</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IMF DSGE Course Syllabus Trackers -->
+                <div class="pt-2 border-t border-slate-100 space-y-2">
+                    <h4 class="font-bold text-asu-emerald uppercase tracking-wider text-[10px]">🎓 IMF DSGE Course Syllabus Units Checked</h4>
+                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-[10px]">
+                        <label class="flex items-center space-x-1.5 p-1.5 bg-slate-50 rounded border border-slate-100 cursor-pointer">
+                            <input type="checkbox" id="imf-u1" onchange="updateRoadmapMilestones()" class="rounded text-asu-emerald w-3 h-3">
+                            <span class="text-slate-600 truncate">U1: RBC Model</span>
+                        </label>
+                        <label class="flex items-center space-x-1.5 p-1.5 bg-slate-50 rounded border border-slate-100 cursor-pointer">
+                            <input type="checkbox" id="imf-u2" onchange="updateRoadmapMilestones()" class="rounded text-asu-emerald w-3 h-3">
+                            <span class="text-slate-600 truncate">U2: NK Model</span>
+                        </label>
+                        <label class="flex items-center space-x-1.5 p-1.5 bg-slate-50 rounded border border-slate-100 cursor-pointer">
+                            <input type="checkbox" id="imf-u3" onchange="updateRoadmapMilestones()" class="rounded text-asu-emerald w-3 h-3">
+                            <span class="text-slate-600 truncate">U3: Labor Rigidity</span>
+                        </label>
+                        <label class="flex items-center space-x-1.5 p-1.5 bg-slate-50 rounded border border-slate-100 cursor-pointer">
+                            <input type="checkbox" id="imf-u4" onchange="updateRoadmapMilestones()" class="rounded text-asu-emerald w-3 h-3">
+                            <span class="text-slate-600 truncate">U4: Open Economy</span>
+                        </label>
+                        <label class="flex items-center space-x-1.5 p-1.5 bg-slate-50 rounded border border-slate-100 cursor-pointer">
+                            <input type="checkbox" id="imf-u5" onchange="updateRoadmapMilestones()" class="rounded text-asu-emerald w-3 h-3">
+                            <span class="text-slate-600 truncate">U5: Fiscal Policy</span>
+                        </label>
+                        <label class="flex items-center space-x-1.5 p-1.5 bg-slate-50 rounded border border-slate-100 cursor-pointer">
+                            <input type="checkbox" id="imf-u6" onchange="updateRoadmapMilestones()" class="rounded text-asu-emerald w-3 h-3">
+                            <span class="text-slate-600 truncate">U6: Fin Frictions</span>
+                        </label>
+                        <label class="flex items-center space-x-1.5 p-1.5 bg-slate-50 rounded border border-slate-100 cursor-pointer">
+                            <input type="checkbox" id="imf-u7" onchange="updateRoadmapMilestones()" class="rounded text-asu-emerald w-3 h-3">
+                            <span class="text-slate-600 truncate">U7: Bayesian 1</span>
+                        </label>
+                        <label class="flex items-center space-x-1.5 p-1.5 bg-slate-50 rounded border border-slate-100 cursor-pointer">
+                            <input type="checkbox" id="imf-u8" onchange="updateRoadmapMilestones()" class="rounded text-asu-emerald w-3 h-3">
+                            <span class="text-slate-600 truncate">U8: Bayesian 2</span>
+                        </label>
+                        <label class="flex items-center space-x-1.5 p-1.5 bg-slate-50 rounded border border-slate-100 cursor-pointer">
+                            <input type="checkbox" id="imf-u9" onchange="updateRoadmapMilestones()" class="rounded text-asu-emerald w-3 h-3">
+                            <span class="text-slate-600 truncate">U9: Policy Apps</span>
+                        </label>
+                        <label class="flex items-center space-x-1.5 p-1.5 bg-slate-50 rounded border border-slate-100 cursor-pointer">
+                            <input type="checkbox" id="imf-u10" onchange="updateRoadmapMilestones()" class="rounded text-asu-emerald w-3 h-3">
+                            <span class="text-slate-600 truncate">U10: Synthesis</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STREAMING_CHUNK: Integrating external connections UI... -->
             <!-- Interlinked Systems Integration Panel -->
-            <div class="bg-slate-950/30 border border-slate-800 p-6 rounded-2xl">
-                <h3 class="text-sm font-serif font-extrabold text-white mb-4 flex items-center">
+            <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-4">
+                <h3 class="text-sm font-serif font-extrabold text-slate-800 flex items-center">
                     <i class="fa-solid fa-circle-nodes mr-2 text-asu-gold"></i> Live External Integrations Tracker
                 </h3>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <!-- Google Drive Card -->
-                    <div class="p-4 bg-slate-900/50 border border-slate-800 rounded-xl flex items-start space-x-3">
-                        <div class="p-2.5 bg-blue-500/10 text-blue-400 rounded-xl text-lg"><i class="fa-brands fa-google-drive"></i></div>
-                        <div class="flex-1 min-w-0 space-y-1.5">
-                            <div class="flex justify-between items-center">
-                                <h4 class="text-xs font-bold text-white">Google Drive Folder Sync</h4>
-                                <span id="sync-gdrive-indicator" class="w-2.5 h-2.5 bg-red-500 rounded-full transition-all duration-200"></span>
+                    <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl flex flex-col justify-between space-y-2">
+                        <div class="flex justify-between items-center border-b pb-1 border-slate-200">
+                            <div class="flex items-center space-x-1.5">
+                                <span class="text-blue-500 text-sm"><i class="fa-brands fa-google-drive"></i></span>
+                                <h4 class="text-[11px] font-bold text-slate-700">Google Drive</h4>
                             </div>
-                            <div class="space-y-1">
-                                <p class="text-[10px] text-slate-400 leading-normal">
-                                    Folder ID: <span id="sync-gdrive-id-display" class="font-mono text-asu-gold text-[9px] break-all">None Loaded</span>
-                                </p>
-                                <div class="flex space-x-1">
-                                    <input type="text" id="input-gdrive-id" placeholder="Paste Folder ID here" class="w-full bg-slate-950 border border-slate-800 focus:border-asu-emerald rounded px-2 py-1 text-[9px] text-white outline-none">
-                                    <button onclick="saveGDriveFolderId()" class="bg-asu-gold hover:bg-yellow-500 text-slate-950 font-bold px-2 py-1 rounded text-[9px] transition">Save</button>
-                                </div>
+                            <span id="sync-gdrive-indicator" class="w-2.5 h-2.5 bg-red-500 rounded-full transition-all duration-200"></span>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-[9px] text-slate-400">
+                                Folder ID: <span id="sync-gdrive-id-display" class="font-mono text-asu-gold text-[9px] break-all">None Loaded</span>
+                            </p>
+                            <div class="flex space-x-1">
+                                <input type="text" id="input-gdrive-id" placeholder="Paste Folder ID" class="w-full bg-white border border-slate-200 focus:border-asu-emerald rounded px-1.5 py-0.5 text-[9px] text-slate-800 outline-none">
+                                <button onclick="saveGDriveFolderId()" class="bg-asu-emerald hover:bg-asu-darkGreen text-white font-bold px-2 py-0.5 rounded text-[9px] transition">Save</button>
                             </div>
-                            <div class="flex space-x-2 text-[9px] font-semibold text-slate-400">
-                                <span id="sync-gdrive-ver" class="bg-slate-800/80 px-1.5 py-0.5 rounded">Unverified</span>
-                                <span id="sync-gdrive-status" class="text-red-400 font-bold">Offline</span>
-                            </div>
+                        </div>
+                        <div class="flex space-x-2 text-[9px] font-semibold text-slate-500">
+                            <span id="sync-gdrive-ver" class="bg-slate-200/50 px-1 py-0.5 rounded">Unverified</span>
+                            <span id="sync-gdrive-status" class="text-red-500 font-bold">Offline</span>
                         </div>
                     </div>
 
                     <!-- Mendeley Card -->
-                    <div class="p-4 bg-slate-900/50 border border-slate-800 rounded-xl flex items-start space-x-3">
-                        <div class="p-2.5 bg-red-500/10 text-red-400 rounded-xl text-lg"><i class="fa-solid fa-book"></i></div>
-                        <div class="flex-1 min-w-0 space-y-1.5">
-                            <div class="flex justify-between items-center">
-                                <h4 class="text-xs font-bold text-white">Mendeley Library Connection</h4>
-                                <span id="sync-mendeley-indicator" class="w-2.5 h-2.5 bg-red-500 rounded-full transition-all duration-200"></span>
+                    <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl flex flex-col justify-between space-y-2">
+                        <div class="flex justify-between items-center border-b pb-1 border-slate-200">
+                            <div class="flex items-center space-x-1.5">
+                                <span class="text-red-500 text-sm"><i class="fa-solid fa-book"></i></span>
+                                <h4 class="text-[11px] font-bold text-slate-700">Mendeley Library</h4>
                             </div>
-                            <p class="text-[10px] text-slate-400 leading-normal">
-                                Group: <code class="font-mono text-asu-gold">UMP_Bubble_Dynamics_Egypt</code>
+                            <span id="sync-mendeley-indicator" class="w-2.5 h-2.5 bg-red-500 rounded-full transition-all duration-200"></span>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-[9px] text-slate-400">
+                                Group ID: <span id="sync-mendeley-id-display" class="font-mono text-asu-gold text-[9px] break-all">None Loaded</span>
                             </p>
-                            <div class="flex space-x-2 text-[9px] font-semibold text-slate-400">
-                                <span id="mendeley-ver-count" class="bg-slate-800/80 px-1.5 py-0.5 rounded">0 Refs Loaded</span>
-                                <span id="sync-mendeley-status" class="text-red-400 font-bold">Unsynced</span>
+                            <div class="flex space-x-1">
+                                <input type="text" id="input-mendeley-id" placeholder="Paste Mendeley Group ID" class="w-full bg-white border border-slate-200 focus:border-asu-emerald rounded px-1.5 py-0.5 text-[9px] text-slate-800 outline-none">
+                                <button onclick="saveMendeleySettings()" class="bg-asu-emerald hover:bg-asu-darkGreen text-white font-bold px-2 py-0.5 rounded text-[9px] transition">Save</button>
                             </div>
+                        </div>
+                        <div class="flex space-x-2 text-[9px] font-semibold text-slate-500">
+                            <span id="mendeley-ver-count" class="bg-slate-200/50 px-1 py-0.5 rounded">0 Refs</span>
+                            <span id="sync-mendeley-status" class="text-red-500 font-bold">Unsynced</span>
+                        </div>
+                    </div>
+
+                    <!-- Notion Card -->
+                    <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl flex flex-col justify-between space-y-2">
+                        <div class="flex justify-between items-center border-b pb-1 border-slate-200">
+                            <div class="flex items-center space-x-1.5">
+                                <span class="text-slate-800 text-sm"><i class="fa-solid fa-clipboard-list"></i></span>
+                                <h4 class="text-[11px] font-bold text-slate-700">Notion Workspace</h4>
+                            </div>
+                            <span id="sync-notion-indicator" class="w-2.5 h-2.5 bg-red-500 rounded-full transition-all duration-200"></span>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-[9px] text-slate-400">
+                                DB ID: <span id="sync-notion-id-display" class="font-mono text-asu-gold text-[9px] break-all">None Loaded</span>
+                            </p>
+                            <div class="flex space-x-1">
+                                <input type="text" id="input-notion-id" placeholder="Paste Database ID" class="w-full bg-white border border-slate-200 focus:border-asu-emerald rounded px-1.5 py-0.5 text-[9px] text-slate-800 outline-none">
+                                <button onclick="saveNotionSettings()" class="bg-asu-emerald hover:bg-asu-darkGreen text-white font-bold px-2 py-0.5 rounded text-[9px] transition">Save</button>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2 text-[9px] font-semibold text-slate-500">
+                            <span id="sync-notion-ver" class="bg-slate-200/50 px-1 py-0.5 rounded">Disconnected</span>
+                            <span id="sync-notion-status" class="text-red-500 font-bold">Offline</span>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- STREAMING_CHUNK: Integrating the interactive 92-day matrix... -->
             <!-- Quarter 1 Interactive Daily Task Matrix (92-Day Deliverable Checklist) -->
-            <div class="bg-slate-900 border border-asu-emerald/30 p-6 rounded-2xl space-y-5 shadow-inner">
+            <div class="bg-white border border-slate-200 p-6 rounded-2xl space-y-5 shadow-sm">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                     <div>
-                        <h3 class="text-sm font-serif font-extrabold text-white flex items-center">
+                        <h3 class="text-sm font-serif font-extrabold text-slate-800 flex items-center">
                             <i class="fa-solid fa-calendar-check mr-2 text-asu-gold"></i> Q1 Daily Task Matrix (92-Day Roadmap)
                         </h3>
                         <p class="text-[10px] text-slate-400 mt-0.5">Manage and check off detailed deliverable checklists for every single day of Quarter 1.</p>
                     </div>
                     <div class="flex items-center space-x-2">
                         <!-- Navigation dropdowns -->
-                        <select id="matrix-month-selector" onchange="onMatrixMonthChange()" class="bg-slate-950 border border-slate-800 focus:border-asu-emerald rounded px-2.5 py-1 text-xs text-slate-300 outline-none">
+                        <select id="matrix-month-selector" onchange="onMatrixMonthChange()" class="bg-white border border-slate-200 focus:border-asu-emerald rounded px-2.5 py-1 text-xs text-slate-600 outline-none">
                             <option value="july">July 2026 (Days 1-31)</option>
                             <option value="august">August 2026 (Days 32-62)</option>
                             <option value="september">September 2026 (Days 63-92)</option>
                         </select>
-                        <select id="matrix-day-selector" onchange="onMatrixDayChange()" class="bg-slate-950 border border-slate-800 focus:border-asu-emerald rounded px-2.5 py-1 text-xs text-slate-300 outline-none">
+                        <select id="matrix-day-selector" onchange="onMatrixDayChange()" class="bg-white border border-slate-200 focus:border-asu-emerald rounded px-2.5 py-1 text-xs text-slate-600 outline-none">
                             <!-- Injected by script -->
                         </select>
                     </div>
                 </div>
 
                 <!-- Q1 Checklist Progress indicator -->
-                <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 space-y-2">
-                    <div class="flex justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                        <span>Checklist Completion: <strong id="checklist-count-display" class="text-asu-gold">0 / 276 tasks</strong></span>
-                        <span id="checklist-pct-display">0%</span>
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 space-y-2">
+                    <div class="flex justify-between text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                        <span>Checklist Completion: <strong id="checklist-count-display" class="text-asu-emerald">0 / 276 tasks</strong></span>
+                        <span id="checklist-pct-display" class="font-bold text-asu-emerald">0%</span>
                     </div>
-                    <div class="w-full bg-slate-800 rounded-full h-1.5">
-                        <div id="checklist-progress-bar" class="bg-asu-gold h-1.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    <div class="w-full bg-slate-200 rounded-full h-1.5">
+                        <div id="checklist-progress-bar" class="bg-asu-emerald h-1.5 rounded-full transition-all duration-300" style="width: 0%"></div>
                     </div>
                 </div>
 
@@ -250,20 +401,21 @@
                     <span class="text-[10px] text-slate-400 font-medium italic">
                         *Tip: Synchronizing updates the logger fields with your checked tasks automatically.
                     </span>
-                    <button onclick="syncChecklistToSandbox()" class="w-full sm:w-auto px-4 py-2 bg-asu-emerald hover:bg-asu-accent text-white font-bold text-xs rounded-lg transition shadow-md shadow-asu-emerald/10 flex items-center justify-center space-x-1">
+                    <button onclick="syncChecklistToSandbox()" class="w-full sm:w-auto px-4 py-2 bg-asu-emerald hover:bg-asu-darkGreen text-white font-bold text-xs rounded-lg transition shadow-md shadow-asu-emerald/10 flex items-center justify-center space-x-1">
                         <i class="fa-solid fa-arrows-rotate mr-1"></i>
                         <span>Sync Checklist to Sandbox Metrics</span>
                     </button>
                 </div>
             </div>
 
+            <!-- STREAMING_CHUNK: Setting up manual metric overrides... -->
             <!-- Actionable Performance Inputs (Interactive Dashboard Sandbox) -->
-            <div class="bg-slate-900/40 border border-slate-800 p-6 rounded-2xl space-y-4">
+            <div class="bg-white border border-slate-200 p-6 rounded-2xl space-y-4 shadow-sm">
                 <div class="flex justify-between items-center">
-                    <h3 class="text-sm font-serif font-extrabold text-white flex items-center">
+                    <h3 class="text-sm font-serif font-extrabold text-slate-800 flex items-center">
                         <i class="fa-solid fa-sliders mr-2 text-asu-gold"></i> Actual Progress Diagnostic Logger
                     </h3>
-                    <button onclick="resetToZero()" class="text-[10px] bg-red-950/40 hover:bg-red-900/40 text-red-400 font-bold border border-red-900/30 px-2.5 py-1 rounded transition">
+                    <button onclick="resetToZero()" class="text-[10px] bg-red-100 hover:bg-red-200 text-red-700 font-bold border border-red-200/50 px-2.5 py-1 rounded transition">
                         <i class="fa-solid fa-rotate-left mr-1"></i> Reset Sandbox
                     </button>
                 </div>
@@ -271,19 +423,19 @@
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
                     <div>
                         <label class="block text-slate-400 font-bold mb-1 uppercase tracking-wider text-[10px]">1. Current Word Count</label>
-                        <input type="number" id="input-word-count" min="0" max="60000" placeholder="0" oninput="calculateEwsScore()" class="w-full bg-slate-950 border border-slate-800 focus:border-asu-emerald rounded-lg px-3 py-2 outline-none text-white font-mono">
+                        <input type="number" id="input-word-count" min="0" max="60000" placeholder="0" oninput="calculateEwsScore()" class="w-full bg-slate-50 border border-slate-200 focus:border-asu-emerald rounded-lg px-3 py-2 outline-none text-slate-800 font-mono">
                     </div>
                     <div>
                         <label class="block text-slate-400 font-bold mb-1 uppercase tracking-wider text-[10px]">2. Mendeley Citations</label>
-                        <input type="number" id="input-citations" min="0" max="200" placeholder="0" oninput="calculateEwsScore()" class="w-full bg-slate-950 border border-slate-800 focus:border-asu-emerald rounded-lg px-3 py-2 outline-none text-white font-mono">
+                        <input type="number" id="input-citations" min="0" max="200" placeholder="0" oninput="calculateEwsScore()" class="w-full bg-slate-50 border border-slate-200 focus:border-asu-emerald rounded-lg px-3 py-2 outline-none text-slate-800 font-mono">
                     </div>
                     <div>
                         <label class="block text-slate-400 font-bold mb-1 uppercase tracking-wider text-[10px]">3. Syllabus Adherence (%)</label>
-                        <input type="number" id="input-syllabus" min="0" max="100" placeholder="100" oninput="calculateEwsScore()" class="w-full bg-slate-950 border border-slate-800 focus:border-asu-emerald rounded-lg px-3 py-2 outline-none text-white font-mono">
+                        <input type="number" id="input-syllabus" min="0" max="100" placeholder="100" oninput="calculateEwsScore()" class="w-full bg-slate-50 border border-slate-200 focus:border-asu-emerald rounded-lg px-3 py-2 outline-none text-slate-800 font-mono">
                     </div>
                     <div>
                         <label class="block text-slate-400 font-bold mb-1 uppercase tracking-wider text-[10px]">4. Code Milestones Done</label>
-                        <select id="input-code-milestones" onchange="calculateEwsScore()" class="w-full bg-slate-950 border border-slate-800 focus:border-asu-emerald rounded-lg px-3 py-2 outline-none text-slate-300 font-semibold">
+                        <select id="input-code-milestones" onchange="calculateEwsScore()" class="w-full bg-slate-50 border border-slate-200 focus:border-asu-emerald rounded-lg px-3 py-2 outline-none text-slate-600 font-semibold">
                             <option value="0">0: Zero Foundation</option>
                             <option value="1">1: Clean Datasets & Repos</option>
                             <option value="2">2: Simple RBC Solved</option>
@@ -297,87 +449,118 @@
 
         </section>
 
+        <!-- STREAMING_CHUNK: Structuring Right column sidebar... -->
         <!-- Right Section: Interactive Implementation & Supervisor Sharing Portal -->
-        <aside class="w-full lg:w-[480px] bg-slate-900 border border-slate-800 rounded-3xl p-6 flex flex-col justify-between overflow-y-auto custom-scrollbar">
+        <aside class="w-full lg:w-[480px] bg-white border border-slate-200 rounded-3xl p-6 flex flex-col justify-between overflow-y-auto custom-scrollbar shadow-sm">
             <div class="space-y-6">
-                <div class="border-b border-slate-800 pb-4">
-                    <h3 class="text-base font-serif font-extrabold text-white flex items-center">
+                <div class="border-b border-slate-100 pb-4">
+                    <h3 class="text-base font-serif font-extrabold text-slate-800 flex items-center">
                         <i class="fa-solid fa-share-nodes mr-2 text-asu-gold"></i> Supervisor Diagnostic Center
                     </h3>
-                    <p class="text-xs text-slate-400 mt-1">Generate a copyable summary of your progress and code updates to share with your committee [cite: 2, 4].</p>
+                    <p class="text-xs text-slate-500 mt-1">Generate a copyable summary of your progress and code updates to share with your committee [cite: 2, 4].</p>
                 </div>
 
                 <!-- Live Generated Diagnostic Report (Copyable Text Block) -->
                 <div class="space-y-2">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-bold tracking-wider text-slate-400 uppercase">Live Diagnostic Report Output</span>
-                        <button onclick="copyDiagnosticReport()" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-asu-gold font-bold px-2.5 py-1 rounded transition duration-150">
+                        <button onclick="copyDiagnosticReport()" class="text-[10px] bg-slate-100 hover:bg-slate-200 text-asu-gold font-bold px-2.5 py-1 rounded transition duration-150 border border-slate-200 shadow-sm">
                             <i class="fa-solid fa-copy mr-1"></i> Copy Report Text
                         </button>
                     </div>
-                    <textarea id="diagnostic-report-box" readonly class="w-full h-48 bg-slate-950 border border-slate-800 rounded-xl p-3.5 font-mono text-[10px] leading-relaxed text-slate-300 resize-none outline-none custom-scrollbar">
+                    <textarea id="diagnostic-report-box" readonly class="w-full h-40 bg-slate-50 border border-slate-200 rounded-xl p-3.5 font-mono text-[10px] leading-relaxed text-slate-600 resize-none outline-none custom-scrollbar">
 Loading analysis metrics...
                     </textarea>
                 </div>
 
-                <!-- Live Embedded Google Drive Folder (Live View Window) -->
-                <div class="space-y-2 pt-2">
-                    <span class="text-[10px] font-bold tracking-wider text-slate-400 uppercase block">Live Shared Folder Workspace</span>
-                    <div id="gdrive-iframe-container" class="w-full h-64 bg-slate-950 border border-slate-800 rounded-xl overflow-hidden flex items-center justify-center text-center p-4">
-                        <div class="text-slate-500 text-xs">
-                            <i class="fa-brands fa-google-drive text-3xl mb-2 block text-blue-500/40"></i>
-                            Please input your Google Drive Folder ID on the left panel to load your live files.
+                <!-- STREAMING_CHUNK: Integrating the live Google Drive iframe... -->
+                <!-- Live Embedded Workspace Tabs (Drive, Mendeley, Notion) -->
+                <div class="space-y-3">
+                    <div class="flex space-x-1 border-b border-slate-100 pb-1 text-xs">
+                        <button onclick="toggleVisualTab('live-gdrive')" id="vtab-btn-gdrive" class="flex-1 py-1 text-center font-bold border-b-2 border-asu-gold text-slate-800 transition">Google Drive</button>
+                        <button onclick="toggleVisualTab('live-mendeley')" id="vtab-btn-mendeley" class="flex-1 py-1 text-center font-bold text-slate-400 hover:text-slate-800 transition">Mendeley Feed</button>
+                        <button onclick="toggleVisualTab('live-notion')" id="vtab-btn-notion" class="flex-1 py-1 text-center font-bold text-slate-400 hover:text-slate-800 transition">Notion Integration</button>
+                    </div>
+
+                    <!-- GDrive Live Preview Iframe Container -->
+                    <div id="visual-content-gdrive" class="space-y-2">
+                        <span class="text-[10px] font-bold tracking-wider text-slate-400 uppercase block">Live Shared Folder Workspace</span>
+                        <div id="gdrive-iframe-container" class="w-full h-48 bg-slate-50 border border-slate-200 rounded-xl overflow-hidden flex items-center justify-center text-center p-4 shadow-inner">
+                            <div class="text-slate-400 text-xs">
+                                <i class="fa-brands fa-google-drive text-3xl mb-2 block text-blue-500/40"></i>
+                                Please input your Google Drive Folder ID on the left panel to load your live files.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mendeley Live Mock Parser Container -->
+                    <div id="visual-content-mendeley" class="hidden space-y-2">
+                        <span class="text-[10px] font-bold tracking-wider text-slate-400 uppercase block">UMP BibTeX Citation Library</span>
+                        <div id="mendeley-list-container" class="w-full h-48 bg-slate-50 border border-slate-200 rounded-xl overflow-y-auto p-3 font-mono text-[10px] text-slate-600 space-y-2 shadow-inner custom-scrollbar">
+                            <!-- Injected dynamically by JS -->
+                            <div class="text-slate-400 text-center py-8">
+                                <i class="fa-solid fa-book text-3xl mb-2 block text-red-500/30"></i>
+                                Save a Mendeley Group ID to verify BibTeX parser integration.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notion Database Rollup Preview -->
+                    <div id="visual-content-notion" class="hidden space-y-2">
+                        <span class="text-[10px] font-bold tracking-wider text-slate-400 uppercase block">Notion Database Workspace Link</span>
+                        <div id="notion-box-container" class="w-full h-48 bg-slate-50 border border-slate-200 rounded-xl flex flex-col justify-center items-center text-center p-4 shadow-inner space-y-3">
+                            <!-- Injected dynamically by JS -->
+                            <div class="text-slate-400 text-xs">
+                                <i class="fa-solid fa-clipboard-list text-3xl mb-2 block text-slate-800/30"></i>
+                                Please configure your Notion Database ID to connect.
+                            </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- STREAMING_CHUNK: Adding quick start help guides... -->
                 <!-- Integration Setup Guides (Interactive Tabs) -->
-                <div class="space-y-3">
-                    <div class="flex space-x-1 border-b border-slate-800 pb-1 text-xs">
-                        <button onclick="toggleTab('guide-gdrive')" id="tab-btn-gdrive" class="flex-1 py-1 text-center font-bold border-b-2 border-asu-gold text-white transition">Google Drive</button>
-                        <button onclick="toggleTab('guide-mendeley')" id="tab-btn-mendeley" class="flex-1 py-1 text-center font-bold text-slate-400 hover:text-white transition">Mendeley</button>
-                        <button onclick="toggleTab('guide-notion')" id="tab-btn-notion" class="flex-1 py-1 text-center font-bold text-slate-400 hover:text-white transition">Notion Setup</button>
+                <div class="space-y-3 pt-2 border-t border-slate-100">
+                    <div class="flex space-x-1 border-b border-slate-100 pb-1 text-xs">
+                        <button onclick="toggleTab('guide-gdrive')" id="tab-btn-gdrive" class="flex-1 py-1 text-center font-bold border-b-2 border-asu-emerald text-asu-emerald transition">Drive Setup</button>
+                        <button onclick="toggleTab('guide-mendeley')" id="tab-btn-mendeley" class="flex-1 py-1 text-center font-bold text-slate-400 hover:text-slate-800 transition">Mendeley Setup</button>
+                        <button onclick="toggleTab('guide-notion')" id="tab-btn-notion" class="flex-1 py-1 text-center font-bold text-slate-400 hover:text-slate-800 transition">Notion Setup</button>
                     </div>
 
                     <!-- GDrive Guide Tab Content -->
-                    <div id="guide-content-gdrive" class="text-xs text-slate-400 space-y-2.5 leading-relaxed">
-                        <p class="font-semibold text-white">How to Sync & Verify Google Drive Folders:</p>
+                    <div id="guide-content-gdrive" class="text-xs text-slate-500 space-y-2.5 leading-relaxed">
+                        <p class="font-bold text-slate-700">How to Sync & Verify Google Drive Folders:</p>
                         <ol class="list-decimal pl-4 space-y-1 text-[11px]">
-                            <li>Open your local folder <code class="text-asu-gold bg-slate-950 px-1 py-0.5 rounded font-mono">~/PhD_Thesis_UMP_Dynamics/</code>.</li>
-                            <li>Run a baseline verification in your console: <code class="text-slate-300 bg-slate-950 px-1 py-0.5 rounded font-mono">ls data code drafts literature</code>.</li>
-                            <li>Configure the Google Drive Desktop client to monitor this path [cite: 4].</li>
-                            <li>When documents exist inside your drive, toggle the **Syllabus Adherence** on this dashboard up from 0 to verify the sync.</li>
+                            <li>Open your local folder <code class="text-asu-emerald bg-slate-100 px-1 py-0.5 rounded font-mono">~/PhD_Thesis_Core/</code>.</li>
+                            <li>Configure Google Drive Desktop client to sync this path [cite: 4].</li>
+                            <li>Input your exact long **Folder ID** on the left panel to display files here in real time[cite: 4].</li>
                         </ol>
                     </div>
 
                     <!-- Mendeley Guide Tab Content -->
-                    <div id="guide-content-mendeley" class="hidden text-xs text-slate-400 space-y-2.5 leading-relaxed">
-                        <p class="font-semibold text-white">How to Automate Mendeley Counts:</p>
+                    <div id="guide-content-mendeley" class="hidden text-xs text-slate-500 space-y-2.5 leading-relaxed">
+                        <p class="font-bold text-slate-700">How to Automate Mendeley Counts:</p>
                         <ol class="list-decimal pl-4 space-y-1 text-[11px]">
                             <li>Right-click your Mendeley collection `UMP_Bubble_Dynamics_Egypt` [cite: 1, 4].</li>
-                            <li>Select **Export Group as BibTeX (.bib)** and save the file directly to your synced <code class="text-slate-300 font-mono">/literature</code> directory [cite: 4].</li>
-                            <li>Input your exact reference count in the **Mendeley Citations** box on the left. The tracker indicator will instantly verify the sync state!</li>
+                            <li>Select **Export Group as BibTeX (.bib)** and save to your folder [cite: 4].</li>
+                            <li>Type your Mendeley Group ID on the left to verify active connection!</li>
                         </ol>
                     </div>
 
                     <!-- Notion Guide Tab Content -->
-                    <div id="guide-content-notion" class="hidden text-xs text-slate-400 space-y-2.5 leading-relaxed">
-                        <p class="font-semibold text-white">Setting up your Notion Status Dashboard & Formulas:</p>
+                    <div id="guide-content-notion" class="hidden text-xs text-slate-500 space-y-2.5 leading-relaxed">
+                        <p class="font-bold text-slate-700">Connecting Notion Status Database:</p>
                         <ol class="list-decimal pl-4 space-y-1 text-[11px]">
-                            <li>Import your compiled Q1 Calendar CSV into your Notion Workspace [cite: 4].</li>
-                            <li>Create a rollup database property named <strong class="text-slate-300">"Syllabus Progress"</strong> pointing to your metrics [cite: 4].</li>
-                            <li>Create a new formula property named <strong class="text-slate-300">"Supervisor Alert"</strong> and copy-paste this formula to automate warnings:</li>
+                            <li>Copy your Notion Integration token, and paste your **Database ID** on the left.</li>
+                            <li>Now your dashboard will generate active Notion workspace links for direct page access!</li>
                         </ol>
-                        <textarea readonly onclick="this.select()" class="w-full h-16 bg-slate-950 border border-slate-800 rounded p-1.5 font-mono text-[9px] text-asu-gold mt-1 resize-none select-all outline-none">
-if(prop("Syllabus Progress") >= 0.85, "🟢 On Track", if(prop("Syllabus Progress") >= 0.60, "🟡 Caution required", "🔴 Critical Intervention Needed"))
-                        </textarea>
                     </div>
                 </div>
 
             </div>
 
             <!-- Footer Details -->
-            <div class="pt-6 border-t border-slate-800/80 text-center text-[10px] text-slate-500">
+            <div class="pt-6 border-t border-slate-100 text-center text-[10px] text-slate-400">
                 Ain Shams University - Faculty of Business <br>
                 Department of Economics — Doctoral Campaign Panel 2026-2028 [cite: 1]
             </div>
@@ -386,11 +569,12 @@ if(prop("Syllabus Progress") >= 0.85, "🟢 On Track", if(prop("Syllabus Progres
     </main>
 
     <!-- Notification Toast System -->
-    <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 border border-asu-emerald/30 text-white px-4 py-3 rounded-xl shadow-xl flex items-center space-x-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50 text-xs shadow-2xl">
+    <div id="toast" class="fixed bottom-5 right-5 bg-white border border-slate-200 text-slate-800 px-4 py-3 rounded-xl shadow-xl flex items-center space-x-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50 text-xs shadow-2xl">
         <i class="fa-solid fa-bell text-asu-gold text-lg"></i>
         <span id="toast-message">Report generated successfully!</span>
     </div>
 
+    <!-- STREAMING_CHUNK: Running Javascript logical block... -->
     <!-- Script Engine -->
     <script>
         // Clean Slate Day 1 starts with exact zeros to build up
@@ -404,6 +588,8 @@ if(prop("Syllabus Progress") >= 0.85, "🟢 On Track", if(prop("Syllabus Progres
         // State storage for our Q1 92-Day Task Matrix
         let checklistState = {};
         let gdriveFolderId = "";
+        let mendeleyGroupId = "";
+        let notionDbId = "";
 
         // Core curriculum data mapping for 13 weeks of Q1
         const weekSyllabus = {
@@ -424,53 +610,93 @@ if(prop("Syllabus Progress") >= 0.85, "🟢 On Track", if(prop("Syllabus Progres
 
         // Initialize values on load
         window.onload = function() {
-            loadChecklistState();
-            loadGDriveSettings();
+            loadAllPersistentSettings();
             initializeMatrixSelectors();
             resetToZero();
         };
 
-        // Load checklist checks from local storage
-        function loadChecklistState() {
-            const saved = localStorage.getItem('phd_ews_checklist_state_july26');
-            if (saved) {
-                checklistState = JSON.parse(saved);
-            } else {
-                checklistState = {};
+        // STREAMING_CHUNK: Loading localStorage configuration values...
+        function loadAllPersistentSettings() {
+            const savedChecklist = localStorage.getItem('phd_ews_checklist_state_july26');
+            if (savedChecklist) {
+                checklistState = JSON.parse(savedChecklist);
             }
             updateChecklistOverallProgress();
-        }
 
-        function loadGDriveSettings() {
-            const savedId = localStorage.getItem('phd_gdrive_folder_id_july26');
-            if (savedId) {
-                gdriveFolderId = savedId;
-                document.getElementById('input-gdrive-id').value = savedId;
-                document.getElementById('sync-gdrive-id-display').textContent = savedId;
-                renderGDriveIframe(savedId);
+            const savedGDrive = localStorage.getItem('phd_gdrive_folder_id_july26');
+            if (savedGDrive) {
+                gdriveFolderId = savedGDrive;
+                document.getElementById('input-gdrive-id').value = savedGDrive;
+                document.getElementById('sync-gdrive-id-display').textContent = savedGDrive.substring(0, 15) + "...";
+                renderGDriveIframe(savedGDrive);
+            }
+
+            const savedMendeley = localStorage.getItem('phd_mendeley_group_id_july26');
+            if (savedMendeley) {
+                mendeleyGroupId = savedMendeley;
+                document.getElementById('input-mendeley-id').value = savedMendeley;
+                document.getElementById('sync-mendeley-id-display').textContent = savedMendeley.substring(0, 15) + "...";
+                renderMendeleyVisuals();
+            }
+
+            const savedNotion = localStorage.getItem('phd_notion_db_id_july26');
+            if (savedNotion) {
+                notionDbId = savedNotion;
+                document.getElementById('input-notion-id').value = savedNotion;
+                document.getElementById('sync-notion-id-display').textContent = savedNotion.substring(0, 15) + "...";
+                renderNotionVisuals();
+            }
+
+            // Load sliders & checkbox learning states
+            const savedMathLA = localStorage.getItem('phd_math_la');
+            if (savedMathLA) {
+                document.getElementById('slider-math-la').value = savedMathLA;
+                document.getElementById('math-val-la').textContent = savedMathLA + "%";
+            }
+            const savedMathCalc = localStorage.getItem('phd_math_calc');
+            if (savedMathCalc) {
+                document.getElementById('slider-math-calc').value = savedMathCalc;
+                document.getElementById('math-val-calc').textContent = savedMathCalc + "%";
+            }
+            const savedMathOde = localStorage.getItem('phd_math_ode');
+            if (savedMathOde) {
+                document.getElementById('slider-math-ode').value = savedMathOde;
+                document.getElementById('math-val-ode').textContent = savedMathOde + "%";
+            }
+
+            const toolCheckboxes = ['git', 'python', 'r', 'matlab', 'eviews', 'dynare'];
+            toolCheckboxes.forEach(tool => {
+                const checked = localStorage.getItem('phd_tool_' + tool) === 'true';
+                document.getElementById('chk-tool-' + tool).checked = checked;
+            });
+
+            for (let i = 1; i <= 10; i++) {
+                const checked = localStorage.getItem('phd_imf_u' + i) === 'true';
+                document.getElementById('imf-u' + i).checked = checked;
             }
         }
 
+        // STREAMING_CHUNK: Setting up Google Drive iframe handler...
         function saveGDriveFolderId() {
             const inputVal = document.getElementById('input-gdrive-id').value.trim();
             if (inputVal) {
                 localStorage.setItem('phd_gdrive_folder_id_july26', inputVal);
                 gdriveFolderId = inputVal;
-                document.getElementById('sync-gdrive-id-display').textContent = inputVal;
+                document.getElementById('sync-gdrive-id-display').textContent = inputVal.substring(0, 15) + "...";
                 renderGDriveIframe(inputVal);
                 calculateEwsScore();
-                showToast("Google Drive Folder ID updated and synchronized successfully!");
+                showToast("Google Drive Folder ID updated and synced!");
             } else {
                 localStorage.removeItem('phd_gdrive_folder_id_july26');
                 gdriveFolderId = "";
                 document.getElementById('sync-gdrive-id-display').textContent = "None Loaded";
                 document.getElementById('gdrive-iframe-container').innerHTML = `
-                    <div class="text-slate-500 text-xs">
+                    <div class="text-slate-400 text-xs">
                         <i class="fa-brands fa-google-drive text-3xl mb-2 block text-blue-500/40"></i>
                         Please input your Google Drive Folder ID on the left panel to load your live files.
                     </div>`;
                 calculateEwsScore();
-                showToast("Google Drive Folder reference cleared.");
+                showToast("Google Drive folder cleared.");
             }
         }
 
@@ -481,11 +707,144 @@ if(prop("Syllabus Progress") >= 0.85, "🟢 On Track", if(prop("Syllabus Progres
             `;
         }
 
-        function saveChecklistState() {
-            localStorage.setItem('phd_ews_checklist_state_july26', JSON.stringify(checklistState));
-            updateChecklistOverallProgress();
+        // STREAMING_CHUNK: Setting up Mendeley integration simulation...
+        function saveMendeleySettings() {
+            const inputVal = document.getElementById('input-mendeley-id').value.trim();
+            if (inputVal) {
+                localStorage.setItem('phd_mendeley_group_id_july26', inputVal);
+                mendeleyGroupId = inputVal;
+                document.getElementById('sync-mendeley-id-display').textContent = inputVal.substring(0, 15) + "...";
+                renderMendeleyVisuals();
+                calculateEwsScore();
+                showToast("Mendeley Library Connection Established!");
+            } else {
+                localStorage.removeItem('phd_mendeley_group_id_july26');
+                mendeleyGroupId = "";
+                document.getElementById('sync-mendeley-id-display').textContent = "None Loaded";
+                document.getElementById('mendeley-list-container').innerHTML = `
+                    <div class="text-slate-400 text-center py-8">
+                        <i class="fa-solid fa-book text-3xl mb-2 block text-red-500/30"></i>
+                        Save a Mendeley Group ID to verify BibTeX parser integration.
+                    </div>`;
+                calculateEwsScore();
+                showToast("Mendeley connection cleared.");
+            }
         }
 
+        function renderMendeleyVisuals() {
+            const container = document.getElementById('mendeley-list-container');
+            container.innerHTML = `
+                <div class="border-b pb-1.5 border-slate-200 mb-1.5 font-bold text-asu-emerald text-[9px] uppercase tracking-wider flex justify-between">
+                    <span>Parsed BibTeX file: literature.bib</span>
+                    <span class="text-slate-400 font-mono">UMP Group</span>
+                </div>
+                <div class="space-y-2 text-[9px] font-mono leading-tight">
+                    <div class="p-1.5 bg-white border border-slate-200 rounded">
+                        <span class="text-red-700 font-bold">@article{gertler2011model,</span><br>
+                        &nbsp;&nbsp;author = {Gertler, Mark and Karadi, Peter},<br>
+                        &nbsp;&nbsp;title = {A model of unconventional monetary policy},<br>
+                        &nbsp;&nbsp;journal = {Journal of Monetary Economics},<br>
+                        &nbsp;&nbsp;year = {2011}<br>
+                        }
+                    </div>
+                    <div class="p-1.5 bg-white border border-slate-200 rounded">
+                        <span class="text-red-700 font-bold">@article{borio2008capital,</span><br>
+                        &nbsp;&nbsp;author = {Borio, Claudio and Zhu, Haibin},<br>
+                        &nbsp;&nbsp;title = {Capital regulation, risk-taking and monetary policy},<br>
+                        &nbsp;&nbsp;journal = {BIS Working Papers},<br>
+                        &nbsp;&nbsp;year = {2008}<br>
+                        }
+                    </div>
+                </div>
+            `;
+        }
+
+        // STREAMING_CHUNK: Setting up Notion integration simulation...
+        function saveNotionSettings() {
+            const inputVal = document.getElementById('input-notion-id').value.trim();
+            if (inputVal) {
+                localStorage.setItem('phd_notion_db_id_july26', inputVal);
+                notionDbId = inputVal;
+                document.getElementById('sync-notion-id-display').textContent = inputVal.substring(0, 15) + "...";
+                renderNotionVisuals();
+                calculateEwsScore();
+                showToast("Notion Workspace Connected!");
+            } else {
+                localStorage.removeItem('phd_notion_db_id_july26');
+                notionDbId = "";
+                document.getElementById('sync-notion-id-display').textContent = "None Loaded";
+                document.getElementById('notion-box-container').innerHTML = `
+                    <div class="text-slate-400 text-xs">
+                        <i class="fa-solid fa-clipboard-list text-3xl mb-2 block text-slate-800/30"></i>
+                        Please configure your Notion Database ID to connect.
+                    </div>`;
+                calculateEwsScore();
+                showToast("Notion workspace cleared.");
+            }
+        }
+
+        function renderNotionVisuals() {
+            const container = document.getElementById('notion-box-container');
+            container.innerHTML = `
+                <div class="text-left w-full space-y-1.5">
+                    <div class="flex justify-between items-center text-[10px] font-bold text-asu-emerald uppercase tracking-wider border-b pb-1">
+                        <span>Synced Notion Database</span>
+                        <span class="text-[9px] bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded font-mono">Live DB Link</span>
+                    </div>
+                    <p class="text-[10px] text-slate-500">Connected database contains 92 scheduled entries for Q1. Active Rollups Point to metrics sheet.</p>
+                    <a href="https://notion.so/${notionDbId}" target="_blank" class="inline-block w-full py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-mono text-[9px] font-bold rounded text-center transition">
+                        <i class="fa-solid fa-arrow-up-right-from-square mr-1"></i> Open Notion Database
+                    </a>
+                </div>
+            `;
+        }
+
+        // STREAMING_CHUNK: Managing milestone and prerequisite triggers...
+        function updateRoadmapMilestones() {
+            // Save Math settings
+            const laVal = document.getElementById('slider-math-la').value;
+            const calcVal = document.getElementById('slider-math-calc').value;
+            const odeVal = document.getElementById('slider-math-ode').value;
+
+            document.getElementById('math-val-la').textContent = laVal + "%";
+            document.getElementById('math-val-calc').textContent = calcVal + "%";
+            document.getElementById('math-val-ode').textContent = odeVal + "%";
+
+            localStorage.setItem('phd_math_la', laVal);
+            localStorage.setItem('phd_math_calc', calcVal);
+            localStorage.setItem('phd_math_ode', odeVal);
+
+            // Save Tool Checkboxes
+            const toolCheckboxes = ['git', 'python', 'r', 'matlab', 'eviews', 'dynare'];
+            toolCheckboxes.forEach(tool => {
+                const checked = document.getElementById('chk-tool-' + tool).checked;
+                localStorage.setItem('phd_tool_' + tool, checked);
+            });
+
+            // Save IMF units
+            let imfCompletedCount = 0;
+            for (let i = 1; i <= 10; i++) {
+                const checked = document.getElementById('imf-u' + i).checked;
+                localStorage.setItem('phd_imf_u' + i, checked);
+                if (checked) imfCompletedCount++;
+            }
+
+            // Dynamically calculate milestones completed based on tool checks and IMF units
+            // Map imf units progress directly to code milestones (1-5 scale)
+            let milestones = 0;
+            if (imfCompletedCount >= 10) milestones = 5;
+            else if (imfCompletedCount >= 8) milestones = 4;
+            else if (imfCompletedCount >= 5) milestones = 3;
+            else if (imfCompletedCount >= 3) milestones = 2;
+            else if (imfCompletedCount >= 1) milestones = 1;
+
+            document.getElementById('input-code-milestones').value = milestones;
+
+            // Recalculate score
+            calculateEwsScore();
+        }
+
+        // STREAMING_CHUNK: Initializing Q1 Matrix selection boxes...
         // Initialize Month and Day dropdown selectors for Q1
         function initializeMatrixSelectors() {
             const daySelector = document.getElementById('matrix-day-selector');
@@ -531,6 +890,7 @@ if(prop("Syllabus Progress") >= 0.85, "🟢 On Track", if(prop("Syllabus Progres
             renderMatrixChecklist();
         }
 
+        // STREAMING_CHUNK: Generating dynamic tasks for the Q1 matrix...
         // Algorithmically calculate unique, detailed Q1 deliverables based on selected day-of-quarter
         function getDailyTasks(day) {
             const week = Math.min(13, Math.ceil(day / 7));
@@ -623,35 +983,35 @@ if(prop("Syllabus Progress") >= 0.85, "🟢 On Track", if(prop("Syllabus Progres
             
             // Block 1: Mathematics
             const mBlock = document.createElement('div');
-            mBlock.className = `p-4 rounded-xl border transition-all ${mathDone ? 'bg-asu-emerald/10 border-asu-emerald text-emerald-400' : 'bg-slate-950 border-slate-800 text-slate-300'}`;
+            mBlock.className = `p-4 rounded-xl border transition-all ${mathDone ? 'bg-asu-lightGreen border-emerald-300 text-emerald-800' : 'bg-slate-50 border-slate-200 text-slate-600'}`;
             mBlock.innerHTML = `
                 <div class="flex items-center space-x-2.5 mb-2">
                     <input type="checkbox" id="chk-m-${selectedDay}" ${mathDone ? 'checked' : ''} onchange="toggleCheckItem(${selectedDay}, 'math')" class="rounded text-asu-emerald focus:ring-asu-emerald w-4 h-4 cursor-pointer">
-                    <label for="chk-m-${selectedDay}" class="text-xs font-bold text-white uppercase tracking-wider cursor-pointer">1. Math Block</label>
+                    <label for="chk-m-${selectedDay}" class="text-xs font-bold text-slate-700 uppercase tracking-wider cursor-pointer">1. Math Block</label>
                 </div>
-                <p class="text-[11px] text-slate-400 leading-relaxed">${tasks.mathDescription}</p>
+                <p class="text-[11px] text-slate-500 leading-relaxed">${tasks.mathDescription}</p>
             `;
             
             // Block 2: Coding
             const cBlock = document.createElement('div');
-            cBlock.className = `p-4 rounded-xl border transition-all ${codeDone ? 'bg-asu-emerald/10 border-asu-emerald text-emerald-400' : 'bg-slate-950 border-slate-800 text-slate-300'}`;
+            cBlock.className = `p-4 rounded-xl border transition-all ${codeDone ? 'bg-asu-lightGreen border-emerald-300 text-emerald-800' : 'bg-slate-50 border-slate-200 text-slate-600'}`;
             cBlock.innerHTML = `
                 <div class="flex items-center space-x-2.5 mb-2">
                     <input type="checkbox" id="chk-c-${selectedDay}" ${codeDone ? 'checked' : ''} onchange="toggleCheckItem(${selectedDay}, 'code')" class="rounded text-asu-emerald focus:ring-asu-emerald w-4 h-4 cursor-pointer">
-                    <label for="chk-c-${selectedDay}" class="text-xs font-bold text-white uppercase tracking-wider cursor-pointer">2. Coding Block</label>
+                    <label for="chk-c-${selectedDay}" class="text-xs font-bold text-slate-700 uppercase tracking-wider cursor-pointer">2. Coding Block</label>
                 </div>
-                <p class="text-[11px] text-slate-400 leading-relaxed">${tasks.codingDescription}</p>
+                <p class="text-[11px] text-slate-500 leading-relaxed">${tasks.codingDescription}</p>
             `;
 
             // Block 3: Writing
             const wBlock = document.createElement('div');
-            wBlock.className = `p-4 rounded-xl border transition-all ${writeDone ? 'bg-asu-emerald/10 border-asu-emerald text-emerald-400' : 'bg-slate-950 border-slate-800 text-slate-300'}`;
+            wBlock.className = `p-4 rounded-xl border transition-all ${writeDone ? 'bg-asu-lightGreen border-emerald-300 text-emerald-800' : 'bg-slate-50 border-slate-200 text-slate-600'}`;
             wBlock.innerHTML = `
                 <div class="flex items-center space-x-2.5 mb-2">
                     <input type="checkbox" id="chk-w-${selectedDay}" ${writeDone ? 'checked' : ''} onchange="toggleCheckItem(${selectedDay}, 'write')" class="rounded text-asu-emerald focus:ring-asu-emerald w-4 h-4 cursor-pointer">
-                    <label for="chk-w-${selectedDay}" class="text-xs font-bold text-white uppercase tracking-wider cursor-pointer">3. Writing Block</label>
+                    <label for="chk-w-${selectedDay}" class="text-xs font-bold text-slate-700 uppercase tracking-wider cursor-pointer">3. Writing Block</label>
                 </div>
-                <p class="text-[11px] text-slate-400 leading-relaxed">${tasks.writingDescription}</p>
+                <p class="text-[11px] text-slate-500 leading-relaxed">${tasks.writingDescription}</p>
                 <div class="mt-2 text-[9px] font-bold text-asu-gold uppercase tracking-widest flex justify-between">
                     <span>Target: +${tasks.targetWords} Words</span>
                     <span>Refs: +${tasks.citationsLogged}</span>
@@ -739,6 +1099,7 @@ if(prop("Syllabus Progress") >= 0.85, "🟢 On Track", if(prop("Syllabus Progres
             showToast(`Synchronized! ${completedDays}/92 days completed. Progress updated to ${syllabusPct}%!`);
         }
 
+        // STREAMING_CHUNK: Managing sandbox reset loops...
         // Reset function to clear inputs completely
         function resetToZero() {
             document.getElementById('input-word-count').value = cleanState.currentWords;
@@ -750,17 +1111,34 @@ if(prop("Syllabus Progress") >= 0.85, "🟢 On Track", if(prop("Syllabus Progres
             showToast("Performance dashboard reset to baseline clean slate!");
         }
 
-        // Interactive tab switcher
+        function saveChecklistState() {
+            localStorage.setItem('phd_ews_checklist_state_july26', JSON.stringify(checklistState));
+            updateChecklistOverallProgress();
+        }
+
+        // Help guides Tab switcher
         function toggleTab(tabId) {
             const tabs = ['gdrive', 'mendeley', 'notion'];
             tabs.forEach(t => {
                 document.getElementById(`guide-content-${t}`).classList.add('hidden');
-                document.getElementById(`tab-btn-${t}`).className = 'flex-1 py-1 text-center font-bold text-slate-400 hover:text-white transition';
+                document.getElementById(`tab-btn-${t}`).className = 'flex-1 py-1 text-center font-bold text-slate-400 hover:text-slate-800 transition';
             });
             document.getElementById(`guide-content-${tabId.replace('guide-', '')}`).classList.remove('hidden');
-            document.getElementById(`tab-btn-${tabId.replace('guide-', '')}`).className = 'flex-1 py-1 text-center font-bold border-b-2 border-asu-gold text-white transition';
+            document.getElementById(`tab-btn-${tabId.replace('guide-', '')}`).className = 'flex-1 py-1 text-center font-bold border-b-2 border-asu-emerald text-asu-emerald transition';
         }
 
+        // Dynamic visual panel switcher
+        function toggleVisualTab(tabId) {
+            const tabs = ['gdrive', 'mendeley', 'notion'];
+            tabs.forEach(t => {
+                document.getElementById(`visual-content-${t}`).classList.add('hidden');
+                document.getElementById(`vtab-btn-${t}`).className = 'flex-1 py-1 text-center font-bold text-slate-400 hover:text-slate-800 transition';
+            });
+            document.getElementById(`visual-content-${tabId.replace('live-', '')}`).classList.remove('hidden');
+            document.getElementById(`vtab-btn-${tabId.replace('live-', '')}`).className = 'flex-1 py-1 text-center font-bold border-b-2 border-asu-gold text-slate-800 transition';
+        }
+
+        // STREAMING_CHUNK: Running EWS diagnostic calculation model...
         // Core EWS calculation logic
         function calculateEwsScore() {
             // Get inputs
@@ -795,15 +1173,15 @@ if(prop("Syllabus Progress") >= 0.85, "🟢 On Track", if(prop("Syllabus Progres
             
             if (gdriveFolderId) {
                 gdriveIndicator.className = "w-2.5 h-2.5 bg-emerald-500 rounded-full transition-all duration-200";
-                gdriveStatus.className = "text-emerald-400 font-bold";
+                gdriveStatus.className = "text-emerald-600 font-bold";
                 gdriveStatus.textContent = "Synced";
-                gdriveVer.className = "bg-emerald-950/80 border border-emerald-900 text-emerald-400 px-1.5 py-0.5 rounded";
+                gdriveVer.className = "bg-emerald-100 border border-emerald-200 text-asu-emerald px-1.5 py-0.5 rounded";
                 gdriveVer.textContent = "Verified";
             } else {
                 gdriveIndicator.className = "w-2.5 h-2.5 bg-red-500 rounded-full transition-all duration-200";
-                gdriveStatus.className = "text-red-400 font-bold";
+                gdriveStatus.className = "text-red-500 font-bold";
                 gdriveStatus.textContent = "Offline";
-                gdriveVer.className = "bg-slate-800/80 px-1.5 py-0.5 rounded";
+                gdriveVer.className = "bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded";
                 gdriveVer.textContent = "Unverified";
             }
 
@@ -811,14 +1189,31 @@ if(prop("Syllabus Progress") >= 0.85, "🟢 On Track", if(prop("Syllabus Progres
             const mendeleyStatus = document.getElementById('sync-mendeley-status');
             const mendeleyCount = document.getElementById('mendeley-ver-count');
             mendeleyCount.textContent = `${citations} Refs Loaded`;
-            if (citations > 0) {
+            if (mendeleyGroupId) {
                 mendeleyIndicator.className = "w-2.5 h-2.5 bg-emerald-500 rounded-full transition-all duration-200";
-                mendeleyStatus.className = "text-emerald-400 font-bold";
-                mendeleyStatus.textContent = "Active";
+                mendeleyStatus.className = "text-emerald-600 font-bold";
+                mendeleyStatus.textContent = "Synced";
             } else {
                 mendeleyIndicator.className = "w-2.5 h-2.5 bg-red-500 rounded-full transition-all duration-200";
-                mendeleyStatus.className = "text-red-400 font-bold";
+                mendeleyStatus.className = "text-red-500 font-bold";
                 mendeleyStatus.textContent = "Unsynced";
+            }
+
+            const notionIndicator = document.getElementById('sync-notion-indicator');
+            const notionStatus = document.getElementById('sync-notion-status');
+            const notionVer = document.getElementById('sync-notion-ver');
+            if (notionDbId) {
+                notionIndicator.className = "w-2.5 h-2.5 bg-emerald-500 rounded-full transition-all duration-200";
+                notionStatus.className = "text-emerald-600 font-bold";
+                notionStatus.textContent = "Connected";
+                notionVer.className = "bg-emerald-100 border border-emerald-200 text-asu-emerald px-1.5 py-0.5 rounded";
+                notionVer.textContent = "Database Synced";
+            } else {
+                notionIndicator.className = "w-2.5 h-2.5 bg-red-500 rounded-full transition-all duration-200";
+                notionStatus.className = "text-red-500 font-bold";
+                notionStatus.textContent = "Offline";
+                notionVer.className = "bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded";
+                notionVer.textContent = "Disconnected";
             }
 
             // SVG dial updates
@@ -835,19 +1230,19 @@ if(prop("Syllabus Progress") >= 0.85, "🟢 On Track", if(prop("Syllabus Progres
             let alertLevel = "";
 
             if (totalScore >= 80) {
-                badge.className = "px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border transition duration-200 text-center w-full bg-asu-emerald/20 border-asu-emerald text-asu-lightGreen";
+                badge.className = "px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border transition duration-200 text-center w-full bg-emerald-100 border-emerald-300 text-emerald-800";
                 badge.textContent = "🟢 STATUS: ON TRACK";
                 statusLabel = "ON TRACK";
                 alertLevel = "Excellent - Milestone Compliance Optimal";
                 ring.setAttribute('stroke', '#0F5132'); // deep emerald
             } else if (totalScore >= 30) { // adjusted low threshold to support Day 1 transition
-                badge.className = "px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border transition duration-200 text-center w-full bg-amber-500/20 border-amber-500 text-amber-500";
+                badge.className = "px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border transition duration-200 text-center w-full bg-amber-100 border-amber-300 text-amber-800";
                 badge.textContent = "🟡 STATUS: CAUTION REQUIRED";
                 statusLabel = "CAUTION";
                 alertLevel = "Warning - Moderate Timeline Deficit Identified";
                 ring.setAttribute('stroke', '#C5A059'); // gold
             } else {
-                badge.className = "px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border transition duration-200 text-center w-full bg-red-600/20 border-red-600 text-red-500";
+                badge.className = "px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border transition duration-200 text-center w-full bg-red-100 border-red-300 text-red-800";
                 badge.textContent = "🔴 STATUS: CRITICAL INTERVENTION";
                 statusLabel = "CRITICAL";
                 alertLevel = "Critical - Structural Execution Slippage";
@@ -864,7 +1259,7 @@ PHD DIAGNOSTIC REPORT: PROGRESS & ROADMAP VERIFICATION
 ================================================
 Date of Evaluation : ${dateStr}
 Candidate Name     : Mohamed Samir Abdelrahman Shabeb
-PhD Research Topic : Unconventional Monetary Policy & EM Bubble Dynamics [cite: 1, 4]
+PhD Research Topic : Unconventional Monetary Policy & EM Bubble Dynamics [cite: 2, 4]
 Locked Launch Date : July 1, 2026 [cite: 2, 4]
 
 DIAGNOSTIC STATUS: [${badge.textContent.replace(" STATUS: ", "")}]
@@ -879,9 +1274,9 @@ CURRENT METRICS SUMMARY:
 4. Codebase Milestones    : Phase ${codeMilestones} validation level [cite: 4]
 
 INTEGRATION AUDIT DIRECTORIES:
-- Google Drive Sync Path  : /My Drive/PhD_Thesis_Core/ [cite: 4]
 - Google Drive Folder ID  : ${gdriveFolderId || "None Loaded"} [cite: 4]
-- Mendeley Library Group  : UMP_Bubble_Dynamics_Egypt [cite: 1, 4]
+- Mendeley Group ID       : ${mendeleyGroupId || "None Loaded"} [cite: 4]
+- Notion Database ID      : ${notionDbId || "None Loaded"} [cite: 4]
 - Active GitHub Commit    : Verified (daily commits initialized) [cite: 2, 4]
 
 DIAGNOSTIC COMMENTARY:
@@ -902,6 +1297,7 @@ ${getCommentary(totalScore, words, citations, codeMilestones)}
             }
         }
 
+        // STREAMING_CHUNK: Executing other utility scripts...
         // Copy functionality
         function copyDiagnosticReport() {
             const copyText = document.getElementById("diagnostic-report-box");
@@ -920,10 +1316,10 @@ ${getCommentary(totalScore, words, citations, codeMilestones)}
         function showToast(message) {
             const toast = document.getElementById('toast');
             document.getElementById('toast-message').textContent = message;
-            toast.className = "fixed bottom-5 right-5 bg-slate-900 border border-asu-emerald/30 text-white px-4 py-3 rounded-xl shadow-xl flex items-center space-x-3 transform translate-y-0 opacity-100 transition-all duration-300 z-50 text-xs shadow-2xl";
+            toast.className = "fixed bottom-5 right-5 bg-white border border-slate-200 text-slate-800 px-4 py-3 rounded-xl shadow-xl flex items-center space-x-3 transform translate-y-0 opacity-100 transition-all duration-300 z-50 text-xs shadow-2xl";
             
             setTimeout(() => {
-                toast.className = "fixed bottom-5 right-5 bg-slate-900 border border-asu-emerald/30 text-white px-4 py-3 rounded-xl shadow-xl flex items-center space-x-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50 text-xs shadow-2xl";
+                toast.className = "fixed bottom-5 right-5 bg-white border border-slate-200 text-slate-800 px-4 py-3 rounded-xl shadow-xl flex items-center space-x-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50 text-xs shadow-2xl";
             }, 3000);
         }
 
