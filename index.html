@@ -339,46 +339,72 @@ Loading analysis metrics...
             </div>
         </section>
 
-        <!-- SECTION 7: Setup Guides & Notion Code Copiers -->
-        <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl shadow-sm space-y-6">
-            <div class="flex space-x-1 border-b border-slate-200 pb-2 text-sm">
-                <button onclick="toggleTab('guide-gdrive')" id="tab-btn-gdrive" class="flex-1 py-2 text-center font-bold border-b-2 border-asu-emerald text-asu-emerald transition">Google Drive Setup</button>
-                <button onclick="toggleTab('guide-mendeley')" id="tab-btn-mendeley" class="flex-1 py-2 text-center font-bold text-slate-400 hover:text-slate-800 transition">Mendeley Setup</button>
-                <button onclick="toggleTab('guide-notion')" id="tab-btn-notion" class="flex-1 py-2 text-center font-bold text-slate-400 hover:text-white transition">Notion Integration</button>
+        <!-- SECTION 7: Quarter 1 Master Curriculum & Notion Synchronizer (Replaces old Setup Guides) -->
+        <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl space-y-6 shadow-sm">
+            
+            <!-- Notion Link Banner -->
+            <div class="bg-[#F3F1EC] border border-slate-200 rounded-2xl p-5 flex flex-col md:flex-row justify-between items-center gap-4 shadow-inner">
+                <div class="flex items-center space-x-4">
+                    <div class="p-3 bg-black text-white text-3xl rounded-xl shadow">
+                        <i class="fa-solid fa-journal-whills"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-800">Your Live Notion PhD Journey Dashboard</h3>
+                        <p class="text-xs text-slate-500">Track tasks, logs, references, and milestones in your official workspace [cite: 112].</p>
+                    </div>
+                </div>
+                <a href="https://app.notion.com/p/PhD-Journey-Dashboard-f25edb9e927e4f1991fe5b1733e12965?source=copy_link" target="_blank" class="w-full md:w-auto px-6 py-2.5 bg-black hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    <span>Go to Notion Dashboard</span>
+                </a>
             </div>
 
-            <!-- GDrive Guide Tab Content -->
-            <div id="guide-content-gdrive" class="text-xs text-slate-600 space-y-3 leading-relaxed">
-                <p class="font-bold text-slate-800 text-sm">How to Sync & Verify Google Drive Folders:</p>
-                <ol class="list-decimal pl-5 space-y-1.5 text-xs">
-                    <li>Create your local directory workspace: <code class="text-asu-emerald bg-slate-100 px-1.5 py-0.5 rounded font-mono font-semibold">~/PhD_Thesis_Core/</code>.</li>
-                    <li>Inside your terminal, verify the system directories: <code class="text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded font-mono">ls data code drafts literature</code>.</li>
-                    <li>Configure the Google Drive Desktop client to sync this path dynamically with the cloud.</li>
-                    <li>When research folders contain active drafts, the live indicators will automatically track directory health.</li>
-                </ol>
+            <!-- Table Header -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-4">
+                <div>
+                    <h3 class="text-lg font-serif font-extrabold text-slate-900 flex items-center">
+                        <i class="fa-solid fa-table-list mr-2.5 text-asu-gold"></i> Complete Quarter 1 Syllabus & Task Database
+                    </h3>
+                    <p class="text-xs text-slate-500 mt-1">Filter, examine, and check off detailed daily curriculum deliverables. Checking tasks here will immediately feed the EWS Dial above.</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="text-xs font-semibold text-slate-500">Filter Week:</span>
+                    <select id="curriculum-week-filter" onchange="renderCurriculumTable()" class="bg-slate-50 border border-slate-300 focus:border-asu-emerald focus:ring-1 focus:ring-asu-emerald rounded-lg px-3 py-1.5 text-xs text-slate-700 font-semibold outline-none transition cursor-pointer">
+                        <option value="all">Show All Q1 Weeks (Weeks 1-13)</option>
+                        <option value="1">Week 1: Foundations & Git Setup</option>
+                        <option value="2">Week 2: Advanced Calculus</option>
+                        <option value="3">Week 3: Linear Algebra Matrix</option>
+                        <option value="4">Week 4: Optimization Rules</option>
+                        <option value="5">Week 5: ODEs & Descriptives</option>
+                        <option value="6">Week 6: Difference Equations</option>
+                        <option value="7">Week 7: Panel Ingestion Setup</option>
+                        <option value="8">Week 8: Panel Data & ADF Tests</option>
+                        <option value="9">Week 9: Open-Economy Macro</option>
+                        <option value="10">Week 10: New Keynesian DSGE</option>
+                        <option value="11">Week 11: Dynare Coding RBC</option>
+                        <option value="12">@Week 12: Dynare Bayesian</option>
+                        <option value="13">Week 13: Synthesis & Draft</option>
+                    </select>
+                </div>
             </div>
 
-            <!-- Mendeley Guide Tab Content -->
-            <div id="guide-content-mendeley" class="hidden text-xs text-slate-600 space-y-3 leading-relaxed">
-                <p class="font-bold text-slate-800 text-sm">How to Sync Mendeley Bibliography Counts:</p>
-                <ol class="list-decimal pl-5 space-y-1.5 text-xs">
-                    <li>Highlight your Mendeley compilation group <code class="text-slate-700 font-mono bg-slate-100 px-1 rounded">UMP_Bubble_Dynamics_Egypt</code>.</li>
-                    <li>Export the references folder as a **BibTeX file (.bib)** and save it directly in your local synced <code class="text-slate-700 font-mono bg-slate-100 px-1 rounded">/literature</code> directory.</li>
-                    <li>Input the exact paper counts inside the actual metrics logger to update your overall EWS index dynamically.</li>
-                </ol>
-            </div>
-
-            <!-- Notion Guide Tab Content -->
-            <div id="guide-content-notion" class="hidden text-xs text-slate-600 space-y-3 leading-relaxed">
-                <p class="font-bold text-slate-800 text-sm">Setting up your Notion Status Dashboard & Formulas:</p>
-                <ol class="list-decimal pl-5 space-y-1.5 text-xs">
-                    <li>Import your compiled Q1 Daily Tasks CSV directly into your Notion workspace as a database.</li>
-                    <li>Create a Rollup database property named <strong class="text-slate-800">"Syllabus Progress"</strong> targeting your daily checks.</li>
-                    <li>Establish a new formula property named <strong class="text-slate-800">"Supervisor Alert"</strong> and paste this exact formula to automate warning lights on your Notion view:</li>
-                </ol>
-                <textarea readonly onclick="this.select()" class="w-full h-16 bg-slate-50 border border-slate-300 focus:border-asu-emerald rounded-lg p-3 font-mono text-[11px] text-asu-emerald mt-2 resize-none select-all outline-none shadow-inner">
-if(prop("Syllabus Progress") >= 0.85, "🟢 On Track", if(prop("Syllabus Progress") >= 0.60, "🟡 Caution required", "🔴 Critical Intervention Needed"))
-                </textarea>
+            <!-- Scrollable Table Workspace -->
+            <div class="overflow-x-auto border border-slate-200 rounded-2xl shadow-inner">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="bg-slate-100 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[11px]">
+                            <th class="p-3 w-16">Day</th>
+                            <th class="p-3 w-36">Week Theme</th>
+                            <th class="p-3">Mathematics & Prerequisites</th>
+                            <th class="p-3">Programming & Sourcing</th>
+                            <th class="p-3">Thesis Formulation & Writing</th>
+                            <th class="p-3 text-center w-28">Status Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="curriculum-table-body" class="divide-y divide-slate-200">
+                        <!-- Filled dynamic procedures by JS -->
+                    </tbody>
+                </table>
             </div>
         </section>
 
@@ -444,6 +470,7 @@ if(prop("Syllabus Progress") >= 0.85, "🟢 On Track", if(prop("Syllabus Progres
                 checklistState = {};
             }
             updateChecklistOverallProgress();
+            renderCurriculumTable();
         }
 
         function loadGDriveSettings() {
@@ -489,6 +516,7 @@ if(prop("Syllabus Progress") >= 0.85, "🟢 On Track", if(prop("Syllabus Progres
         function saveChecklistState() {
             localStorage.setItem('phd_ews_checklist_state_july26', JSON.stringify(checklistState));
             updateChecklistOverallProgress();
+            renderCurriculumTable();
         }
 
         // Initialize Month and Day dropdown selectors for Q1
@@ -553,52 +581,52 @@ if(prop("Syllabus Progress") >= 0.85, "🟢 On Track", if(prop("Syllabus Progres
             
             switch(dow) {
                 case 1:
-                    mathDescription = `Review definitions of ${wSyllabus.math}. Read Chapter 1 prerequisites. Complete 5 diagnostic notation drills.`;
-                    codingDescription = `Initialize local coding folders. Configure scripts and test package updates for ${wSyllabus.coding}.`;
-                    writingDescription = `Structure academic subsections and draft opening paragraph points for ${wSyllabus.writing}.`;
+                    mathDescription = `Review definitions of ${wSyllabus.math} Read Ch 1 guidelines. Complete 5 notation drills.`;
+                    codingDescription = `Initialize directory folders. Configure python packages for ${wSyllabus.coding}`;
+                    writingDescription = `Outline Chapter 1 headings & structures mapping out ${wSyllabus.writing}`;
                     targetWords = 150;
                     citationsLogged = 1;
                     break;
                 case 2:
-                    mathDescription = `Solve 5 sample mathematical proofs step-by-step in your notebook, focusing on ${wSyllabus.math}.`;
-                    codingDescription = `Write and run basic operations testing variables and functions in ${wSyllabus.coding}.`;
-                    writingDescription = `Perform thematic database checks and identify 3 key citations from Zotero/Mendeley for ${wSyllabus.writing}.`;
+                    mathDescription = `Derive 5 detailed calculus equations step-by-step for ${wSyllabus.math}`;
+                    codingDescription = `Write python variables and functions testing script logic for ${wSyllabus.coding}`;
+                    writingDescription = `Identify 3 critical bibliography elements from citation manager on ${wSyllabus.writing}`;
                     targetWords = 200;
                     citationsLogged = 2;
                     break;
                 case 3:
-                    mathDescription = `Calculate 10 mathematical exercises on ${wSyllabus.math} and cross-verify with textbook solution keys.`;
-                    codingDescription = `Build a clean, local script to automate raw data cleaning and transformations for ${wSyllabus.coding}.`;
-                    writingDescription = `Draft a raw paragraph block (approx. 250 words) establishing literature connections for ${wSyllabus.writing}.`;
+                    mathDescription = `Calculate 10 advanced algebraic metrics for ${wSyllabus.math} and verify answers.`;
+                    codingDescription = `Automate local spreadsheet data cleaning pipelines executing ${wSyllabus.coding}`;
+                    writingDescription = `Draft 250 words outlining literature consensus points for ${wSyllabus.writing}`;
                     targetWords = 300;
                     citationsLogged = 1;
                     break;
                 case 4:
-                    mathDescription = `Examine the applied macroeconomic role of ${wSyllabus.math} inside New Keynesian structures.`;
-                    codingDescription = `Import raw CBE data and execute validation checks on your program running ${wSyllabus.coding}.`;
-                    writingDescription = `Polishing pass: review drafts written this week. Enhance flow, style, and citation tags for ${wSyllabus.writing}.`;
+                    mathDescription = `Examine applied macroeconomic relevance of ${wSyllabus.math} to financial loops.`;
+                    codingDescription = `Wrangle raw CBE Excel worksheets to EViews format running ${wSyllabus.coding}`;
+                    writingDescription = `Draft 300 words justifying research objectives on ${wSyllabus.writing}`;
                     targetWords = 250;
                     citationsLogged = 2;
                     break;
                 case 5:
-                    mathDescription = `Map out limits, dynamic boundary constraints, and shadow variables modeling ${wSyllabus.math}.`;
-                    codingDescription = `Optimize execution, eliminate redundant logic, and resolve compile warnings for ${wSyllabus.coding}.`;
-                    writingDescription = `Incorporate specific Egypt-context data details or historical CBE policy indicators into ${wSyllabus.writing}.`;
+                    mathDescription = `Evaluate limits, dynamic boundaries, and shadow constraints for ${wSyllabus.math}`;
+                    codingDescription = `Eliminate memory leaks and check matrix calculations in ${wSyllabus.coding}`;
+                    writingDescription = `Incorporate domestic policy dates into text body drafts for ${wSyllabus.writing}`;
                     targetWords = 200;
                     citationsLogged = 1;
                     break;
                 case 6:
-                    mathDescription = `Conduct a comprehensive weekly mathematics review, compiling all steps on ${wSyllabus.math}.`;
-                    codingDescription = `Add documentation comments. Synchronize and push your local scripting folder to your remote Git repository.`;
-                    writingDescription = `Integrate all sections drafted this week into your master dissertation document. Run consistency checks.`;
+                    mathDescription = `Conduct detailed weekly reviews and synthesize notations for ${wSyllabus.math}`;
+                    codingDescription = `Document variable types and execute push commands to local git repository.`;
+                    writingDescription = `Combine all sections written this week into unified document drafts.`;
                     targetWords = 400;
                     citationsLogged = 3;
                     break;
                 case 7:
-                    mathDescription = `Take a timed, 1-hour self-assessment challenge on ${wSyllabus.math} to test your analytical mastery.`;
-                    codingDescription = `Re-run your entire coding folder from a clean console state to guarantee replication accuracy.`;
-                    writingDescription = `Verify that all inline citations are correctly mapped and formatted against your reference manager bibliography.`;
-                    targetWords = 0; // Sunday is reserved for revision and replication checks
+                    mathDescription = `Complete 1-hour mathematical self-assessment examining ${wSyllabus.math}`;
+                    codingDescription = `Verify complete directory compile processes in a clean workspace environment.`;
+                    writingDescription = `Verify bibliography styling alignment against APA standards.`;
+                    targetWords = 0;
                     citationsLogged = 0;
                     break;
             }
@@ -671,9 +699,9 @@ if(prop("Syllabus Progress") >= 0.85, "🟢 On Track", if(prop("Syllabus Progres
         // Toggle checkbox state and save
         function toggleCheckItem(day, taskType) {
             const key = `day-${day}-${taskType}`;
-            const checkbox = document.getElementById(`chk-${taskType === 'math' ? 'm' : (taskType === 'code' ? 'c' : 'w')}-${day}`);
+            const isChecked = checklistState[key] || false;
             
-            if (checkbox.checked) {
+            if (!isChecked) {
                 checklistState[key] = true;
             } else {
                 delete checklistState[key];
@@ -681,6 +709,104 @@ if(prop("Syllabus Progress") >= 0.85, "🟢 On Track", if(prop("Syllabus Progres
             saveChecklistState();
             renderMatrixChecklist();
             showToast(`Day ${day} ${taskType} status saved!`);
+        }
+
+        // Render Master Curriculum Table
+        function renderCurriculumTable() {
+            const filterWeek = document.getElementById('curriculum-week-filter').value;
+            const tableBody = document.getElementById('curriculum-table-body');
+            tableBody.innerHTML = '';
+
+            for (let d = 1; d <= 92; d++) {
+                const week = Math.min(13, Math.ceil(d / 7));
+                
+                // Handle filtering
+                if (filterWeek !== 'all' && filterWeek !== String(week)) {
+                    continue;
+                }
+
+                const tasks = getDailyTasks(d);
+                const wSyllabus = weekSyllabus[week];
+
+                const mathKey = `day-${d}-math`;
+                const codeKey = `day-${d}-code`;
+                const writeKey = `day-${d}-write`;
+
+                const mathDone = checklistState[mathKey] || false;
+                const codeDone = checklistState[codeKey] || false;
+                const writeDone = checklistState[writeKey] || false;
+
+                const tr = document.createElement('tr');
+                tr.className = `hover:bg-slate-50 transition border-b border-slate-200 ${(mathDone && codeDone && writeDone) ? 'bg-asu-lightGreen/20' : ''}`;
+                tr.innerHTML = `
+                    <td class="p-3 font-mono font-bold text-slate-500 text-center">D${d}</td>
+                    <td class="p-3">
+                        <span class="font-bold text-slate-700 block text-xs">W${week}: ${wSyllabus.theme}</span>
+                        <span class="text-[10px] text-slate-400 capitalize font-semibold">${tasks.dayName}</span>
+                    </td>
+                    <td class="p-3 text-slate-600 leading-normal">
+                        <div class="flex items-start space-x-2">
+                            <input type="checkbox" id="tab-math-${d}" ${mathDone ? 'checked' : ''} onchange="toggleTableCheckbox(${d}, 'math')" class="rounded text-asu-emerald focus:ring-asu-emerald mt-0.5 cursor-pointer">
+                            <span class="${mathDone ? 'line-through text-slate-400' : ''}">${tasks.mathDescription}</span>
+                        </div>
+                    </td>
+                    <td class="p-3 text-slate-600 leading-normal">
+                        <div class="flex items-start space-x-2">
+                            <input type="checkbox" id="tab-code-${d}" ${codeDone ? 'checked' : ''} onchange="toggleTableCheckbox(${d}, 'code')" class="rounded text-asu-emerald focus:ring-asu-emerald mt-0.5 cursor-pointer">
+                            <span class="${codeDone ? 'line-through text-slate-400' : ''}">${tasks.codingDescription}</span>
+                        </div>
+                    </td>
+                    <td class="p-3 text-slate-600 leading-normal">
+                        <div class="flex items-start space-x-2">
+                            <input type="checkbox" id="tab-write-${d}" ${writeDone ? 'checked' : ''} onchange="toggleTableCheckbox(${d}, 'write')" class="rounded text-asu-emerald focus:ring-asu-emerald mt-0.5 cursor-pointer">
+                            <span class="${writeDone ? 'line-through text-slate-400' : ''}">${tasks.writingDescription}</span>
+                        </div>
+                    </td>
+                    <td class="p-3 text-center">
+                        <button onclick="toggleDayCompletedStatus(${d})" class="px-2.5 py-1 text-[11px] font-bold rounded-lg transition border border-slate-200 shadow-sm ${(mathDone && codeDone && writeDone) ? 'bg-asu-emerald text-white border-transparent' : 'bg-white text-slate-600 hover:bg-slate-50'}">
+                            ${(mathDone && codeDone && writeDone) ? '<i class="fa-solid fa-check"></i> Done' : 'Complete'}
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            }
+        }
+
+        // Toggle separate checkbox inside the curriculum table rows
+        function toggleTableCheckbox(day, type) {
+            const key = `day-${day}-${type}`;
+            if (checklistState[key]) {
+                delete checklistState[key];
+            } else {
+                checklistState[key] = true;
+            }
+            saveChecklistState();
+            renderMatrixChecklist();
+            syncChecklistToSandbox();
+        }
+
+        // Complete/Reset all tasks for a specific day in the master table
+        function toggleDayCompletedStatus(day) {
+            const mathKey = `day-${day}-math`;
+            const codeKey = `day-${day}-code`;
+            const writeKey = `day-${day}-write`;
+
+            const isDayFinished = checklistState[mathKey] && checklistState[codeKey] && checklistState[writeKey];
+
+            if (isDayFinished) {
+                delete checklistState[mathKey];
+                delete checklistState[codeKey];
+                delete checklistState[writeKey];
+                showToast(`Day ${day} tasks cleared.`);
+            } else {
+                checklistState[mathKey] = true;
+                checklistState[codeKey] = true;
+                checklistState[writeKey] = true;
+                showToast(`Day ${day} milestones achieved!`);
+            }
+            saveChecklistState();
+            renderMatrixChecklist();
+            syncChecklistToSandbox();
         }
 
         // Update overall Q1 progress bar based on checkbox state
@@ -744,28 +870,6 @@ if(prop("Syllabus Progress") >= 0.85, "🟢 On Track", if(prop("Syllabus Progres
             showToast(`Synchronized! ${completedDays}/92 days completed. Progress updated to ${syllabusPct}%!`);
         }
 
-        // Reset function to clear inputs completely
-        function resetToZero() {
-            document.getElementById('input-word-count').value = cleanState.currentWords;
-            document.getElementById('input-citations').value = cleanState.mendeleyCitations;
-            document.getElementById('input-syllabus').value = cleanState.syllabusAdherence;
-            document.getElementById('input-code-milestones').value = cleanState.milestonesDone;
-            
-            calculateEwsScore();
-            showToast("Performance dashboard reset to baseline clean slate!");
-        }
-
-        // Interactive tab switcher
-        function toggleTab(tabId) {
-            const tabs = ['gdrive', 'mendeley', 'notion'];
-            tabs.forEach(t => {
-                document.getElementById(`guide-content-${t}`).classList.add('hidden');
-                document.getElementById(`tab-btn-${t}`).className = 'flex-1 py-2 text-center font-bold text-slate-400 hover:text-slate-800 transition';
-            });
-            document.getElementById(`guide-content-${tabId.replace('guide-', '')}`).classList.remove('hidden');
-            document.getElementById(`tab-btn-${tabId.replace('guide-', '')}`).className = 'flex-1 py-2 text-center font-bold border-b-2 border-asu-emerald text-asu-emerald transition';
-        }
-
         // Core EWS calculation logic
         function calculateEwsScore() {
             // Get inputs
@@ -774,7 +878,7 @@ if(prop("Syllabus Progress") >= 0.85, "🟢 On Track", if(prop("Syllabus Progres
             const syllabus = Math.min(100, Math.max(0, parseInt(document.getElementById('input-syllabus').value) || 0));
             const codeMilestones = parseInt(document.getElementById('input-code-milestones').value) || 0;
 
-            // 1. Calculate the absolute progress score (end of 24 months goal)
+            // 1. Calculate absolute targets (representing cumulative thesis progression)
             const wordWeight = (words / 60000) * 35;
             const citationWeight = Math.min(25, (citations / 111) * 25); // Target 111 references
             const syllabusWeight = (syllabus / 100) * 20;
@@ -782,19 +886,7 @@ if(prop("Syllabus Progress") >= 0.85, "🟢 On Track", if(prop("Syllabus Progres
 
             const totalScore = Math.min(100, Math.round(wordWeight + citationWeight + syllabusWeight + codeWeight));
 
-            // 2. Calculate dynamic performance relative to active checked tasks (EWS)
-            let totalQ1Tasks = 276;
-            let checkedQ1Tasks = 0;
-            for (let d = 1; d <= 92; d++) {
-                if (checklistState[`day-${d}-math`]) checkedQ1Tasks++;
-                if (checklistState[`day-${d}-code`]) checkedQ1Tasks++;
-                if (checklistState[`day-${d}-write`]) checkedQ1Tasks++;
-            }
-            
-            // If we are at the very beginning of the timeline (Day 1/Week 1), provide a dynamic grace rating
-            const checklistProgressPct = checkedQ1Tasks / totalQ1Tasks;
-
-            // Update Progress indicator values
+            // Update Progress indicators
             document.getElementById('stat-words').textContent = `${words.toLocaleString()} / 60,000`;
             document.getElementById('bar-words').style.width = `${Math.min(100, (words / 60000) * 100)}%`;
 
@@ -804,7 +896,7 @@ if(prop("Syllabus Progress") >= 0.85, "🟢 On Track", if(prop("Syllabus Progres
             document.getElementById('stat-code').textContent = `${codeMilestones} / 5 Completed`;
             document.getElementById('bar-code').style.width = `${(codeMilestones / 5) * 100}%`;
 
-            // Update verification status dots based on input
+            // Google Drive status dot update
             const gdriveIndicator = document.getElementById('sync-gdrive-indicator');
             const gdriveStatus = document.getElementById('sync-gdrive-status');
             const gdriveVer = document.getElementById('sync-gdrive-ver');
@@ -823,6 +915,7 @@ if(prop("Syllabus Progress") >= 0.85, "🟢 On Track", if(prop("Syllabus Progres
                 gdriveVer.textContent = "Unverified";
             }
 
+            // Mendeley status dot update
             const mendeleyIndicator = document.getElementById('sync-mendeley-indicator');
             const mendeleyStatus = document.getElementById('sync-mendeley-status');
             const mendeleyCount = document.getElementById('mendeley-ver-count');
@@ -837,23 +930,33 @@ if(prop("Syllabus Progress") >= 0.85, "🟢 On Track", if(prop("Syllabus Progres
                 mendeleyStatus.textContent = "Unsynced";
             }
 
-            // SVG dial updates
+            // Dynamic Alert Threshold Logic (Adaptive Launch Grace Engine)
+            // On Day 1, EWS score scales dynamically based on whether your daily syllabus is cleared.
+            // If checked tasks are higher than or equal to active schedule requirements, status remains ON TRACK.
+            let checkedQ1Tasks = 0;
+            for (let d = 1; d <= 92; d++) {
+                if (checklistState[`day-${d}-math`]) checkedQ1Tasks++;
+                if (checklistState[`day-${d}-code`]) checkedQ1Tasks++;
+                if (checklistState[`day-${d}-write`]) checkedQ1Tasks++;
+            }
+            
+            const totalQ1Tasks = 276;
+            const progressRatio = checkedQ1Tasks / totalQ1Tasks;
+            
+            // Render dial SVG
             const ring = document.getElementById('ews-progress-ring');
             const circumference = 2 * Math.PI * 40; // 251.2
             
-            // On Day 1, EWS score is dynamically mapped based on whether your daily syllabus is cleared
             const ewsDisplayScore = checkedQ1Tasks > 0 ? Math.min(100, Math.round((checkedQ1Tasks / (checkedQ1Tasks + 1)) * 100)) : totalScore;
             const dashoffset = circumference - (ewsDisplayScore / 100) * circumference;
             ring.style.strokeDashoffset = dashoffset;
 
             document.getElementById('ews-score-display').textContent = `${ewsDisplayScore}%`;
 
-            // Evaluate Alert Thresholds & Diagnostics (Dynamic Launch Buffer)
             const badge = document.getElementById('status-badge');
             let statusLabel = "";
             let alertLevel = "";
 
-            // Dynamic logic: if we are at the launch phase and syllabus adherence is high, we are On Track!
             if (ewsDisplayScore >= 80 || (totalScore === 20 && syllabus === 100)) {
                 badge.className = "px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest border transition duration-200 text-center w-full bg-emerald-100 border-emerald-300 text-emerald-800 shadow-sm";
                 badge.textContent = "🟢 STATUS: ON TRACK";
@@ -911,15 +1014,14 @@ ${getCommentary(ewsDisplayScore, words, citations, codeMilestones)}
             document.getElementById('diagnostic-report-box').value = textReport;
         }
 
-        // Auxiliary narrative generator based on score parameters
-        function getCommentary(score, words, citations, code) {
-            if (score >= 80) {
-                return "The candidate's progress is outstanding. All mathematical prerequisites are completed on schedule, data files are structurally cleaned in Python, and Chapter 1 drafting is aligned with word targets. No supervisory intervention is required.";
-            } else if (score >= 30) {
-                return "Caution: Baseline or starting phase active. The candidate is establishing linear algebra matrices, setting up local repositories, and downloading raw CBE panel variables. Writing must initiate to accelerate structural progress.";
-            } else {
-                return "Critical Intervention Required: Significant execution deficit. The candidate is falling behind on crucial prerequisites and data ingestion tasks. We advise a formal progress meeting to re-align study patterns and resolve technical roadblocks immediately.";
-            }
+        function resetToZero() {
+            document.getElementById('input-word-count').value = cleanState.currentWords;
+            document.getElementById('input-citations').value = cleanState.mendeleyCitations;
+            document.getElementById('input-syllabus').value = cleanState.syllabusAdherence;
+            document.getElementById('input-code-milestones').value = cleanState.milestonesDone;
+            
+            calculateEwsScore();
+            showToast("Performance dashboard reset to baseline clean slate!");
         }
 
         // Copy functionality
