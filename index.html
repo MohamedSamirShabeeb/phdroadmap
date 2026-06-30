@@ -315,7 +315,7 @@
         </section>
 
         <!-- SECTION 6: Actual Progress Diagnostic Logger (Sandbox Inputs) -->
-        <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl space-y-6 shadow-sm">
+        <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl shadow-sm space-y-6">
             <div class="flex justify-between items-center border-b border-slate-100 pb-4">
                 <h3 class="text-lg font-serif font-extrabold text-slate-900 flex items-center">
                     <i class="fa-solid fa-sliders mr-2.5 text-asu-gold"></i> Actual Progress Diagnostic Logger
@@ -356,7 +356,7 @@
         <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             
             <!-- Left Side: Supervisor Diagnostic Reporter -->
-            <div class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl space-y-4 shadow-sm h-full flex flex-col justify-between">
+            <div class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl shadow-sm h-full flex flex-col justify-between">
                 <div class="border-b border-slate-100 pb-4">
                     <h3 class="text-lg font-serif font-extrabold text-slate-900 flex items-center">
                         <i class="fa-solid fa-share-nodes mr-2.5 text-asu-gold"></i> Supervisor Diagnostic Center
@@ -379,7 +379,7 @@ Loading analysis metrics...
             </div>
 
             <!-- Right Side: Interactive Shared Workspace Previews -->
-            <div class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl space-y-4 shadow-sm h-full flex flex-col">
+            <div class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl shadow-sm h-full flex flex-col">
                 <div class="border-b border-slate-100 pb-4">
                     <h3 class="text-lg font-serif font-extrabold text-slate-900 flex items-center">
                         <i class="fa-solid fa-folder-tree mr-2.5 text-asu-gold"></i> Live Shared Workspace
@@ -823,6 +823,153 @@ Loading analysis metrics...
             }
         }
 
+        // Algorithmically calculate unique, detailed Q1 deliverables based on selected day-of-quarter
+        function getDailyTasks(day) {
+            const week = Math.min(13, Math.ceil(day / 7));
+            const dow = ((day - 1) % 7) + 1;
+            const wSyllabus = weekSyllabus[week];
+            
+            const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+            const dayName = dayNames[dow - 1];
+            
+            let mathDescription = "";
+            let codingDescription = "";
+            let writingDescription = "";
+            let targetWords = 0;
+            let citationsLogged = 0;
+            
+            switch(dow) {
+                case 1:
+                    mathDescription = `Review definitions of ${wSyllabus.math}. Read Chapter 1 prerequisites. Complete 5 diagnostic notation drills.`;
+                    codingDescription = `Initialize local coding folders. Configure scripts and test package updates for ${wSyllabus.coding}.`;
+                    writingDescription = `Structure academic subsections and draft opening paragraph points for ${wSyllabus.writing}.`;
+                    targetWords = 150;
+                    citationsLogged = 1;
+                    break;
+                case 2:
+                    mathDescription = `Solve 5 sample mathematical proofs step-by-step in your notebook, focusing on ${wSyllabus.math}.`;
+                    codingDescription = `Write and run basic operations testing variables and functions in ${wSyllabus.coding}.`;
+                    writingDescription = `Perform thematic database checks and identify 3 key citations from Zotero/Mendeley for ${wSyllabus.writing}.`;
+                    targetWords = 200;
+                    citationsLogged = 2;
+                    break;
+                case 3:
+                    mathDescription = `Calculate 10 mathematical exercises on ${wSyllabus.math} and cross-verify with textbook solution keys.`;
+                    codingDescription = `Build a clean, local script to automate raw data cleaning and transformations for ${wSyllabus.coding}.`;
+                    writingDescription = `Draft a raw paragraph block (approx. 250 words) establishing literature connections for ${wSyllabus.writing}.`;
+                    targetWords = 300;
+                    citationsLogged = 1;
+                    break;
+                case 4:
+                    mathDescription = `Examine the applied macroeconomic role of ${wSyllabus.math} inside New Keynesian structures.`;
+                    codingDescription = `Import raw CBE data and execute validation checks on your program running ${wSyllabus.coding}.`;
+                    writingDescription = `Polishing pass: review drafts written this week. Enhance flow, style, and citation tags for ${wSyllabus.writing}.`;
+                    targetWords = 250;
+                    citationsLogged = 2;
+                    break;
+                case 5:
+                    mathDescription = `Map out limits, dynamic boundary constraints, and shadow variables modeling ${wSyllabus.math}.`;
+                    codingDescription = `Optimize execution, eliminate redundant logic, and resolve compile warnings for ${wSyllabus.coding}.`;
+                    writingDescription = `Incorporate specific Egypt-context data details or historical CBE policy indicators into ${wSyllabus.writing}.`;
+                    targetWords = 200;
+                    citationsLogged = 1;
+                    break;
+                case 6:
+                    mathDescription = `Conduct a comprehensive weekly mathematics review, compiling all steps on ${wSyllabus.math}.`;
+                    codingDescription = `Add documentation comments. Synchronize and push your local scripting folder to your remote Git repository.`;
+                    writingDescription = `Integrate all sections drafted this week into your master dissertation document. Run consistency checks.`;
+                    targetWords = 400;
+                    citationsLogged = 3;
+                    break;
+                case 7:
+                    mathDescription = `Take a timed, 1-hour self-assessment challenge on ${wSyllabus.math} to test your analytical mastery.`;
+                    codingDescription = `Re-run your entire coding folder from a clean console state to guarantee replication accuracy.`;
+                    writingDescription = `Verify that all inline citations are correctly mapped and formatted against your reference manager bibliography.`;
+                    targetWords = 0; // Sunday is reserved for revision and replication checks
+                    citationsLogged = 0;
+                    break;
+            }
+            
+            return {
+                dayName,
+                mathDescription,
+                codingDescription,
+                writingDescription,
+                targetWords,
+                citationsLogged
+            };
+        }
+
+        // Render the 3-Block Task Checklist dynamically in the DOM
+        function renderMatrixChecklist() {
+            const selectedDay = parseInt(document.getElementById('matrix-day-selector').value) || 1;
+            const tasks = getDailyTasks(selectedDay);
+            const container = document.getElementById('daily-checklist-blocks');
+            
+            container.innerHTML = '';
+            
+            // Check state variables
+            const mathDone = checklistState[`day-${selectedDay}-math`] || false;
+            const codeDone = checklistState[`day-${selectedDay}-code`] || false;
+            const writeDone = checklistState[`day-${selectedDay}-write`] || false;
+            
+            // Block 1: Mathematics
+            const mBlock = document.createElement('div');
+            mBlock.className = `p-4 rounded-xl border transition-all ${mathDone ? 'bg-asu-emerald/10 border-asu-emerald text-emerald-700' : 'bg-slate-50 border-slate-200 text-slate-600'}`;
+            mBlock.innerHTML = `
+                <div class="flex items-center space-x-2.5 mb-2">
+                    <input type="checkbox" id="chk-m-${selectedDay}" ${mathDone ? 'checked' : ''} onchange="toggleCheckItem(${selectedDay}, 'math')" class="rounded text-asu-emerald focus:ring-asu-emerald w-4 h-4 cursor-pointer">
+                    <label for="chk-m-${selectedDay}" class="text-xs font-bold text-slate-800 uppercase tracking-wider cursor-pointer">1. Math Block</label>
+                </div>
+                <p class="text-[13px] text-slate-600 leading-relaxed">${tasks.mathDescription}</p>
+            `;
+            
+            // Block 2: Coding
+            const cBlock = document.createElement('div');
+            cBlock.className = `p-4 rounded-xl border transition-all ${codeDone ? 'bg-asu-emerald/10 border-asu-emerald text-emerald-700' : 'bg-slate-50 border-slate-200 text-slate-600'}`;
+            cBlock.innerHTML = `
+                <div class="flex items-center space-x-2.5 mb-2">
+                    <input type="checkbox" id="chk-c-${selectedDay}" ${codeDone ? 'checked' : ''} onchange="toggleCheckItem(${selectedDay}, 'code')" class="rounded text-asu-emerald focus:ring-asu-emerald w-4 h-4 cursor-pointer">
+                    <label for="chk-c-${selectedDay}" class="text-xs font-bold text-slate-800 uppercase tracking-wider cursor-pointer">2. Coding Block</label>
+                </div>
+                <p class="text-[13px] text-slate-600 leading-relaxed">${tasks.codingDescription}</p>
+            `;
+
+            // Block 3: Writing
+            const wBlock = document.createElement('div');
+            wBlock.className = `p-4 rounded-xl border transition-all ${writeDone ? 'bg-asu-emerald/10 border-asu-emerald text-emerald-700' : 'bg-slate-50 border-slate-200 text-slate-600'}`;
+            wBlock.innerHTML = `
+                <div class="flex items-center space-x-2.5 mb-2">
+                    <input type="checkbox" id="chk-w-${selectedDay}" ${writeDone ? 'checked' : ''} onchange="toggleCheckItem(${selectedDay}, 'write')" class="rounded text-asu-emerald focus:ring-asu-emerald w-4 h-4 cursor-pointer">
+                    <span class="text-xs font-bold text-slate-800 uppercase tracking-wider cursor-pointer">3. Writing Block</span>
+                </div>
+                <p class="text-[13px] text-slate-600 leading-relaxed">${tasks.writingDescription}</p>
+                <div class="mt-2.5 text-xs font-bold text-asu-gold uppercase tracking-widest flex justify-between">
+                    <span>Target: +${tasks.targetWords} Words</span>
+                    <span>Refs: +${tasks.citationsLogged}</span>
+                </div>
+            `;
+            
+            container.appendChild(mBlock);
+            container.appendChild(cBlock);
+            container.appendChild(wBlock);
+        }
+
+        // Toggle checkbox state and save
+        function toggleCheckItem(day, taskType) {
+            const key = `day-${day}-${taskType}`;
+            const isChecked = checklistState[key] || false;
+            
+            if (!isChecked) {
+                checklistState[key] = true;
+            } else {
+                delete checklistState[key];
+            }
+            saveChecklistState();
+            renderMatrixChecklist();
+            showToast(`Day ${day} ${taskType} status saved!`);
+        }
+
         // Render Master Curriculum Table
         function renderCurriculumTable() {
             const filterWeek = document.getElementById('curriculum-week-filter').value;
@@ -1144,6 +1291,16 @@ ${getCommentary(ewsDisplayScore, words, citations, codeMilestones)}
             document.getElementById('diagnostic-report-box').value = textReport;
         }
 
+        function getCommentary(score, words, citations, code) {
+            if (score >= 80) {
+                return "The candidate's progress is outstanding. All mathematical prerequisites are completed on schedule, data files are structurally cleaned in Python, and Chapter 1 drafting is aligned with word targets. No supervisory intervention is required.";
+            } else if (score >= 30) {
+                return "Caution: Baseline or starting phase active. The candidate is establishing linear algebra matrices, setting up local repositories, and downloading raw CBE panel variables. Writing must initiate to accelerate structural progress.";
+            } else {
+                return "Critical Intervention Required: Significant execution deficit. The candidate is falling behind on crucial prerequisites and data ingestion tasks. We advise a formal progress meeting to re-align study patterns and resolve technical roadblocks immediately.";
+            }
+        }
+
         function resetToZero() {
             document.getElementById('input-word-count').value = cleanState.currentWords;
             document.getElementById('input-citations').value = cleanState.mendeleyCitations;
@@ -1172,10 +1329,10 @@ ${getCommentary(ewsDisplayScore, words, citations, codeMilestones)}
         function showToast(message) {
             const toast = document.getElementById('toast');
             document.getElementById('toast-message').textContent = message;
-            toast.className = "fixed bottom-5 right-5 bg-white border border-slate-200 text-slate-800 px-5 py-4 rounded-xl shadow-xl flex items-center space-x-3 transform translate-y-0 opacity-100 transition-all duration-300 z-50 text-xs md:text-sm font-semibold shadow-2xl";
+            toast.className = "fixed bottom-5 right-5 bg-white border border-slate-200 text-slate-800 px-5 py-4 rounded-xl shadow-xl flex items-center space-x-3 transform translate-y-0 opacity-100 transition-all duration-300 z-50 text-xs md:text-sm font-semibold";
             
             setTimeout(() => {
-                toast.className = "fixed bottom-5 right-5 bg-white border border-slate-200 text-slate-800 px-5 py-4 rounded-xl shadow-xl flex items-center space-x-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50 text-xs md:text-sm font-semibold shadow-2xl";
+                toast.className = "fixed bottom-5 right-5 bg-white border border-slate-200 text-slate-800 px-5 py-4 rounded-xl shadow-xl flex items-center space-x-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50 text-xs md:text-sm font-semibold";
             }, 3000);
         }
 
