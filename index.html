@@ -1,814 +1,1187 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-slate-50">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PhD Mission Control & Supervisor Diagnostic Hub</title>
-    
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PhD Mission Control · Supervisor Diagnostic Hub</title>
+
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
-    
+    <script src="https://cdn.tailwindcss.com">
+    </script>
     <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Tailwind Config -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+
+    <style>
+        /* ----- Custom styles ----- */
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 1.25rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+            transition: box-shadow 0.15s ease;
+        }
+        .card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.03);
+        }
+
+        .gauge-ring {
+            transition: stroke-dashoffset 0.6s ease;
+        }
+
+        .tag-pill {
+            display: inline-block;
+            padding: 0.1rem 0.6rem;
+            border-radius: 9999px;
+            font-size: 0.6rem;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        .tag-country {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .tag-source {
+            background: #fae8ff;
+            color: #7c3aed;
+        }
+        .tag-sector {
+            background: #ecfdf5;
+            color: #065f46;
+        }
+
+        select.status-select {
+            font-size: 0.7rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            outline: none;
+            cursor: pointer;
+            transition: border 0.15s;
+            width: 100%;
+        }
+        select.status-select:focus {
+            border-color: #0F5132;
+        }
+
+        .task-check {
+            accent-color: #0F5132;
+            width: 0.9rem;
+            height: 0.9rem;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .task-label {
+            font-size: 0.7rem;
+            color: #334155;
+            line-height: 1.2;
+        }
+
+        .progress-bar-bg {
+            background: #e2e8f0;
+            border-radius: 9999px;
+            height: 6px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 9999px;
+            transition: width 0.4s ease;
+            background: #0F5132;
+        }
+
+        .drop-zone {
+            border: 2px dashed #cbd5e1;
+            border-radius: 1rem;
+            padding: 1.25rem 0.75rem;
+            text-align: center;
+            transition: border-color 0.2s, background 0.2s;
+            background: #f8fafc;
+            cursor: pointer;
+        }
+        .drop-zone.dragover {
+            border-color: #0F5132;
+            background: #f0fdf4;
+        }
+
+        .report-box {
+            background: #f1f5f9;
+            border: none;
+            border-radius: 0.75rem;
+            padding: 0.75rem;
+            width: 100%;
+            font-family: 'Inter', monospace;
+            font-size: 0.75rem;
+            line-height: 1.5;
+            resize: vertical;
+            min-height: 140px;
+            color: #0f172a;
+        }
+        .report-box:focus {
+            outline: 2px solid #0F5132;
+            outline-offset: 2px;
+        }
+
+        .table-scroll {
+            max-height: 420px;
+            overflow-y: auto;
+        }
+        .table-scroll::-webkit-scrollbar {
+            width: 5px;
+        }
+        .table-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        .table-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .view-selector {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 0.15rem 0.5rem;
+            font-size: 0.75rem;
+            background: white;
+            outline: none;
+            cursor: pointer;
+        }
+        .view-selector:focus {
+            border-color: #0F5132;
+        }
+
+        .btn-emerald {
+            background: #0F5132;
+            color: #fff;
+            transition: background 0.15s;
+        }
+        .btn-emerald:hover {
+            background: #0a3d26;
+        }
+        .btn-gold {
+            background: #C5A059;
+            color: #fff;
+            transition: background 0.15s;
+        }
+        .btn-gold:hover {
+            background: #b08a4a;
+        }
+        .btn-outline-emerald {
+            border: 1px solid #0F5132;
+            color: #0F5132;
+            background: transparent;
+            transition: background 0.15s, color 0.15s;
+        }
+        .btn-outline-emerald:hover {
+            background: #0F5132;
+            color: #fff;
+        }
+
+        .variable-card {
+            transition: border-color 0.15s;
+            border: 1px solid #f1f5f9;
+        }
+        .variable-card:hover {
+            border-color: #cbd5e1;
+        }
+
+        .mini-stat {
+            background: #f8fafc;
+            border-radius: 0.75rem;
+            padding: 0.6rem 0.4rem;
+            text-align: center;
+        }
+
+        .integration-iframe {
+            border-radius: 0.75rem;
+            border: 1px solid #e2e8f0;
+            width: 100%;
+            height: 200px;
+            background: white;
+        }
+
+        /* Responsive tweaks */
+        @media (max-width: 1024px) {
+            .desktop-grid {
+                display: flex;
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            .desktop-grid>div {
+                width: 100%;
+            }
+        }
+
+        @media (min-width: 1025px) {
+            .desktop-grid {
+                display: grid;
+                grid-template-columns: 1fr 1.1fr 1.2fr;
+                gap: 1.5rem;
+                align-items: start;
+            }
+        }
+    </style>
+
+    <!-- Tailwind config -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        asu: {
-                            gold: '#C5A059',
-                            emerald: '#0F5132',
-                            darkGreen: '#0A3622',
-                            lightGreen: '#E2EFE0',
-                            accent: '#198754'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
+                        emerald: '#0F5132',
+                        gold: '#C5A059',
                     }
                 }
             }
         }
     </script>
-    
-    <style>
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(15, 81, 50, 0.05); border-radius: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #C5A059; }
-        
-        .dial-transition { transition: stroke-dashoffset 0.8s ease-in-out, stroke 0.3s ease; }
-    </style>
 </head>
-<body class="h-full w-full text-slate-800 font-sans antialiased selection:bg-asu-gold selection:text-white bg-slate-100">
+<body>
 
-    <!-- 3-Column Desktop Grid Layout -->
-    <div class="w-full max-w-[1920px] mx-auto h-full flex flex-col xl:flex-row gap-5 p-4 xl:overflow-hidden">
-        
-        <!-- ========================================================= -->
-        <!-- COLUMN 1: PERFORMANCE & DIAGNOSTICS                         -->
-        <!-- ========================================================= -->
-        <div class="w-full xl:w-[30%] flex flex-col gap-5 overflow-y-auto custom-scrollbar xl:pr-2 xl:pb-8">
-            
-            <!-- 1. Header/Branding -->
-            <header class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex flex-col gap-4 shrink-0">
-                <div class="flex items-center space-x-3">
-                    <div class="bg-asu-emerald p-2 rounded-full flex items-center justify-center w-11 h-11 shadow-inner shrink-0">
-                        <svg class="w-7 h-7 text-white" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="6"/>
-                            <path d="M50 20 L50 80 M20 50 L80 50" stroke="currentColor" stroke-width="3" stroke-dasharray="3 3"/>
-                            <polygon points="50,30 58,48 42,48" fill="currentColor"/>
-                        </svg>
-                    </div>
+    <div class="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6" id="app">
+
+        <!-- ============================================================ -->
+        <!-- 3-COLUMN GRID                                                -->
+        <!-- ============================================================ -->
+        <div class="desktop-grid">
+
+            <!-- ========================================================= -->
+            <!-- COLUMN 1: Performance & Diagnostics                        -->
+            <!-- ========================================================= -->
+            <div class="space-y-4">
+
+                <!-- Header / Branding -->
+                <div class="card p-4 flex items-center justify-between">
                     <div>
-                        <h1 class="text-sm lg:text-base font-serif font-extrabold text-asu-emerald tracking-wide uppercase">Ain Shams University</h1>
-                        <p class="text-[10px] text-slate-500 font-semibold tracking-wider">PhD Performance Dashboard & Supervisor Portal</p>
+                        <div class="flex items-center gap-2">
+                            <span class="text-emerald font-serif text-xl font-semibold tracking-tight">PhD</span>
+                            <span class="text-slate-400 text-sm font-light">·</span>
+                            <span class="text-sm font-medium text-slate-600">Mission Control</span>
+                        </div>
+                        <div class="text-[0.6rem] text-slate-400 uppercase tracking-wider mt-0.5 flex items-center gap-2">
+                            <span class="inline-block w-2 h-2 rounded-full bg-emerald"></span>
+                            Ain Shams University · Faculty of Business
+                        </div>
                     </div>
+                    <button id="sharePdfBtn" class="btn-outline-emerald text-xs px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition">
+                        <i class="fas fa-file-pdf"></i> Share PDF
+                    </button>
                 </div>
-                <button onclick="exportDiagnostics()" class="w-full text-xs bg-asu-gold hover:bg-yellow-500 text-slate-900 font-bold px-4 py-2.5 rounded-lg transition shadow-sm flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-file-export"></i> <span>Share Diagnostic PDF</span>
-                </button>
-            </header>
 
-            <!-- 2. EWS Monitor -->
-            <section class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm flex flex-col items-center gap-4 text-center shrink-0">
-                <div class="w-full text-left">
-                    <h2 class="text-lg font-serif font-extrabold text-slate-900">EWS Monitor</h2>
-                    <p class="text-[11px] text-slate-500">Dynamic circular SVG dial</p>
-                </div>
-                
-                <div class="relative w-48 h-48 flex items-center justify-center">
-                    <svg class="w-full h-full transform -rotate-90 drop-shadow-md" viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r="40" stroke="#f1f5f9" stroke-width="10" fill="none" />
-                        <circle id="ews-progress-ring" cx="50" cy="50" r="40" stroke="#0F5132" stroke-width="10" fill="none" stroke-linecap="round" stroke-dasharray="251.2" stroke-dashoffset="251.2" class="dial-transition" />
-                    </svg>
-                    <div class="absolute flex flex-col items-center">
-                        <span id="ews-score-display" class="text-4xl font-bold font-mono tracking-tighter text-slate-900">0%</span>
+                <!-- EWS Monitor -->
+                <div class="card p-5 flex flex-col items-center">
+                    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">EWS Monitor</h2>
+                    <div class="relative w-40 h-40 sm:w-44 sm:h-44">
+                        <svg viewBox="0 0 120 120" class="w-full h-full -rotate-90">
+                            <circle cx="60" cy="60" r="52" fill="none" stroke="#e2e8f0" stroke-width="10" />
+                            <circle cx="60" cy="60" r="52" fill="none" stroke="#0F5132" stroke-width="10"
+                            stroke-linecap="round"
+                            stroke-dasharray="326.726" stroke-dashoffset="326.726"
+                            class="gauge-ring" id="gaugeRing" />
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span class="text-3xl font-bold text-slate-800" id="gaugeScore">0%</span>
+                            <span class="text-[0.55rem] uppercase tracking-wider text-slate-400 font-medium" id="gaugeLabel">INITIALIZING</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap justify-center gap-2 mt-2 text-[0.55rem] text-slate-500 font-medium">
+                        <span class="flex items-center gap-1"><span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald"></span> ≥80% ON TRACK</span>
+                        <span class="flex items-center gap-1"><span class="inline-block w-2.5 h-2.5 rounded-full bg-[#C5A059]"></span> 30–79% CAUTION</span>
+                        <span class="flex items-center gap-1"><span class="inline-block w-2.5 h-2.5 rounded-full bg-red-500"></span> &lt;30% CRITICAL</span>
                     </div>
                 </div>
-                
-                <div id="status-badge" class="px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest border transition duration-300 w-full shadow-sm bg-slate-100 text-slate-500">
-                    Checking...
-                </div>
-            </section>
 
-            <!-- 3. Quantitative Metrics Grid -->
-            <section class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-4 shrink-0">
-                <div class="text-left">
-                    <h3 class="text-sm font-bold text-slate-800">Quantitative Metrics Grid</h3>
-                    <p class="text-[10px] text-slate-500">Visualizer progress cards</p>
-                </div>
-                <div class="grid grid-cols-3 gap-3">
-                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 flex flex-col justify-between">
-                        <span class="text-[9px] font-bold text-slate-500 uppercase">Drafted Words</span>
-                        <p class="text-lg font-mono font-bold text-slate-900 my-1" id="stat-words">0</p>
-                        <div class="w-full bg-slate-200 rounded-full h-1 mt-1">
-                            <div id="bar-words" class="bg-asu-emerald h-1 rounded-full transition-all" style="width: 0%"></div>
-                        </div>
-                        <span class="text-[8px] text-slate-400 mt-1 text-right">60,000 target</span>
+                <!-- Quantitative Metrics Grid -->
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="mini-stat">
+                        <div class="text-[0.55rem] text-slate-400 uppercase tracking-wider">Words</div>
+                        <div class="text-lg font-bold text-slate-700" id="statWords">0</div>
+                        <div class="text-[0.5rem] text-slate-400">/ 60,000</div>
                     </div>
-                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 flex flex-col justify-between">
-                        <span class="text-[9px] font-bold text-slate-500 uppercase">Papers Citations</span>
-                        <p class="text-lg font-mono font-bold text-slate-900 my-1" id="stat-papers">0</p>
-                        <div class="w-full bg-slate-200 rounded-full h-1 mt-1">
-                            <div id="bar-papers" class="bg-asu-gold h-1 rounded-full transition-all" style="width: 0%"></div>
-                        </div>
-                        <span class="text-[8px] text-slate-400 mt-1 text-right">111 target</span>
+                    <div class="mini-stat">
+                        <div class="text-[0.55rem] text-slate-400 uppercase tracking-wider">Citations</div>
+                        <div class="text-lg font-bold text-slate-700" id="statCitations">0</div>
+                        <div class="text-[0.5rem] text-slate-400">/ 111</div>
                     </div>
-                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 flex flex-col justify-between">
-                        <span class="text-[9px] font-bold text-slate-500 uppercase">Code Milestones</span>
-                        <p class="text-lg font-mono font-bold text-slate-900 my-1" id="stat-code">0</p>
-                        <div class="w-full bg-slate-200 rounded-full h-1 mt-1">
-                            <div id="bar-code" class="bg-blue-500 h-1 rounded-full transition-all" style="width: 0%"></div>
-                        </div>
-                        <span class="text-[8px] text-slate-400 mt-1 text-right">5 targets</span>
+                    <div class="mini-stat">
+                        <div class="text-[0.55rem] text-slate-400 uppercase tracking-wider">Code</div>
+                        <div class="text-lg font-bold text-slate-700" id="statCode">0</div>
+                        <div class="text-[0.5rem] text-slate-400">/ 5</div>
                     </div>
                 </div>
-            </section>
 
-            <!-- 4. Diagnostic Logger & Supervisor Report (Stacked Grid) -->
-            <section class="grid grid-cols-1 sm:grid-cols-2 gap-4 shrink-0">
-                <!-- Logger -->
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-3">
-                    <div class="flex justify-between items-center mb-1">
-                        <h3 class="text-xs font-bold text-slate-800 flex items-center"><i class="fa-solid fa-sliders text-asu-gold mr-1.5"></i> Diagnostic Logger</h3>
+                <!-- Diagnostic Logger + Supervisor Report (side-by-side) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <!-- Logger -->
+                    <div class="card p-4">
+                        <h3 class="text-xs font-semibold text-slate-600 flex items-center gap-1.5 mb-3">
+                            <i class="fas fa-sliders-h text-emerald"></i> Diagnostic Logger
+                        </h3>
+                        <div class="space-y-2.5">
+                            <div>
+                                <label class="text-[0.6rem] text-slate-500 block">Words (max 60,000)</label>
+                                <input type="number" id="diagWords" min="0" max="60000" value="0"
+                                class="w-full border border-slate-200 rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald/30" />
+                            </div>
+                            <div>
+                                <label class="text-[0.6rem] text-slate-500 block">Citations (max 111)</label>
+                                <input type="number" id="diagCitations" min="0" max="111" value="0"
+                                class="w-full border border-slate-200 rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald/30" />
+                            </div>
+                            <div>
+                                <label class="text-[0.6rem] text-slate-500 block">Syllabus Adherence (%)</label>
+                                <input type="number" id="diagSyllabus" min="0" max="100" value="0"
+                                class="w-full border border-slate-200 rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald/30" />
+                            </div>
+                            <div>
+                                <label class="text-[0.6rem] text-slate-500 block">Code Milestones (0–5)</label>
+                                <select id="diagCode" class="w-full border border-slate-200 rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald/30 bg-white">
+                                    <option value="0">0</option><option value="1">1</option><option value="2">2</option>
+                                    <option value="3">3</option><option value="4">4</option><option value="5">5</option>
+                                </select>
+                            </div>
+                            <button id="resetDiagBtn" class="text-xs text-slate-400 hover:text-red-500 transition flex items-center gap-1 mt-1">
+                                <i class="fas fa-undo-alt"></i> Reset
+                            </button>
+                        </div>
                     </div>
-                    <div class="space-y-3 text-[10px]">
-                        <div>
-                            <label class="block text-slate-500 font-semibold mb-1">Words (max 60k)</label>
-                            <input type="number" id="input-word-count" min="0" max="60000" placeholder="0" oninput="calculateEwsScore()" class="w-full bg-slate-50 border border-slate-200 focus:border-asu-emerald rounded p-1.5 outline-none font-mono">
+
+                    <!-- Report -->
+                    <div class="card p-4 flex flex-col">
+                        <h3 class="text-xs font-semibold text-slate-600 flex items-center gap-1.5 mb-2">
+                            <i class="fas fa-file-alt text-gold"></i> Supervisor Report
+                        </h3>
+                        <textarea id="reportBox" class="report-box flex-1" readonly placeholder="Report auto-generates…"></textarea>
+                        <button id="copyReportBtn" class="self-end text-[0.6rem] bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-full transition flex items-center gap-1 mt-2">
+                            <i class="far fa-copy"></i> Copy
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ========================================================= -->
+            <!-- COLUMN 2: Data Ingestion                                   -->
+            <!-- ========================================================= -->
+            <div class="space-y-4">
+
+                <!-- Data Readiness Bar -->
+                <div class="card p-4">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-xs font-medium text-slate-600">Data Readiness</span>
+                        <span class="text-sm font-bold text-emerald" id="dataReadinessLabel">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="dataReadinessBar" style="width:0%;"></div>
+                    </div>
+                    <div class="flex justify-between text-[0.5rem] text-slate-400 mt-0.5">
+                        <span>0%</span>
+                        <span>100%</span>
+                    </div>
+                </div>
+
+                <!-- Variables Tracker (17 cards) -->
+                <div class="card p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-xs font-semibold text-slate-600 flex items-center gap-1.5">
+                            <i class="fas fa-database text-emerald"></i> Variables Tracker
+                            <span class="text-[0.55rem] font-normal text-slate-400">(17)</span>
+                        </h3>
+                        <span class="text-[0.55rem] text-slate-400" id="varsProgress">0/17 integrated</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2" id="variablesGrid">
+                        <!-- injected by JS -->
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ========================================================= -->
+            <!-- COLUMN 3: Task Management & Integrations                   -->
+            <!-- ========================================================= -->
+            <div class="space-y-4">
+
+                <!-- 92-Day Task Table -->
+                <div class="card p-4">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                        <h3 class="text-xs font-semibold text-slate-600 flex items-center gap-1.5">
+                            <i class="fas fa-tasks text-gold"></i> 92-Day Task Matrix
+                            <span class="text-[0.55rem] font-normal text-slate-400">(Jul–Sep)</span>
+                        </h3>
+                        <div class="flex flex-wrap items-center gap-1.5">
+                            <label class="text-[0.55rem] text-slate-500">Filter:</label>
+                            <select id="taskFilter" class="view-selector">
+                                <option value="all">All Days</option>
+                                <option value="July">July</option>
+                                <option value="August">Aug</option>
+                                <option value="September">Sep</option>
+                            </select>
+                            <button id="notionSyncBtn" class="btn-emerald text-[0.6rem] px-2.5 py-1 rounded-lg flex items-center gap-1 transition">
+                                <i class="fab fa-notion"></i> Sync Notion
+                            </button>
                         </div>
-                        <div>
-                            <label class="block text-slate-500 font-semibold mb-1">Citations (max 200)</label>
-                            <input type="number" id="input-citations" min="0" max="200" placeholder="0" oninput="calculateEwsScore()" class="w-full bg-slate-50 border border-slate-200 focus:border-asu-emerald rounded p-1.5 outline-none font-mono">
+                    </div>
+
+                    <div class="table-scroll">
+                        <table class="w-full text-[0.65rem]">
+                            <thead class="sticky top-0 bg-slate-50/95 backdrop-blur-sm z-10">
+                                <tr class="border-b border-slate-200">
+                                    <th class="text-left py-1.5 px-1 font-semibold text-slate-500 w-[12%]">Week</th>
+                                    <th class="text-left py-1.5 px-1 font-semibold text-slate-500 w-[16%]">Day / Date</th>
+                                    <th class="text-left py-1.5 px-1 font-semibold text-slate-500 w-[22%]">Mathematics</th>
+                                    <th class="text-left py-1.5 px-1 font-semibold text-slate-500 w-[22%]">Technical</th>
+                                    <th class="text-left py-1.5 px-1 font-semibold text-slate-500 w-[22%]">Writing</th>
+                                    <th class="text-left py-1.5 px-1 font-semibold text-slate-500 w-[6%] text-center">Done</th>
+                                </tr>
+                            </thead>
+                            <tbody id="taskTableBody">
+                                <!-- injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100">
+                        <span class="text-[0.55rem] text-slate-400" id="taskSummary">0 / 92 days complete</span>
+                        <span class="text-[0.55rem] text-slate-400" id="taskCompletionPct">0%</span>
+                    </div>
+                </div>
+
+                <!-- Bottom Integrations: Mendeley + Google Drive (side-by-side) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+                    <!-- Mendeley Library -->
+                    <div class="card p-4">
+                        <h3 class="text-xs font-semibold text-slate-600 flex items-center gap-1.5 mb-2">
+                            <i class="fas fa-book-open text-emerald"></i> Mendeley .bib
+                        </h3>
+                        <div id="dropZone" class="drop-zone">
+                            <i class="fas fa-cloud-upload-alt text-2xl text-slate-300 mb-1 block"></i>
+                            <p class="text-[0.6rem] text-slate-500">Drop your <strong>.bib</strong> here</p>
+                            <p class="text-[0.5rem] text-slate-400">or click to browse</p>
+                            <input type="file" id="bibFileInput" accept=".bib" class="hidden" />
                         </div>
-                        <div>
-                            <label class="block text-slate-500 font-semibold mb-1">Syllabus Adherence (%)</label>
-                            <input type="number" id="input-syllabus" min="0" max="100" placeholder="100" oninput="calculateEwsScore()" class="w-full bg-slate-50 border border-slate-200 focus:border-asu-emerald rounded p-1.5 outline-none font-mono">
+                        <div class="flex items-center gap-2 mt-2 text-[0.65rem]">
+                            <span class="text-slate-500">Entries:</span>
+                            <span id="bibEntryCount" class="font-bold text-emerald">0</span>
+                            <button id="bibApplyBtn" class="ml-auto text-[0.55rem] bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-full transition">
+                                Apply to Citations
+                            </button>
                         </div>
-                        <div>
-                            <label class="block text-slate-500 font-semibold mb-1">Code Milestones (0-5)</label>
-                            <select id="input-code-milestones" onchange="calculateEwsScore()" class="w-full bg-slate-50 border border-slate-200 focus:border-asu-emerald rounded p-1.5 outline-none font-sans">
-                                <option value="0">0: Zero Foundation</option>
-                                <option value="1">1: Clean Datasets & Repos</option>
-                                <option value="2">2: Simple RBC Solved</option>
-                                <option value="3">3: NK Model in Dynare</option>
-                                <option value="4">4: Crisis Simulations</option>
-                                <option value="5">5: Panel VAR Estimated</option>
+                    </div>
+
+                    <!-- Google Drive -->
+                    <div class="card p-4">
+                        <h3 class="text-xs font-semibold text-slate-600 flex items-center gap-1.5 mb-2">
+                            <i class="fab fa-google-drive text-emerald"></i> Google Drive
+                        </h3>
+                        <div class="flex gap-1.5">
+                            <input type="text" id="driveFolderId" placeholder="Folder ID"
+                            class="flex-1 border border-slate-200 rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald/30" />
+                            <button id="loadDriveBtn" class="btn-emerald text-xs px-3 py-1.5 rounded-lg transition">Load</button>
+                        </div>
+                        <div class="mt-2 rounded-lg overflow-hidden border border-slate-200" style="height:150px;">
+                            <iframe id="driveIframe" src="about:blank" class="w-full h-full" frameborder="0"></iframe>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div><!-- /desktop-grid -->
+
+        <!-- ============================================================ -->
+        <!-- FOOTER                                                        -->
+        <!-- ============================================================ -->
+        <footer class="mt-6 pt-3 border-t border-slate-200/60 flex flex-wrap items-center justify-between text-[0.55rem] text-slate-400">
+            <span><i class="fas fa-database text-emerald mr-1"></i> Auto-saved in localStorage</span>
+            <span id="lastSaved">Ready</span>
+        </footer>
+
+    </div><!-- /app -->
+
+    <!-- ============================================================ -->
+    <!-- JAVASCRIPT                                                     -->
+    <!-- ============================================================ -->
+    <script>
+        (function() {
+            'use strict';
+
+            // -------- CONSTANTS --------
+            const GAUGE_CIRCUMFERENCE = 326.726;
+            const STORAGE_KEY = 'phd_dashboard_vFinal';
+            const TARGET_WORDS = 60000;
+            const TARGET_CITATIONS = 111;
+            const TARGET_CODE = 5;
+
+            // 17 variable names (plain unicode, no HTML entities)
+            const VARIABLE_NAMES = [
+                'Price of Capital (Qt)', 'Wages (Wt)', 'Inflation (Pt)',
+                'Output Gap (Yt)', 'Quantitative Easing (QEt)',
+                'Interest Rates (Rt)', 'Exchange Rates (Et)',
+                'GDP Growth (Gt)', 'Unemployment Rate (Ut)',
+                'Consumer Confidence (Ct)', 'Business Investment (It)',
+                'Government Spending (Gt)', 'Net Exports (NXt)',
+                'Money Supply (Mt)', 'Credit Availability (At)',
+                'Stock Market Index (St)', 'Commodity Prices (Cmt)'
+            ];
+
+            const SECTORS = ['Real Economy', 'Financial', 'External', 'Fiscal', 'Monetary'];
+            const COUNTRIES = ['Egypt', 'US', 'Eurozone', 'UK', 'China', 'GCC'];
+            const SOURCES = ['IMF', 'World Bank', 'Bloomberg', 'Reuters', 'Central Banks', 'National Stats'];
+            const STATUSES = ['Not Started', 'Sourced', 'Wrangled', 'Integrated'];
+
+            // 92 days: July 1 – Sep 30, 2026
+            function buildDateRange() {
+                const dates = [];
+                const start = new Date(2026, 6, 1);
+                const end = new Date(2026, 8, 30);
+                let d = new Date(start);
+                let idx = 0;
+                while (d <= end) {
+                    const month = d.toLocaleString('en-US', { month: 'long' });
+                    const day = d.getDate();
+                    const label = `${month} ${day}`;
+                    const weekNum = Math.floor(idx / 7) + 1;
+                    dates.push({ idx, dateObj: new Date(d), label, month, week: weekNum });
+                    d.setDate(d.getDate() + 1);
+                    idx++;
+                }
+                return dates;
+            }
+            const DATE_RANGE = buildDateRange(); // 92
+
+            // Task categories
+            const TASK_CATS = ['math', 'tech', 'writing'];
+            const TASK_LABELS = { math: 'Mathematics', tech: 'Technical', writing: 'Writing' };
+            const TASK_DESCRIPTIONS = {
+                math: ['Derivations', 'Optimization', 'Linear Algebra', 'Statistics', 'Econometrics'],
+                tech: ['Python script', 'Data pipeline', 'API integration', 'SQL query', 'Dashboard UI'],
+                writing: ['Intro draft', 'Lit review', 'Methodology', 'Results', 'Discussion']
+            };
+
+            // -------- STATE --------
+            let state = {
+                variables: [],
+                tasks: [],
+                diag: { words: 0, citations: 0, syllabus: 0, code: 0 },
+                driveFolderId: '',
+                bibCount: 0,
+                filter: 'all',
+            };
+
+            // -------- DOM REFS --------
+            const $ = (s) => document.querySelector(s);
+            const $$ = (s) => document.querySelectorAll(s);
+
+            const gaugeRing = $('#gaugeRing');
+            const gaugeScore = $('#gaugeScore');
+            const gaugeLabel = $('#gaugeLabel');
+            const statWords = $('#statWords');
+            const statCitations = $('#statCitations');
+            const statCode = $('#statCode');
+            const dataReadinessBar = $('#dataReadinessBar');
+            const dataReadinessLabel = $('#dataReadinessLabel');
+            const varsProgress = $('#varsProgress');
+            const variablesGrid = $('#variablesGrid');
+            const taskTableBody = $('#taskTableBody');
+            const taskFilter = $('#taskFilter');
+            const taskSummary = $('#taskSummary');
+            const taskCompletionPct = $('#taskCompletionPct');
+            const diagWords = $('#diagWords');
+            const diagCitations = $('#diagCitations');
+            const diagSyllabus = $('#diagSyllabus');
+            const diagCode = $('#diagCode');
+            const resetDiagBtn = $('#resetDiagBtn');
+            const reportBox = $('#reportBox');
+            const copyReportBtn = $('#copyReportBtn');
+            const sharePdfBtn = $('#sharePdfBtn');
+            const notionSyncBtn = $('#notionSyncBtn');
+            const dropZone = $('#dropZone');
+            const bibFileInput = $('#bibFileInput');
+            const bibEntryCount = $('#bibEntryCount');
+            const bibApplyBtn = $('#bibApplyBtn');
+            const driveFolderId = $('#driveFolderId');
+            const loadDriveBtn = $('#loadDriveBtn');
+            const driveIframe = $('#driveIframe');
+            const lastSaved = $('#lastSaved');
+
+            // -------- HELPERS --------
+            function getRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+            function getTags(index) {
+                const c1 = COUNTRIES[index % COUNTRIES.length];
+                const c2 = COUNTRIES[(index * 3 + 5) % COUNTRIES.length];
+                const s1 = SOURCES[(index * 2 + 1) % SOURCES.length];
+                const s2 = SOURCES[(index * 7 + 3) % SOURCES.length];
+                const countries = [...new Set([c1, c2])].slice(0, 2);
+                const sources = [...new Set([s1, s2])].slice(0, 2);
+                return { countries, sources };
+            }
+
+            function getTaskDescription(dayIdx, cat) {
+                const list = TASK_DESCRIPTIONS[cat] || ['Task'];
+                return list[dayIdx % list.length];
+            }
+
+            // -------- INIT STATE --------
+            function initState() {
+                // Variables
+                state.variables = VARIABLE_NAMES.map((name, i) => {
+                    const tags = getTags(i);
+                    return {
+                        id: i,
+                        name: name,
+                        sector: SECTORS[i % SECTORS.length],
+                        countries: tags.countries,
+                        sources: tags.sources,
+                        status: 'Not Started'
+                    };
+                });
+
+                // Tasks
+                state.tasks = DATE_RANGE.map((d) => {
+                    const t = {};
+                    TASK_CATS.forEach(cat => {
+                        t[cat] = {
+                            done: false,
+                            desc: getTaskDescription(d.idx, cat)
+                        };
+                    });
+                    return {
+                        dayIdx: d.idx,
+                        dateStr: d.label,
+                        month: d.month,
+                        week: d.week,
+                        tasks: t
+                    };
+                });
+            }
+
+            // -------- PERSISTENCE --------
+            function saveState() {
+                try {
+                    const payload = {
+                        variables: state.variables,
+                        tasks: state.tasks,
+                        diag: state.diag,
+                        driveFolderId: state.driveFolderId,
+                        bibCount: state.bibCount,
+                        filter: state.filter,
+                    };
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+                    lastSaved.textContent = 'Saved ' + new Date().toLocaleTimeString();
+                } catch (_) { /* ignore */ }
+            }
+
+            function loadState() {
+                try {
+                    const raw = localStorage.getItem(STORAGE_KEY);
+                    if (!raw) return false;
+                    const parsed = JSON.parse(raw);
+                    if (parsed.variables) state.variables = parsed.variables;
+                    if (parsed.tasks) state.tasks = parsed.tasks;
+                    if (parsed.diag) state.diag = parsed.diag;
+                    if (parsed.driveFolderId) state.driveFolderId = parsed.driveFolderId;
+                    if (parsed.bibCount !== undefined) state.bibCount = parsed.bibCount;
+                    if (parsed.filter) state.filter = parsed.filter;
+                    return true;
+                } catch (_) { return false; }
+            }
+
+            // -------- COMPUTE SCORES --------
+            function computeScores() {
+                const totalVars = state.variables.length;
+                const integrated = state.variables.filter(v => v.status === 'Integrated').length;
+                const dataReadiness = totalVars === 0 ? 0 : Math.round((integrated / totalVars) * 100);
+
+                const words = Math.min(Number(state.diag.words) || 0, TARGET_WORDS);
+                const wordsPct = Math.round((words / TARGET_WORDS) * 100);
+                const citations = Math.min(Number(state.diag.citations) || 0, TARGET_CITATIONS);
+                const citationsPct = Math.round((citations / TARGET_CITATIONS) * 100);
+                const syllabus = Math.min(Number(state.diag.syllabus) || 0, 100);
+                const code = Math.min(Number(state.diag.code) || 0, TARGET_CODE);
+                const codePct = Math.round((code / TARGET_CODE) * 100);
+
+                // Weighted: Data 20%, Words 30%, Citations 20%, Syllabus 15%, Code 15%
+                const overall = Math.round(
+                    (dataReadiness * 0.20) +
+                    (wordsPct * 0.30) +
+                    (citationsPct * 0.20) +
+                    (syllabus * 0.15) +
+                    (codePct * 0.15)
+                );
+
+                // Task completion
+                const totalTasks = state.tasks.length;
+                const doneTasks = state.tasks.filter(t => {
+                    const cats = Object.values(t.tasks);
+                    return cats.every(c => c.done === true);
+                }).length;
+
+                return {
+                    dataReadiness,
+                    wordsPct,
+                    citationsPct,
+                    syllabus,
+                    codePct,
+                    overall,
+                    words,
+                    citations,
+                    code,
+                    doneTasks,
+                    totalTasks,
+                    integrated,
+                    totalVars,
+                };
+            }
+
+            // -------- RENDER: GAUGE --------
+            function renderGauge(score) {
+                const clamped = Math.min(Math.max(score, 0), 100);
+                const offset = GAUGE_CIRCUMFERENCE - (clamped / 100) * GAUGE_CIRCUMFERENCE;
+                gaugeRing.setAttribute('stroke-dashoffset', offset);
+                gaugeScore.textContent = clamped + '%';
+
+                let color = '#0F5132';
+                let label = 'ON TRACK';
+                if (clamped < 30) { color = '#ef4444';
+                    label = 'CRITICAL'; } else if (clamped < 80) { color = '#C5A059';
+                    label = 'CAUTION'; }
+                gaugeRing.setAttribute('stroke', color);
+                gaugeLabel.textContent = label;
+                gaugeLabel.style.color = color;
+            }
+
+            // -------- RENDER: VARIABLES --------
+            function renderVariables() {
+                let html = '';
+                for (const v of state.variables) {
+                    const countryTags = v.countries.map(c =>
+                        `<span class="tag-pill tag-country">${c}</span>`
+                    ).join(' ');
+                    const sourceTags = v.sources.map(s =>
+                        `<span class="tag-pill tag-source">${s}</span>`
+                    ).join(' ');
+                    const opts = STATUSES.map(s =>
+                        `<option value="${s}" ${s === v.status ? 'selected' : ''}>${s}</option>`
+                    ).join('');
+                    html += `
+                        <div class="variable-card card p-2.5 flex flex-col gap-1" data-varid="${v.id}">
+                            <div class="flex items-center justify-between">
+                                <span class="font-medium text-[0.65rem] text-slate-700 truncate" title="${v.name}">${v.name}</span>
+                                <span class="tag-pill tag-sector text-[0.5rem]">${v.sector}</span>
+                            </div>
+                            <div class="flex flex-wrap gap-0.5">${countryTags} ${sourceTags}</div>
+                            <select class="status-select mt-0.5" data-varid="${v.id}">
+                                ${opts}
                             </select>
                         </div>
-                    </div>
-                    <button onclick="resetSandbox()" class="mt-2 w-full text-[10px] bg-red-50 hover:bg-red-100 text-red-600 font-bold border border-red-200 py-1.5 rounded transition">
-                        <i class="fa-solid fa-rotate-left mr-1"></i> Reset
-                    </button>
-                </div>
+                    `;
+                }
+                variablesGrid.innerHTML = html;
 
-                <!-- Report -->
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-3">
-                    <h3 class="text-xs font-bold text-slate-800 flex items-center mb-1"><i class="fa-solid fa-file-lines text-asu-gold mr-1.5"></i> Supervisor Report</h3>
-                    <textarea id="diagnostic-report-box" readonly class="flex-1 w-full bg-slate-50 border border-slate-200 rounded p-2 font-mono text-[9px] text-slate-600 resize-none outline-none custom-scrollbar min-h-[180px]">Loading report...</textarea>
-                    <button onclick="copyDiagnosticReport()" class="w-full text-[10px] bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold border border-slate-300 py-1.5 rounded transition flex items-center justify-center space-x-1">
-                        <i class="fa-solid fa-copy"></i> <span>Copy</span>
-                    </button>
-                </div>
-            </section>
-        </div>
-
-        <!-- ========================================================= -->
-        <!-- COLUMN 2: DATA INGESTION                                  -->
-        <!-- ========================================================= -->
-        <div class="w-full xl:w-[35%] flex flex-col gap-5 overflow-y-auto custom-scrollbar xl:pr-2 xl:pb-8">
-            
-            <!-- Data Readiness Bar -->
-            <section class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm shrink-0">
-                <div class="flex justify-between items-center mb-2">
-                    <h2 class="text-sm font-bold text-slate-800">Data Readiness Bar</h2>
-                    <span id="data-readiness-percent" class="font-mono text-sm font-bold text-slate-800">0%</span>
-                </div>
-                <div class="w-full bg-slate-200 rounded-full h-2">
-                    <div id="data-readiness-bar" class="bg-asu-emerald h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
-                </div>
-            </section>
-
-            <!-- Live Data & Variables Ingestion Tracker -->
-            <section class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex flex-col gap-4">
-                <div>
-                    <h3 class="text-base font-serif font-extrabold text-slate-900 flex items-center">
-                        <span class="w-2.5 h-2.5 rounded-full bg-slate-300 mr-2"></span> Live Data & Variables Ingestion Tracker
-                    </h3>
-                    <p class="text-[10px] text-slate-500 mt-1">17 Notion-style macroeconomic parameters.</p>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="variables-tracker-grid">
-                    <!-- Variable Cards Injected via JS -->
-                </div>
-            </section>
-        </div>
-
-        <!-- ========================================================= -->
-        <!-- COLUMN 3: TASK MANAGEMENT & INTEGRATIONS                  -->
-        <!-- ========================================================= -->
-        <div class="w-full xl:w-[35%] flex flex-col gap-5 overflow-y-auto custom-scrollbar xl:pr-2 xl:pb-8">
-            
-            <!-- 92-Day Task Table -->
-            <section class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex flex-col gap-4 shrink-0">
-                
-                <div class="flex justify-between items-center">
-                    <h2 class="text-sm font-bold text-slate-800">92-Day Task Table (Weekly & Daily Detail)</h2>
-                </div>
-                
-                <button onclick="syncChecklistToSandbox()" class="w-full py-2 bg-white border border-slate-200 rounded-lg shadow-sm text-xs font-bold text-slate-700 hover:bg-slate-50 transition flex items-center justify-center space-x-2">
-                    <i class="fa-brands fa-neos"></i> <span>Sync with Notion / Notion Integration Active</span> <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span>
-                </button>
-
-                <div class="flex items-center justify-between mt-2">
-                    <div class="flex items-center space-x-2">
-                        <span class="text-[11px] font-semibold text-slate-600">Select View:</span>
-                        <select id="task-filter" onchange="renderTaskTable()" class="bg-slate-50 border border-slate-300 rounded px-2 py-1 text-[11px] outline-none cursor-pointer text-slate-700 font-medium">
-                            <option value="all">All Days</option>
-                            <option value="july">July 2026</option>
-                            <option value="august">August 2026</option>
-                            <option value="september">September 2026</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="overflow-x-auto border border-slate-200 rounded-lg shadow-inner mt-2 max-h-[500px] custom-scrollbar">
-                    <table class="w-full text-left border-collapse min-w-[550px]">
-                        <thead class="sticky top-0 bg-slate-100 z-10 shadow-sm">
-                            <tr class="text-[9px] font-bold uppercase tracking-wider text-slate-600 border-b border-slate-200">
-                                <th class="p-2 w-12">Week</th>
-                                <th class="p-2 w-16">Day/Date</th>
-                                <th class="p-2 w-28">Math Tasks</th>
-                                <th class="p-2 w-28">Tech Tasks</th>
-                                <th class="p-2 w-28">Writing Tasks</th>
-                                <th class="p-2 text-center w-24">Daily Completion</th>
-                            </tr>
-                        </thead>
-                        <tbody id="task-table-body" class="divide-y divide-slate-100 bg-white">
-                            <!-- Rows injected via JS -->
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <!-- Bottom Integrations (Side-by-Side) -->
-            <section class="grid grid-cols-1 sm:grid-cols-2 gap-4 shrink-0 mt-auto">
-                
-                <!-- Mendeley Library -->
-                <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex flex-col gap-3">
-                    <h3 class="text-sm font-bold text-slate-800 flex items-center">
-                        <i class="fa-solid fa-book text-red-600 mr-1.5"></i> Mendeley Library
-                    </h3>
-                    
-                    <div id="mendeley-dropzone" class="border-2 border-dashed border-slate-300 hover:border-red-400 bg-slate-50 rounded-xl p-4 text-center cursor-pointer transition flex flex-col items-center justify-center h-24">
-                        <i class="fa-solid fa-file-arrow-up text-lg text-slate-400 mb-1"></i>
-                        <span class="text-[10px] text-slate-500 font-medium leading-tight">Drop <strong class="text-red-600">.bib</strong> file here to parse references</span>
-                        <input type="file" id="mendeley-file-input" accept=".bib" class="hidden">
-                    </div>
-                    
-                    <div class="text-[9px] text-slate-500 bg-slate-100 rounded p-2 text-center border border-slate-200 mt-auto">
-                        <span id="mendeley-ver-count" class="font-bold text-slate-700">0</span> parsed references ready for EWS.
-                    </div>
-                </div>
-
-                <!-- Google Drive Section -->
-                <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex flex-col gap-3">
-                    <h3 class="text-sm font-bold text-slate-800 flex items-center">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/1/12/Google_Drive_icon_%282020%29.svg" class="w-4 h-4 mr-1.5" alt="Drive"> Google Drive
-                    </h3>
-                    
-                    <div class="flex space-x-2">
-                        <input type="text" id="input-gdrive-id" placeholder="Paste Folder ID..." class="w-full bg-slate-50 border border-slate-300 focus:border-blue-500 rounded p-1.5 text-[10px] outline-none">
-                        <button onclick="saveGDriveFolderId()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold px-2 py-1.5 rounded text-[10px] transition shadow-sm">Load</button>
-                    </div>
-
-                    <div id="gdrive-iframe-container" class="w-full flex-1 bg-slate-50 border border-slate-200 rounded-xl overflow-hidden flex items-center justify-center text-center p-2 min-h-[96px] shadow-inner mt-auto">
-                        <span class="text-[10px] text-slate-400">Embedded Google Drive iframe.</span>
-                    </div>
-                </div>
-            </section>
-
-        </div>
-    </div>
-
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-5 right-5 bg-slate-800 text-white px-4 py-3 rounded-lg shadow-xl flex items-center space-x-2 transform translate-y-20 opacity-0 transition-all z-50 text-xs font-semibold">
-        <i class="fa-solid fa-bell text-asu-gold"></i>
-        <span id="toast-message">Action Complete</span>
-    </div>
-
-    <!-- JAVASCRIPT ENGINE (Hardened & Sanitized) -->
-    <script>
-        // Use a clean key to bypass previous state corruption
-        const STORAGE_KEY = 'phd_dashboard_vFinal_Live';
-        
-        // Sanitized Variables Syllabus (Strictly No HTML tags like <sub> or &pi;)
-        const variablesSyllabus = {
-            "price_capital": { name: "Price of Capital (Qt)", sector: "Target Sector", countries: ["Egypt", "US"], sources: ["Bloomberg", "BIS"], code: "EGY_Q" },
-            "wages": { name: "Wages (Wt)", sector: "Target Sector", countries: ["Egypt", "US", "Eurozone", "UK"], sources: ["Bloomberg", "BIS", "CBE", "Others"], code: "EGY_W" },
-            "capital_return": { name: "Capital Return (Rk,t)", sector: "Target Sector", countries: ["Egypt", "US", "Eurozone"], sources: ["Bloomberg", "BIS", "CBE"], code: "EGY_RK" },
-            "inflation": { name: "Inflation (pi t)", sector: "Target Sector", countries: ["Egypt", "US", "Eurozone"], sources: ["Bloomberg", "BIS", "IMF"], code: "EGY_INF" },
-            "equity": { name: "Equity (Et)", sector: "Target Sector", countries: ["Egypt", "US", "Eurozone"], sources: ["Bloomberg", "BIS", "Central Banks"], code: "EGY_EQ" },
-            "investment": { name: "Investment (It)", sector: "Target Sector", countries: ["Egypt", "US", "Eurozone"], sources: ["World Bank", "IMF"], code: "EGY_INV" },
-            "productivity": { name: "Productivity (At)", sector: "Target Sector", countries: ["Egypt", "US", "Eurozone"], sources: ["World Bank", "OECD"], code: "EGY_PROD" },
-            "output_gap": { name: "Output Gap (Y_hat t)", sector: "Target Sector", countries: ["Egypt", "US", "Eurozone"], sources: ["FRED", "OECD"], code: "EGY_YGAP" },
-            "forward_guidance": { name: "Forward Guidance (Rf,t)", sector: "Spillovers", countries: ["US", "Eurozone", "UK"], sources: ["Central Banks", "Bloomberg"], code: "UMP_FG" },
-            "bonds": { name: "Bonds (Bt)", sector: "Target Sector", countries: ["Egypt", "US", "Eurozone"], sources: ["Central Banks", "BIS"], code: "EGY_B" },
-            "interest_rate": { name: "Interest Rate (Rt)", sector: "Target Sector", countries: ["Egypt", "US", "Eurozone"], sources: ["Central Banks", "FRED"], code: "EGY_R" },
-            "risk_premium": { name: "Risk Premium", sector: "Target Sector", countries: ["Egypt", "US"], sources: ["Central Banks", "BIS"], code: "EGY_RP" },
-            "output": { name: "Output (Yt)", sector: "Target Sector", countries: ["Egypt", "US", "Eurozone"], sources: ["IMF", "World Bank"], code: "EGY_Y" },
-            "consumption": { name: "Consumption (Ct)", sector: "Target Sector", countries: ["Egypt", "US"], sources: ["Central Banks", "National Acc."], code: "EGY_C" },
-            "leverage": { name: "Leverage (phi t)", sector: "Target Sector", countries: ["Egypt", "US", "Eurozone"], sources: ["Central Banks", "BIS"], code: "EGY_LEV" },
-            "loans": { name: "Loans (Lt)", sector: "Target Sector", countries: ["Egypt", "US"], sources: ["Central Banks", "BIS", "IMF"], code: "EGY_L" },
-            "qe": { name: "Quantitative Easing (QEt)", sector: "Spillovers", countries: ["US", "Eurozone", "Japan"], sources: ["Central Banks", "FRED"], code: "UMP_QE" }
-        };
-
-        // State Management
-        let appState = {
-            inputs: { words: 0, citations: 0, syllabus: 100, milestones: 0 },
-            variables: {},
-            tasks: {},
-            gdriveId: ""
-        };
-
-        // Initialize Application with Bulletproof Failsafes
-        document.addEventListener('DOMContentLoaded', () => {
-            try {
-                loadState();
-                renderVariablesTracker();
-                renderTaskTable();
-                initMendeleyParser();
-                calculateEwsScore();
-                if(appState.gdriveId) renderGDriveIframe(appState.gdriveId);
-            } catch (error) {
-                console.error("Dashboard initialization error bypass activated:", error);
+                // Attach change events
+                variablesGrid.querySelectorAll('.status-select').forEach(sel => {
+                    sel.addEventListener('change', function() {
+                        const id = parseInt(this.dataset.varid);
+                        const v = state.variables.find(x => x.id === id);
+                        if (v) {
+                            v.status = this.value;
+                            calculateEwsScore();
+                            saveState();
+                        }
+                    });
+                });
             }
-        });
 
-        function loadState() {
-            const saved = localStorage.getItem(STORAGE_KEY);
-            if (saved) {
+            // -------- RENDER: TASKS --------
+            function renderTasks() {
+                const filter = taskFilter.value;
+                state.filter = filter;
+
+                let filtered = state.tasks;
+                if (filter !== 'all') {
+                    filtered = state.tasks.filter(t => t.month === filter);
+                }
+
+                let html = '';
+                let currentWeek = -1;
+                for (const t of filtered) {
+                    const weekNum = t.week;
+                    const showWeek = (weekNum !== currentWeek);
+                    currentWeek = weekNum;
+
+                    const cats = t.tasks;
+                    const doneCount = Object.values(cats).filter(c => c.done).length;
+                    const pct = Math.round((doneCount / 3) * 100);
+
+                    const mathChecked = cats.math.done ? 'checked' : '';
+                    const techChecked = cats.tech.done ? 'checked' : '';
+                    const writingChecked = cats.writing.done ? 'checked' : '';
+
+                    const weekLabel = showWeek ? `W${weekNum}` : '';
+
+                    html += `
+                        <tr class="border-b border-slate-100/70 hover:bg-slate-50/60 transition ${doneCount === 3 ? 'bg-emerald/5' : ''}">
+                            <td class="py-1.5 px-1 text-[0.6rem] text-slate-400 font-mono">${weekLabel}</td>
+                            <td class="py-1.5 px-1 text-[0.6rem] text-slate-600 font-medium">${t.dateStr}</td>
+                            <td class="py-1.5 px-1">
+                                <label class="flex items-center gap-1 cursor-pointer">
+                                    <input type="checkbox" class="task-check task-cb" data-dayidx="${t.dayIdx}" data-cat="math" ${mathChecked} />
+                                    <span class="task-label">${t.tasks.math.desc}</span>
+                                </label>
+                            </td>
+                            <td class="py-1.5 px-1">
+                                <label class="flex items-center gap-1 cursor-pointer">
+                                    <input type="checkbox" class="task-check task-cb" data-dayidx="${t.dayIdx}" data-cat="tech" ${techChecked} />
+                                    <span class="task-label">${t.tasks.tech.desc}</span>
+                                </label>
+                            </td>
+                            <td class="py-1.5 px-1">
+                                <label class="flex items-center gap-1 cursor-pointer">
+                                    <input type="checkbox" class="task-check task-cb" data-dayidx="${t.dayIdx}" data-cat="writing" ${writingChecked} />
+                                    <span class="task-label">${t.tasks.writing.desc}</span>
+                                </label>
+                            </td>
+                            <td class="py-1.5 px-1 text-center">
+                                <div class="w-full bg-slate-200 rounded-full h-1.5">
+                                    <div class="h-1.5 rounded-full ${pct === 100 ? 'bg-emerald' : pct >= 66 ? 'bg-gold' : 'bg-red-400'}" style="width:${pct}%;"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }
+
+                if (!html) {
+                    html = `<tr><td colspan="6" class="py-4 text-center text-slate-400 text-sm">No tasks for this filter.</td></tr>`;
+                }
+                taskTableBody.innerHTML = html;
+
+                // Attach checkbox events
+                taskTableBody.querySelectorAll('.task-cb').forEach(cb => {
+                    cb.addEventListener('change', function() {
+                        const dayIdx = parseInt(this.dataset.dayidx);
+                        const cat = this.dataset.cat;
+                        const task = state.tasks.find(t => t.dayIdx === dayIdx);
+                        if (task && task.tasks[cat]) {
+                            task.tasks[cat].done = this.checked;
+                            calculateEwsScore();
+                            saveState();
+                        }
+                    });
+                });
+
+                // Summary
+                const total = state.tasks.length;
+                const done = state.tasks.filter(t => {
+                    const cats = Object.values(t.tasks);
+                    return cats.every(c => c.done === true);
+                }).length;
+                taskSummary.textContent = `${done} / ${total} days complete`;
+                taskCompletionPct.textContent = total > 0 ? Math.round((done / total) * 100) + '%' : '0%';
+            }
+
+            // -------- RENDER: STATS & REPORT --------
+            function renderStats(scores) {
+                const {
+                    dataReadiness, wordsPct, citationsPct, syllabus, codePct,
+                    overall, words, citations, code, doneTasks, totalTasks,
+                    integrated, totalVars
+                } = scores;
+
+                statWords.textContent = words;
+                statCitations.textContent = citations;
+                statCode.textContent = code;
+
+                dataReadinessBar.style.width = dataReadiness + '%';
+                dataReadinessLabel.textContent = dataReadiness + '%';
+                varsProgress.textContent = `${integrated}/${totalVars} integrated`;
+
+                // Report
+                const lines = [];
+                lines.push('=== SUPERVISOR DIAGNOSTIC REPORT ===');
+                lines.push(`Generated: ${new Date().toLocaleString()}`);
+                lines.push('');
+                lines.push(`OVERALL EWS SCORE: ${overall}%`);
+                lines.push(`─ Data Readiness:   ${dataReadiness}%  (weight: 20%)`);
+                lines.push(`─ Words:            ${wordsPct}%  (${words}/${TARGET_WORDS}, weight: 30%)`);
+                lines.push(`─ Citations:        ${citationsPct}%  (${citations}/${TARGET_CITATIONS}, weight: 20%)`);
+                lines.push(`─ Syllabus Adh.:    ${syllabus}%  (weight: 15%)`);
+                lines.push(`─ Code Milestones:  ${codePct}%  (${code}/${TARGET_CODE}, weight: 15%)`);
+                lines.push('');
+                lines.push(`TASK MATRIX: ${doneTasks} / ${totalTasks} days fully completed.`);
+                lines.push(`VARIABLES: ${integrated}/${totalVars} integrated.`);
+                lines.push('');
+                let comment = '';
+                if (overall >= 80) comment = 'Excellent progress. Ready for committee review.';
+                else if (overall >= 60) comment = 'Good progress. Focus on remaining weak areas.';
+                else if (overall >= 40) comment = 'Moderate progress. Significant effort needed.';
+                else comment = 'Critical status. Immediate intervention recommended.';
+                lines.push(`DIAGNOSTIC: ${comment}`);
+                lines.push('');
+                lines.push('─ End of Report ─');
+                reportBox.value = lines.join('\n');
+            }
+
+            // -------- MASTER CALCULATE --------
+            function calculateEwsScore() {
                 try {
-                    appState = JSON.parse(saved);
-                } catch(e) {
-                    console.warn("State corrupted, starting fresh.");
+                    const scores = computeScores();
+                    renderGauge(scores.overall);
+                    renderStats(scores);
+                    // re-render tasks & variables to reflect any changes (checkboxes, statuses)
+                    renderTasks();
+                    renderVariables();
+                    saveState();
+                } catch (e) {
+                    console.warn('EWS calculation error:', e);
                 }
             }
-            
-            // Populate inputs
-            const elWords = document.getElementById('input-word-count');
-            const elCits = document.getElementById('input-citations');
-            const elSyl = document.getElementById('input-syllabus');
-            const elMil = document.getElementById('input-code-milestones');
-            const elGdrive = document.getElementById('input-gdrive-id');
-            
-            if(elWords) elWords.value = appState.inputs.words || 0;
-            if(elCits) elCits.value = appState.inputs.citations || 0;
-            if(elSyl) elSyl.value = appState.inputs.syllabus ?? 100;
-            if(elMil) elMil.value = appState.inputs.milestones || 0;
-            if(elGdrive) elGdrive.value = appState.gdriveId || "";
-        }
 
-        function saveState() {
-            try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
-            } catch(e) {
-                console.warn("Failed to save state to localStorage.");
-            }
-        }
-
-        // ==========================================
-        // DATA & VARIABLES TRACKER
-        // ==========================================
-        function getPillHTML(text, type) {
-            let colors = "bg-slate-100 text-slate-600 border border-slate-200";
-            if (type === 'country') {
-                if (text === 'Egypt') colors = "bg-emerald-800 text-white font-bold border-emerald-900";
-                else if (text === 'US') colors = "bg-blue-800 text-white font-bold border-blue-900";
-                else if (text === 'Eurozone') colors = "bg-purple-800 text-white font-bold border-purple-900";
-                else if (text === 'UK') colors = "bg-indigo-700 text-white font-bold border-indigo-800";
-                else if (text === 'Japan') colors = "bg-orange-600 text-white font-bold border-orange-700";
-            } else if (type === 'source') {
-                if (text === 'Bloomberg') colors = "bg-yellow-500 text-slate-900 font-bold border-yellow-600";
-                else if (text === 'BIS') colors = "bg-blue-900 text-white font-bold border-blue-950";
-                else if (text === 'CBE') colors = "bg-rose-500 text-white font-bold border-rose-600";
-                else if (text === 'IMF' || text === 'World Bank') colors = "bg-cyan-600 text-white font-bold border-cyan-700";
-                else if (text === 'FRED' || text === 'OECD') colors = "bg-violet-600 text-white font-bold border-violet-700";
-                else if (text === 'Central Banks') colors = "bg-pink-600 text-white font-bold border-pink-700";
-                else colors = "bg-slate-200 text-slate-700 font-bold border-slate-300";
-            }
-            return `<span class="px-1.5 py-0.5 rounded text-[8px] ${colors}">${text}</span>`;
-        }
-
-        function renderVariablesTracker() {
-            const container = document.getElementById('variables-tracker-grid');
-            if(!container) return;
-            container.innerHTML = '';
-            
-            let totalWeight = 0;
-            const keys = Object.keys(variablesSyllabus);
-
-            keys.forEach(key => {
-                const data = variablesSyllabus[key];
-                const status = appState.variables[key] || "Not Started";
-
-                let statusWeight = 0;
-                if (status === "Sourced") statusWeight = 35;
-                else if (status === "Wrangled") statusWeight = 70;
-                else if (status === "Integrated") statusWeight = 100;
-                totalWeight += statusWeight;
-
-                const cHtml = data.countries.map(c => getPillHTML(c, 'country')).join(' ');
-                const sHtml = data.sources.map(s => getPillHTML(s, 'source')).join(' ');
-
-                const card = document.createElement('div');
-                card.className = "bg-white border border-slate-200 p-4 rounded-xl flex flex-col justify-between shadow-sm hover:shadow-md transition gap-3";
-                card.innerHTML = `
-                    <div>
-                        <h4 class="text-[11px] font-bold text-slate-900">${data.name}</h4>
-                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">${data.sector}</span>
-                    </div>
-                    <div class="space-y-1.5">
-                        <div class="text-[9px] font-bold text-slate-700">Countries</div>
-                        <div class="flex flex-wrap gap-1">${cHtml}</div>
-                    </div>
-                    <div class="space-y-1.5">
-                        <div class="text-[9px] font-bold text-slate-700">Sources</div>
-                        <div class="flex flex-wrap gap-1">${sHtml}</div>
-                    </div>
-                    <div class="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
-                        <select onchange="updateVariable('${key}', this.value)" class="w-full bg-slate-50 border border-slate-200 rounded p-1 text-[10px] outline-none text-slate-700 font-semibold cursor-pointer">
-                            <option value="Not Started" ${status === 'Not Started' ? 'selected' : ''}>Not Started</option>
-                            <option value="Sourced" ${status === 'Sourced' ? 'selected' : ''}>Sourced</option>
-                            <option value="Wrangled" ${status === 'Wrangled' ? 'selected' : ''}>Wrangled</option>
-                            <option value="Integrated" ${status === 'Integrated' ? 'selected' : ''}>Integrated</option>
-                        </select>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-
-            // Update bar
-            const avg = Math.round(totalWeight / keys.length);
-            const percentEl = document.getElementById('data-readiness-percent');
-            const barEl = document.getElementById('data-readiness-bar');
-            if(percentEl) percentEl.textContent = `${avg}%`;
-            if(barEl) barEl.style.width = `${avg}%`;
-            
-            // Store for EWS calc
-            appState.inputs.dataReadiness = avg;
-        }
-
-        function updateVariable(key, value) {
-            appState.variables[key] = value;
-            saveState();
-            renderVariablesTracker();
-            calculateEwsScore();
-            showToast(`Variable updated to ${value}`);
-        }
-
-        // ==========================================
-        // 92-DAY TASK TABLE
-        // ==========================================
-        function getDayData(d) {
-            // Simulated data generation to keep code lean but functional
-            const w = Math.ceil(d/7);
-            let month = "July"; let dayOfMonth = d;
-            if (d > 31 && d <= 62) { month = "Aug"; dayOfMonth = d - 31; }
-            else if (d > 62) { month = "Sept"; dayOfMonth = d - 62; }
-            
-            return {
-                weekStr: `Week ${w}<br><span class="text-[8px] text-slate-400 font-normal">(${month} ${dayOfMonth}-${Math.min(dayOfMonth+6, 30)})</span>`,
-                dateStr: `Day ${d}<br><span class="text-[8px] text-slate-400 font-normal">${month} ${dayOfMonth}</span>`,
-                mathText: `Solve system (${d})`,
-                techText: `Config Panel (${d})`,
-                writeText: `Draft ch${Math.ceil(w/3)} part ${d%3}`,
-                isJuly: month === "July",
-                isAug: month === "Aug",
-                isSept: month === "Sept"
-            };
-        }
-
-        function renderTaskTable() {
-            const tbody = document.getElementById('task-table-body');
-            const filter = document.getElementById('task-filter').value;
-            if(!tbody) return;
-            tbody.innerHTML = '';
-
-            let lastWeek = "";
-
-            for (let d = 1; d <= 92; d++) {
-                const info = getDayData(d);
-                
-                if (filter === 'july' && !info.isJuly) continue;
-                if (filter === 'august' && !info.isAug) continue;
-                if (filter === 'september' && !info.isSept) continue;
-
-                const mChk = appState.tasks[`m-${d}`] || false;
-                const tChk = appState.tasks[`t-${d}`] || false;
-                const wChk = appState.tasks[`w-${d}`] || false;
-                
-                let completeCount = (mChk?1:0) + (tChk?1:0) + (wChk?1:0);
-                let completePct = Math.round((completeCount / 3) * 100);
-
-                let weekCell = "";
-                if (info.weekStr !== lastWeek) {
-                    weekCell = `<td class="p-2 align-top font-bold text-slate-800 text-[10px]" rowspan="1">${info.weekStr}</td>`;
-                    lastWeek = info.weekStr;
-                } else {
-                    weekCell = `<td class="p-2 border-none"></td>`;
-                }
-
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 transition border-b border-slate-100/50";
-                tr.innerHTML = `
-                    ${weekCell}
-                    <td class="p-2 text-slate-700 font-medium text-[10px] leading-tight align-top">${info.dateStr}</td>
-                    <td class="p-2 align-top">
-                        <label class="flex items-start space-x-1.5 cursor-pointer group">
-                            <input type="checkbox" onchange="toggleTask('m', ${d})" ${mChk?'checked':''} class="mt-0.5 rounded border-slate-300 text-asu-emerald focus:ring-asu-emerald cursor-pointer">
-                            <span class="${mChk?'line-through text-slate-400':'text-slate-600 group-hover:text-slate-900'} text-[10px] leading-tight transition-colors">${info.mathText}</span>
-                        </label>
-                    </td>
-                    <td class="p-2 align-top">
-                        <label class="flex items-start space-x-1.5 cursor-pointer group">
-                            <input type="checkbox" onchange="toggleTask('t', ${d})" ${tChk?'checked':''} class="mt-0.5 rounded border-slate-300 text-asu-emerald focus:ring-asu-emerald cursor-pointer">
-                            <span class="${tChk?'line-through text-slate-400':'text-slate-600 group-hover:text-slate-900'} text-[10px] leading-tight transition-colors">${info.techText}</span>
-                        </label>
-                    </td>
-                    <td class="p-2 align-top">
-                        <label class="flex items-start space-x-1.5 cursor-pointer group">
-                            <input type="checkbox" onchange="toggleTask('w', ${d})" ${wChk?'checked':''} class="mt-0.5 rounded border-slate-300 text-asu-emerald focus:ring-asu-emerald cursor-pointer">
-                            <span class="${wChk?'line-through text-slate-400':'text-slate-600 group-hover:text-slate-900'} text-[10px] leading-tight transition-colors">${info.writeText}</span>
-                        </label>
-                    </td>
-                    <td class="p-2 text-center align-middle">
-                        <div class="flex items-center justify-between text-[8px] font-bold text-slate-500 mb-1 px-1">
-                            <span>0%</span><span class="${completePct === 100 ? 'text-asu-emerald' : ''}">${completePct}%</span>
-                        </div>
-                        <div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
-                            <div class="bg-asu-emerald h-1.5 rounded-full transition-all duration-300" style="width: ${completePct}%"></div>
-                        </div>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            }
-        }
-
-        function toggleTask(type, day) {
-            const key = `${type}-${day}`;
-            appState.tasks[key] = !appState.tasks[key];
-            saveState();
-            renderTaskTable();
-        }
-
-        function syncChecklistToSandbox() {
-            let doneTasks = 0;
-            for(let key in appState.tasks) {
-                if(appState.tasks[key]) doneTasks++;
-            }
-            // 276 total tasks (92 days * 3 blocks)
-            let pct = Math.min(100, Math.round((doneTasks / 276) * 100));
-            
-            const sylInput = document.getElementById('input-syllabus');
-            if(sylInput) sylInput.value = pct;
-            
-            calculateEwsScore();
-            showToast(`Synced tasks! Syllabus Adherence updated to ${pct}%`);
-        }
-
-        // ==========================================
-        // EWS ALGORITHM & LOGGER
-        // ==========================================
-        function calculateEwsScore() {
-            // Read inputs safely
-            const words = Math.min(60000, Math.max(0, parseInt(document.getElementById('input-word-count')?.value || 0)));
-            const citations = Math.min(200, Math.max(0, parseInt(document.getElementById('input-citations')?.value || 0)));
-            const syllabus = Math.min(100, Math.max(0, parseInt(document.getElementById('input-syllabus')?.value || 100)));
-            const milestones = parseInt(document.getElementById('input-code-milestones')?.value || 0);
-
-            // Save to state
-            appState.inputs.words = words;
-            appState.inputs.citations = citations;
-            appState.inputs.syllabus = syllabus;
-            appState.inputs.milestones = milestones;
-            saveState();
-
-            // Render mini metrics in Grid
-            const statWords = document.getElementById('stat-words');
-            const barWords = document.getElementById('bar-words');
-            if(statWords) statWords.textContent = `${words.toLocaleString()} / 60,000`;
-            if(barWords) barWords.style.width = `${(words/60000)*100}%`;
-
-            const statPapers = document.getElementById('stat-papers');
-            const barPapers = document.getElementById('bar-papers');
-            if(statPapers) statPapers.textContent = `${citations} Citations`;
-            if(barPapers) barPapers.style.width = `${Math.min((citations/111)*100, 100)}%`;
-
-            const statCode = document.getElementById('stat-code');
-            const barCode = document.getElementById('bar-code');
-            if(statCode) statCode.textContent = `${milestones} / 5 Completed`;
-            if(barCode) barCode.style.width = `${(milestones/5)*100}%`;
-
-            // Calculate EWS Total Score
-            // Weights: Data (20), Words (30), Citations (20), Syllabus (15), Milestones (15)
-            const dataReady = appState.inputs.dataReadiness || 0;
-            const scoreData = (dataReady / 100) * 20;
-            const scoreWords = (words / 60000) * 30;
-            const scoreCits = Math.min(20, (citations / 111) * 20);
-            const scoreSyl = (syllabus / 100) * 15;
-            const scoreMil = (milestones / 5) * 15;
-
-            const totalScore = Math.min(100, Math.round(scoreData + scoreWords + scoreCits + scoreSyl + scoreMil));
-
-            // Update UI SVG Ring
-            const ring = document.getElementById('ews-progress-ring');
-            const scoreDisplay = document.getElementById('ews-score-display');
-            const badge = document.getElementById('status-badge');
-            
-            if(scoreDisplay) scoreDisplay.textContent = `${totalScore}%`;
-            
-            if(ring) {
-                const circ = 251.2;
-                ring.style.strokeDashoffset = circ - (totalScore/100)*circ;
-            }
-
-            let statusText = "";
-            let alertDiag = "";
-            
-            if (totalScore >= 80 || (totalScore >= 15 && syllabus >= 90 && words === 0)) {
-                // Adaptive logic: If syllabus is high but it's early (words=0), allow green tracking
-                if(ring) ring.setAttribute('stroke', '#0F5132'); // ASU Emerald
-                if(badge) {
-                    badge.className = "px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest border transition duration-300 w-full shadow-sm bg-emerald-100 text-emerald-800 border-emerald-300";
-                    badge.textContent = "🟢 STATUS: ON TRACK";
-                }
-                statusText = "ON TRACK";
-                alertDiag = "Launch Phase Active - Timeline Compliance Optimal";
-            } else if (totalScore >= 30) {
-                if(ring) ring.setAttribute('stroke', '#C5A059'); // ASU Gold
-                if(badge) {
-                    badge.className = "px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest border transition duration-300 w-full shadow-sm bg-amber-100 text-amber-800 border-amber-300";
-                    badge.textContent = "🟡 STATUS: CAUTION REQUIRED";
-                }
-                statusText = "CAUTION";
-                alertDiag = "Warning - Moderate Timeline Deficit Identified";
-            } else {
-                if(ring) ring.setAttribute('stroke', '#ef4444'); // Red
-                if(badge) {
-                    badge.className = "px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest border transition duration-300 w-full shadow-sm bg-red-100 text-red-800 border-red-300";
-                    badge.textContent = "🔴 STATUS: CRITICAL INTERVENTION";
-                }
-                statusText = "CRITICAL";
-                alertDiag = "Critical - Structural Execution Slippage";
-            }
-
-            // Update Text Report Box
-            const reportBox = document.getElementById('diagnostic-report-box');
-            if(reportBox) {
-                const d = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-                reportBox.value = `================================================
-AIN SHAMS UNIVERSITY — DOCTORAL ADVISORY SYSTEM
-PHD DIAGNOSTIC REPORT: PROGRESS VERIFICATION
-================================================
-Date of Evaluation : ${d}
-
-DIAGNOSTIC STATUS: [${statusText}]
-Overall Score    : ${totalScore} / 100
-Alert Level      : ${alertDiag}
-
-CURRENT METRICS SUMMARY:
-1. Data Ingestion : ${dataReady}% variable parameters mapped
-2. Written Words  : ${words.toLocaleString()} / 60,000 words
-3. Citations Sync : ${citations} verified structural references
-4. Roadmap Sync   : ${syllabus}% syllabus task completion rate
-5. Code Milestones: Phase ${milestones} validation level
-
-INTEGRATION DIRECTORIES:
-- Google Drive : ${appState.gdriveId ? 'Verified Sync' : 'Offline'}
-- Notion API   : Connected Database
-================================================`;
-            }
-        }
-
-        function resetSandbox() {
-            appState.inputs = { words: 0, citations: 0, syllabus: 100, milestones: 0, dataReadiness: appState.inputs.dataReadiness };
-            saveState();
-            loadState();
-            calculateEwsScore();
-            showToast("Sandbox reset successfully.");
-        }
-
-        function copyDiagnosticReport() {
-            const box = document.getElementById("diagnostic-report-box");
-            if(box) {
-                box.select();
-                try {
-                    document.execCommand('copy');
-                    showToast("Report copied to clipboard.");
-                } catch(e) {}
-            }
-        }
-
-        function exportDiagnostics() {
-            showToast("Compiling PDF summary logs... Complete!");
-            copyDiagnosticReport();
-        }
-
-        // ==========================================
-        // BOTTOM INTEGRATIONS
-        // ==========================================
-        function initMendeleyParser() {
-            const dropzone = document.getElementById('mendeley-dropzone');
-            const fileInput = document.getElementById('mendeley-file-input');
-            if(!dropzone || !fileInput) return;
-
-            dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('border-red-400', 'bg-red-50'); });
-            dropzone.addEventListener('dragleave', () => { dropzone.classList.remove('border-red-400', 'bg-red-50'); });
-            dropzone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                dropzone.classList.remove('border-red-400', 'bg-red-50');
-                const file = e.dataTransfer.files[0];
-                if (file && file.name.endsWith('.bib')) {
-                    parseBibTeX(file);
-                } else {
-                    showToast("Invalid file. Drop a .bib file.");
-                }
-            });
-            dropzone.addEventListener('click', () => { fileInput.click(); });
-            fileInput.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file && file.name.endsWith('.bib')) {
-                    parseBibTeX(file);
-                }
-            });
-        }
-
-        function parseBibTeX(file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const content = e.target.result;
-                const entries = content.match(/@[a-zA-Z]+\s*\{/g) || [];
-                const citationCount = entries.length;
-                
-                document.getElementById('mendeley-ver-count').textContent = citationCount;
-                document.getElementById('input-citations').value = citationCount;
-                
+            // -------- RESET DIAG --------
+            function resetDiagnostics() {
+                state.diag = { words: 0, citations: 0, syllabus: 0, code: 0 };
+                diagWords.value = 0;
+                diagCitations.value = 0;
+                diagSyllabus.value = 0;
+                diagCode.value = 0;
                 calculateEwsScore();
-                showToast(`Success! Found and loaded ${citationCount} references.`);
-            };
-            reader.readAsText(file);
-        }
-
-        function saveGDriveFolderId() {
-            const inputEl = document.getElementById('input-gdrive-id');
-            if(!inputEl) return;
-            const inputVal = inputEl.value.trim();
-            
-            if (inputVal) {
-                appState.gdriveId = inputVal;
                 saveState();
-                renderGDriveIframe(inputVal);
-                showToast("Google Drive Connected!");
+            }
+
+            // -------- BIB PARSING --------
+            function parseBibFile(text) {
+                const matches = text.match(/@\w+\s*\{/g);
+                return matches ? matches.length : 0;
+            }
+
+            function handleBibFile(file) {
+                if (!file.name.endsWith('.bib')) {
+                    alert('Please drop a .bib file.');
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const text = e.target.result;
+                        const count = parseBibFile(text);
+                        state.bibCount = count;
+                        bibEntryCount.textContent = count;
+                        saveState();
+                    } catch (_) {
+                        alert('Error parsing .bib file.');
+                    }
+                };
+                reader.onerror = function() { alert('Error reading file.'); };
+                reader.readAsText(file);
+            }
+
+            // -------- NOTION SYNC (demo) --------
+            function notionSync() {
+                const btn = notionSyncBtn;
+                const orig = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Syncing…';
+                btn.disabled = true;
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-check"></i> Synced!';
+                    btn.disabled = false;
+                    setTimeout(() => {
+                        btn.innerHTML = orig;
+                    }, 1500);
+                }, 1200);
+            }
+
+            // -------- SHARE PDF (demo) --------
+            function sharePdf() {
+                const btn = sharePdfBtn;
+                const orig = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                btn.disabled = true;
+                setTimeout(() => {
+                    alert('PDF report exported! (Demo)');
+                    btn.innerHTML = orig;
+                    btn.disabled = false;
+                }, 800);
+            }
+
+            // -------- EVENT BINDINGS --------
+            function bindEvents() {
+                // Task filter
+                taskFilter.addEventListener('change', function() {
+                    state.filter = this.value;
+                    renderTasks();
+                    saveState();
+                });
+
+                // Diagnostic inputs
+                ['diagWords', 'diagCitations', 'diagSyllabus'].forEach(id => {
+                    document.getElementById(id).addEventListener('input', function() {
+                        const key = id.replace('diag', '').toLowerCase();
+                        state.diag[key] = parseInt(this.value) || 0;
+                        calculateEwsScore();
+                    });
+                });
+                diagCode.addEventListener('change', function() {
+                    state.diag.code = parseInt(this.value) || 0;
+                    calculateEwsScore();
+                });
+
+                // Reset
+                resetDiagBtn.addEventListener('click', resetDiagnostics);
+
+                // Copy report
+                copyReportBtn.addEventListener('click', function() {
+                    reportBox.select();
+                    try {
+                        navigator.clipboard.writeText(reportBox.value).then(() => {
+                            const orig = this.innerHTML;
+                            this.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                            setTimeout(() => { this.innerHTML = orig; }, 1500);
+                        }).catch(() => {
+                            document.execCommand('copy');
+                            alert('Report copied!');
+                        });
+                    } catch (_) {
+                        document.execCommand('copy');
+                        alert('Report copied!');
+                    }
+                });
+
+                // Share PDF
+                sharePdfBtn.addEventListener('click', sharePdf);
+
+                // Notion sync
+                notionSyncBtn.addEventListener('click', notionSync);
+
+                // Drive
+                loadDriveBtn.addEventListener('click', function() {
+                    const id = driveFolderId.value.trim();
+                    if (!id) { alert('Enter a Google Drive Folder ID.'); return; }
+                    state.driveFolderId = id;
+                    driveIframe.src = `https://drive.google.com/embeddedfolderview?id=${id}#grid`;
+                    saveState();
+                });
+
+                // Bib drag & drop
+                dropZone.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('dragover');
+                });
+                dropZone.addEventListener('dragleave', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                });
+                dropZone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                    if (e.dataTransfer.files.length > 0) {
+                        handleBibFile(e.dataTransfer.files[0]);
+                    }
+                });
+                dropZone.addEventListener('click', function() { bibFileInput.click(); });
+                bibFileInput.addEventListener('change', function() {
+                    if (this.files.length > 0) {
+                        handleBibFile(this.files[0]);
+                    }
+                    this.value = '';
+                });
+
+                bibApplyBtn.addEventListener('click', function() {
+                    if (state.bibCount > 0) {
+                        const val = Math.min(state.bibCount, TARGET_CITATIONS);
+                        diagCitations.value = val;
+                        state.diag.citations = val;
+                        calculateEwsScore();
+                    } else {
+                        alert('No .bib entries loaded. Drop a .bib file first.');
+                    }
+                });
+            }
+
+            // -------- INIT --------
+            function init() {
+                try {
+                    // Initialize state
+                    initState();
+
+                    // Try loading saved state
+                    const loaded = loadState();
+                    if (loaded) {
+                        // Restore diagnostic values
+                        diagWords.value = state.diag.words || 0;
+                        diagCitations.value = state.diag.citations || 0;
+                        diagSyllabus.value = state.diag.syllabus || 0;
+                        diagCode.value = state.diag.code || 0;
+                        if (state.driveFolderId) {
+                            driveFolderId.value = state.driveFolderId;
+                            driveIframe.src =
+                                `https://drive.google.com/embeddedfolderview?id=${state.driveFolderId}#grid`;
+                        }
+                        if (state.bibCount > 0) {
+                            bibEntryCount.textContent = state.bibCount;
+                        }
+                        if (state.filter) {
+                            taskFilter.value = state.filter;
+                        }
+                    }
+
+                    // Render everything
+                    renderVariables();
+                    renderTasks();
+                    calculateEwsScore();
+
+                    // Bind events
+                    bindEvents();
+
+                    // Auto-save
+                    setInterval(saveState, 30000);
+                    window.addEventListener('beforeunload', saveState);
+
+                    // Restore drive iframe on load
+                    if (state.driveFolderId) {
+                        driveIframe.src =
+                            `https://drive.google.com/embeddedfolderview?id=${state.driveFolderId}#grid`;
+                    }
+
+                    lastSaved.textContent = 'Ready';
+
+                } catch (e) {
+                    console.error('Dashboard initialization error:', e);
+                    // Fallback: try to render a minimal working state
+                    try {
+                        renderVariables();
+                        renderTasks();
+                        calculateEwsScore();
+                    } catch (_) { /* give up */ }
+                }
+            }
+
+            // -------- START --------
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
             } else {
-                appState.gdriveId = "";
-                saveState();
-                document.getElementById('gdrive-iframe-container').innerHTML = `
-                    <span class="text-[10px] text-slate-400">Embedded Google Drive iframe.</span>
-                `;
-                showToast("Google Drive Link Detached.");
+                init();
             }
-        }
 
-        function renderGDriveIframe(folderId) {
-            const container = document.getElementById('gdrive-iframe-container');
-            if(container) {
-                container.innerHTML = `
-                    <iframe src="https://drive.google.com/embeddedfolderview?id=${folderId}#grid" class="w-full h-full border-0 rounded-lg" allow="autoplay"></iframe>
-                `;
-            }
-        }
-
-        // Helpers
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            const msgEl = document.getElementById('toast-message');
-            if(!toast || !msgEl) return;
-            
-            msgEl.textContent = message;
-            toast.className = "fixed bottom-5 right-5 bg-slate-800 text-white px-4 py-3 rounded-lg shadow-xl flex items-center space-x-2 transform translate-y-0 opacity-100 transition-all z-50 text-xs font-semibold";
-            
-            setTimeout(() => {
-                toast.className = "fixed bottom-5 right-5 bg-slate-800 text-white px-4 py-3 rounded-lg shadow-xl flex items-center space-x-2 transform translate-y-20 opacity-0 transition-all z-50 text-xs font-semibold";
-            }, 3000);
-        }
+        })();
     </script>
+
 </body>
 </html>
