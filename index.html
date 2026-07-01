@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PhD Mission Control &amp; Supervisor Diagnostic Hub</title>
+    <title>PhD Mission Control · Notion Sync + Task Matrix</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com">
@@ -16,7 +16,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
 
     <style>
-        /* Custom styles */
         * {
             box-sizing: border-box;
         }
@@ -27,13 +26,6 @@
         .font-serif {
             font-family: 'Playfair Display', serif;
         }
-
-        /* Gauge ring */
-        .gauge-ring {
-            transition: stroke-dashoffset 0.6s ease;
-        }
-
-        /* Cards */
         .card {
             background: #ffffff;
             border-radius: 1.5rem;
@@ -43,15 +35,12 @@
         .card:hover {
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.03);
         }
-
-        /* Variable card tag */
         .tag {
             display: inline-block;
             padding: 0.1rem 0.6rem;
             border-radius: 9999px;
             font-size: 0.65rem;
             font-weight: 500;
-            letter-spacing: 0.01em;
             background: #f1f5f9;
             color: #1e293b;
         }
@@ -63,8 +52,6 @@
             background: #fae8ff;
             color: #7c3aed;
         }
-
-        /* Dropdown */
         select.status-select {
             font-size: 0.75rem;
             padding: 0.2rem 0.5rem;
@@ -78,8 +65,6 @@
         select.status-select:focus {
             border-color: #0F5132;
         }
-
-        /* Task checklist */
         .task-check {
             accent-color: #0F5132;
             width: 1rem;
@@ -87,13 +72,11 @@
             cursor: pointer;
         }
         .task-label {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #334155;
         }
-
-        /* Scrollable matrix */
         .matrix-scroll {
-            max-height: 480px;
+            max-height: 500px;
             overflow-y: auto;
         }
         .matrix-scroll::-webkit-scrollbar {
@@ -107,8 +90,6 @@
             background: #cbd5e1;
             border-radius: 10px;
         }
-
-        /* Drag & drop zone */
         .drop-zone {
             border: 2px dashed #cbd5e1;
             border-radius: 1rem;
@@ -121,8 +102,6 @@
             border-color: #0F5132;
             background: #f0fdf4;
         }
-
-        /* Report textarea */
         .report-box {
             background: #f1f5f9;
             border: none;
@@ -140,32 +119,11 @@
             outline: 2px solid #0F5132;
             outline-offset: 2px;
         }
-
-        /* Responsive tweaks */
-        @media (max-width: 640px) {
-            .card {
-                border-radius: 1rem;
-            }
-            .gauge-container {
-                max-width: 200px;
-                margin: 0 auto;
-            }
-        }
-
-        /* Progress bar fill */
-        .progress-fill {
-            transition: width 0.4s ease;
-        }
-
-        /* Utility */
         .bg-emerald {
             background-color: #0F5132;
         }
         .text-emerald {
             color: #0F5132;
-        }
-        .border-emerald {
-            border-color: #0F5132;
         }
         .bg-gold {
             background-color: #C5A059;
@@ -173,31 +131,90 @@
         .text-gold {
             color: #C5A059;
         }
-        .border-gold {
-            border-color: #C5A059;
+        .progress-fill {
+            transition: width 0.4s ease;
         }
-        .ring-emerald {
-            --tw-ring-color: #0F5132;
+        .gauge-ring {
+            transition: stroke-dashoffset 0.6s ease;
+        }
+        .motivation-quote {
+            font-style: italic;
+            color: #475569;
+            font-size: 0.9rem;
+            transition: opacity 0.5s;
+        }
+        .streak-badge {
+            background: #fef3c7;
+            color: #b45309;
+            border-radius: 9999px;
+            padding: 0.15rem 0.75rem;
+            font-weight: 600;
+            font-size: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .view-selector {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 0.2rem 0.6rem;
+            font-size: 0.8rem;
+            background: white;
+            outline: none;
+            cursor: pointer;
+        }
+        .view-selector:focus {
+            border-color: #0F5132;
+        }
+        .week-progress {
+            background: #f1f5f9;
+            border-radius: 9999px;
+            height: 6px;
+            overflow: hidden;
+        }
+        .week-progress-bar {
+            height: 100%;
+            background: #0F5132;
+            border-radius: 9999px;
+            transition: width 0.3s;
+        }
+        .month-card {
+            border-left: 4px solid #C5A059;
+        }
+        .notion-iframe {
+            border-radius: 1rem;
+            border: 1px solid #e2e8f0;
+            width: 100%;
+            height: 300px;
+            background: white;
         }
     </style>
 </head>
 <body>
 
-    <div class="max-w-4xl mx-auto px-4 py-6 sm:py-10" id="app">
+    <div class="max-w-5xl mx-auto px-4 py-6 sm:py-10" id="app">
 
         <!-- ===== HEADER ===== -->
-        <header class="mb-8">
-            <h1 class="font-serif text-3xl sm:text-4xl font-semibold text-slate-800 tracking-tight">
-                <span class="text-emerald">PhD</span> Mission Control
-                <span class="text-gold">&amp;</span> Supervisor Diagnostic Hub
-            </h1>
-            <p class="text-slate-500 text-sm mt-1 flex items-center gap-2">
-                <i class="fas fa-graduation-cap text-emerald"></i>
-                Ain Shams University · Faculty of Business
-                <span class="mx-1 text-slate-300">|</span>
-                <i class="far fa-calendar-alt text-gold"></i>
-                <span id="currentDate"></span>
-            </p>
+        <header class="mb-6 flex flex-wrap items-center justify-between">
+            <div>
+                <h1 class="font-serif text-3xl sm:text-4xl font-semibold text-slate-800 tracking-tight">
+                    <span class="text-emerald">PhD</span> Mission Control
+                    <span class="text-gold">&amp;</span> Supervisor Hub
+                </h1>
+                <p class="text-slate-500 text-sm mt-1 flex items-center gap-2">
+                    <i class="fas fa-graduation-cap text-emerald"></i>
+                    Ain Shams University · Faculty of Business
+                    <span class="mx-1 text-slate-300">|</span>
+                    <i class="far fa-calendar-alt text-gold"></i>
+                    <span id="currentDate"></span>
+                </p>
+            </div>
+            <div class="mt-2 sm:mt-0 flex items-center gap-3">
+                <div class="streak-badge" id="streakBadge">
+                    <i class="fas fa-fire"></i> <span id="streakCount">0</span> day streak
+                </div>
+                <div class="text-xs text-slate-400" id="motivationQuote"></div>
+            </div>
         </header>
 
         <!-- ===== EWS MONITOR + GAUGE ===== -->
@@ -207,9 +224,7 @@
                 <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2">EWS Monitor</h2>
                 <div class="gauge-container relative w-48 h-48">
                     <svg viewBox="0 0 120 120" class="w-full h-full -rotate-90">
-                        <!-- Background ring -->
                         <circle cx="60" cy="60" r="52" fill="none" stroke="#e2e8f0" stroke-width="10" />
-                        <!-- Foreground ring -->
                         <circle cx="60" cy="60" r="52" fill="none" stroke="#0F5132" stroke-width="10"
                         stroke-linecap="round"
                         stroke-dasharray="326.726" stroke-dashoffset="326.726"
@@ -262,39 +277,28 @@
             </div>
         </section>
 
-        <!-- ===== INTEGRATIONS ===== -->
-        <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <!-- Google Drive -->
+        <!-- ===== NOTION INTEGRATION ===== -->
+        <section class="mb-8">
             <div class="card p-5">
                 <h3 class="text-sm font-semibold text-slate-600 flex items-center gap-2 mb-3">
-                    <i class="fab fa-google-drive text-emerald"></i> Google Drive Folder
+                    <i class="fab fa-notion text-emerald"></i> Notion Dashboard Sync
                 </h3>
-                <div class="flex gap-2">
-                    <input type="text" id="driveFolderId" placeholder="Folder ID" class="flex-1 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald/30" />
-                    <button id="loadDriveBtn" class="bg-emerald text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-emerald/90 transition">Load</button>
+                <div class="flex flex-wrap gap-3">
+                    <input type="text" id="notionUrl" placeholder="Paste Notion page URL or embed ID"
+                    class="flex-1 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald/30" />
+                    <button id="loadNotionBtn" class="bg-emerald text-white px-5 py-2 rounded-xl text-sm font-medium hover:bg-emerald/90 transition">
+                        <i class="fas fa-link"></i> Embed
+                    </button>
+                    <button id="clearNotionBtn" class="bg-slate-200 text-slate-600 px-4 py-2 rounded-xl text-sm font-medium hover:bg-slate-300 transition">
+                        <i class="fas fa-times"></i> Clear
+                    </button>
                 </div>
-                <div class="mt-3 rounded-xl overflow-hidden border border-slate-200" style="height:180px;">
-                    <iframe id="driveIframe" src="about:blank" class="w-full h-full" frameborder="0"></iframe>
+                <div id="notionContainer" class="mt-3 hidden">
+                    <iframe id="notionIframe" class="notion-iframe" src="about:blank" frameborder="0"></iframe>
                 </div>
-                <p class="text-[0.6rem] text-slate-400 mt-1"><i class="far fa-info-circle"></i> Enter folder ID and click Load.</p>
-            </div>
-
-            <!-- Mendeley .bib drag & drop -->
-            <div class="card p-5">
-                <h3 class="text-sm font-semibold text-slate-600 flex items-center gap-2 mb-3">
-                    <i class="fas fa-book-open text-gold"></i> Mendeley .bib Importer
-                </h3>
-                <div id="dropZone" class="drop-zone">
-                    <i class="fas fa-cloud-upload-alt text-3xl text-slate-300 mb-2 block"></i>
-                    <p class="text-sm text-slate-500">Drag &amp; drop your <strong>.bib</strong> file here</p>
-                    <p class="text-xs text-slate-400 mt-1">or click to browse</p>
-                    <input type="file" id="bibFileInput" accept=".bib" class="hidden" />
-                </div>
-                <div class="mt-3 flex items-center gap-3 text-sm">
-                    <span class="text-slate-500">Entries found:</span>
-                    <span id="bibEntryCount" class="font-bold text-emerald">0</span>
-                    <button id="bibApplyBtn" class="ml-auto text-xs bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-full transition">Apply to Citations</button>
-                </div>
+                <p class="text-[0.6rem] text-slate-400 mt-1">
+                    <i class="far fa-info-circle"></i> Enter a public Notion page URL or the embed ID (from Share → Embed).
+                </p>
             </div>
         </section>
 
@@ -314,11 +318,11 @@
                 </div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3" id="variablesGrid">
-                <!-- Cards injected by JS -->
+                <!-- injected -->
             </div>
         </section>
 
-        <!-- ===== 92-DAY Q1 TASK MATRIX ===== -->
+        <!-- ===== 92-DAY Q1 TASK MATRIX (Enhanced) ===== -->
         <section class="mb-8">
             <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
                 <h2 class="text-lg font-semibold text-slate-700 flex items-center gap-2">
@@ -326,12 +330,12 @@
                     <span class="text-sm font-normal text-slate-400">(Jul–Sep)</span>
                 </h2>
                 <div class="flex flex-wrap items-center gap-2">
-                    <label class="text-xs text-slate-500">Filter:</label>
-                    <select id="matrixFilter" class="border border-slate-200 rounded-lg px-2 py-1 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-emerald/30">
-                        <option value="all">All Days</option>
-                        <option value="July">July</option>
-                        <option value="August">August</option>
-                        <option value="September">September</option>
+                    <label class="text-xs text-slate-500">View:</label>
+                    <select id="matrixView" class="view-selector">
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="quarterly">Quarterly</option>
                     </select>
                     <button id="syncMatrixBtn" class="bg-emerald text-white px-4 py-1.5 rounded-lg text-xs font-medium hover:bg-emerald/90 transition flex items-center gap-1">
                         <i class="fas fa-sync-alt"></i> Sync
@@ -341,12 +345,12 @@
             </div>
             <div class="card p-4">
                 <div class="matrix-scroll" id="matrixContainer">
-                    <!-- Injected by JS -->
+                    <!-- injected -->
                 </div>
             </div>
         </section>
 
-        <!-- ===== DIAGNOSTIC LOGGER ===== -->
+        <!-- ===== DIAGNOSTIC LOGGER + REPORT ===== -->
         <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div class="card p-5">
                 <h3 class="text-sm font-semibold text-slate-600 flex items-center gap-2 mb-4">
@@ -368,23 +372,18 @@
                     <div>
                         <label class="text-xs text-slate-500 block mb-0.5">Code Milestones (0–5)</label>
                         <select id="diagCode" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald/30">
-                            <option value="0">0</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
+                            <option value="0">0</option><option value="1">1</option><option value="2">2</option>
+                            <option value="3">3</option><option value="4">4</option><option value="5">5</option>
                         </select>
                     </div>
                 </div>
             </div>
 
-            <!-- ===== SUPERVISOR REPORT ===== -->
             <div class="card p-5 flex flex-col">
                 <h3 class="text-sm font-semibold text-slate-600 flex items-center gap-2 mb-3">
                     <i class="fas fa-file-alt text-gold"></i> Supervisor Report
                 </h3>
-                <textarea id="reportBox" class="report-box flex-1" readonly placeholder="Report will auto-generate…"></textarea>
+                <textarea id="reportBox" class="report-box flex-1" readonly placeholder="Report auto-generates…"></textarea>
                 <button id="copyReportBtn" class="mt-3 self-end text-xs bg-slate-100 hover:bg-slate-200 px-4 py-1.5 rounded-full transition flex items-center gap-1">
                     <i class="far fa-copy"></i> Copy
                 </button>
@@ -393,7 +392,7 @@
 
         <!-- ===== FOOTER ===== -->
         <footer class="text-center text-xs text-slate-400 pt-4 border-t border-slate-200/60">
-            <i class="fas fa-database text-emerald mr-1"></i> State auto-saved in localStorage
+            <i class="fas fa-database text-emerald mr-1"></i> Auto‑saved in localStorage
             <span class="mx-2">·</span>
             <span id="lastSaved"></span>
         </footer>
@@ -406,6 +405,25 @@
 
             // ---------- CONSTANTS ----------
             const GAUGE_CIRCUMFERENCE = 326.726;
+            const TASK_CATEGORIES = ['math', 'coding', 'writing', 'research', 'dataAnalysis'];
+            const TASK_LABELS = {
+                math: 'Math',
+                coding: 'Coding',
+                writing: 'Writing',
+                research: 'Research',
+                dataAnalysis: 'Data Analysis'
+            };
+            const MOTIVATIONAL_QUOTES = [
+                "The only way to do great work is to love what you do. – Steve Jobs",
+                "Success is not final, failure is not fatal: it is the courage to continue that counts. – Churchill",
+                "Believe you can and you're halfway there. – T. Roosevelt",
+                "It does not matter how slowly you go as long as you do not stop. – Confucius",
+                "The future belongs to those who believe in the beauty of their dreams. – E. Roosevelt",
+                "You are never too old to set another goal or to dream a new dream. – C.S. Lewis",
+                "Perseverance is not a long race; it is many short races one after another. – W. Elliot",
+                "Start where you are. Use what you have. Do what you can. – Arthur Ashe"
+            ];
+
             const VARIABLE_NAMES = [
                 'Price of Capital', 'Wages', 'Inflation', 'Output Gap',
                 'Quantitative Easing', 'Interest Rates', 'Exchange Rates',
@@ -418,7 +436,6 @@
             const SOURCES = ['IMF', 'World Bank', 'Bloomberg', 'Reuters', 'National Statistics', 'OECD'];
             const STATUSES = ['Not Started', 'Sourced', 'Wrangled', 'Integrated'];
 
-            // Generate random tags for each variable (deterministic seed based on index)
             function getTags(index) {
                 const c = COUNTRIES[index % COUNTRIES.length];
                 const s = SOURCES[(index * 3 + 1) % SOURCES.length];
@@ -429,68 +446,11 @@
                 return { countries: unique, sources: uniqueSrc };
             }
 
-            // ---------- STATE ----------
-            let state = {
-                variables: VARIABLE_NAMES.map((name, i) => ({
-                    id: i,
-                    name: name,
-                    status: 'Not Started',
-                    countries: getTags(i).countries,
-                    sources: getTags(i).sources,
-                })),
-                tasks: [], // [{dayIdx, dateStr, math:bool, coding:bool, writing:bool}]
-                diag: { words: 0, citations: 0, syllabus: 0, code: 0 },
-                driveFolderId: '',
-                bibCount: 0,
-            };
-
-            // ---------- DOM REFS ----------
-            const $ = (s) => document.querySelector(s);
-            const $$ = (s) => document.querySelectorAll(s);
-
-            const gaugeRing = $('#gaugeRing');
-            const gaugeScore = $('#gaugeScore');
-            const statWords = $('#statWords');
-            const statCitations = $('#statCitations');
-            const statSyllabus = $('#statSyllabus');
-            const statCode = $('#statCode');
-            const statData = $('#statData');
-            const statDaysDone = $('#statDaysDone');
-            const variablesGrid = $('#variablesGrid');
-            const dataReadinessBar = $('#dataReadinessBar');
-            const dataReadinessLabel = $('#dataReadinessLabel');
-            const matrixContainer = $('#matrixContainer');
-            const matrixFilter = $('#matrixFilter');
-            const syncMatrixBtn = $('#syncMatrixBtn');
-            const matrixSummary = $('#matrixSummary');
-            const diagWords = $('#diagWords');
-            const diagCitations = $('#diagCitations');
-            const diagSyllabus = $('#diagSyllabus');
-            const diagCode = $('#diagCode');
-            const reportBox = $('#reportBox');
-            const copyReportBtn = $('#copyReportBtn');
-            const driveFolderId = $('#driveFolderId');
-            const loadDriveBtn = $('#loadDriveBtn');
-            const driveIframe = $('#driveIframe');
-            const dropZone = $('#dropZone');
-            const bibFileInput = $('#bibFileInput');
-            const bibEntryCount = $('#bibEntryCount');
-            const bibApplyBtn = $('#bibApplyBtn');
-            const lastSaved = $('#lastSaved');
-            const currentDate = $('#currentDate');
-
-            // ---------- HELPERS ----------
-            function getTodayStr() {
-                const d = new Date();
-                return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-            }
-            currentDate.textContent = getTodayStr();
-
-            // Build date range: July 1 – Sep 30 (92 days)
+            // ---------- DATE RANGE (92 days) ----------
             function buildDateRange() {
                 const dates = [];
-                const start = new Date(2026, 6, 1); // July 1
-                const end = new Date(2026, 8, 30); // Sep 30
+                const start = new Date(2026, 6, 1);
+                const end = new Date(2026, 8, 30);
                 let d = new Date(start);
                 let idx = 0;
                 while (d <= end) {
@@ -503,35 +463,59 @@
                 }
                 return dates;
             }
-            const dateRange = buildDateRange(); // 92 entries
+            const dateRange = buildDateRange(); // 92
 
-            // Initialize tasks if not present
+            // ---------- STATE ----------
+            let state = {
+                variables: VARIABLE_NAMES.map((name, i) => ({
+                    id: i,
+                    name: name,
+                    status: 'Not Started',
+                    countries: getTags(i).countries,
+                    sources: getTags(i).sources,
+                })),
+                tasks: [], // will be populated
+                diag: { words: 0, citations: 0, syllabus: 0, code: 0 },
+                driveFolderId: '',
+                bibCount: 0,
+                notionUrl: '',
+                view: 'daily',
+            };
+
+            // Initialize tasks with all categories false
             function initTasks() {
                 if (state.tasks.length === 0) {
-                    state.tasks = dateRange.map((d) => ({
-                        dayIdx: d.idx,
-                        dateStr: d.label,
-                        month: d.month,
-                        math: false,
-                        coding: false,
-                        writing: false,
-                    }));
+                    state.tasks = dateRange.map((d) => {
+                        const taskObj = {};
+                        TASK_CATEGORIES.forEach(cat => taskObj[cat] = false);
+                        return {
+                            dayIdx: d.idx,
+                            dateStr: d.label,
+                            month: d.month,
+                            tasks: taskObj
+                        };
+                    });
                 } else {
-                    // ensure all days exist
+                    // Ensure all days exist and have all categories
                     const existing = new Set(state.tasks.map(t => t.dayIdx));
                     for (const d of dateRange) {
                         if (!existing.has(d.idx)) {
+                            const taskObj = {};
+                            TASK_CATEGORIES.forEach(cat => taskObj[cat] = false);
                             state.tasks.push({
                                 dayIdx: d.idx,
                                 dateStr: d.label,
                                 month: d.month,
-                                math: false,
-                                coding: false,
-                                writing: false,
+                                tasks: taskObj
+                            });
+                        } else {
+                            // Ensure all categories exist for existing task
+                            const task = state.tasks.find(t => t.dayIdx === d.idx);
+                            TASK_CATEGORIES.forEach(cat => {
+                                if (!(cat in task.tasks)) task.tasks[cat] = false;
                             });
                         }
                     }
-                    // sort by dayIdx
                     state.tasks.sort((a, b) => a.dayIdx - b.dayIdx);
                 }
             }
@@ -546,12 +530,12 @@
                         diag: state.diag,
                         driveFolderId: state.driveFolderId,
                         bibCount: state.bibCount,
+                        notionUrl: state.notionUrl,
+                        view: state.view,
                     };
                     localStorage.setItem('phdDashboardState', JSON.stringify(payload));
-                    lastSaved.textContent = 'Saved ' + new Date().toLocaleTimeString();
-                } catch (e) {
-                    // silent fail
-                }
+                    document.getElementById('lastSaved').textContent = 'Saved ' + new Date().toLocaleTimeString();
+                } catch (e) {}
             }
 
             function loadState() {
@@ -564,35 +548,50 @@
                     if (parsed.diag) state.diag = parsed.diag;
                     if (parsed.driveFolderId) state.driveFolderId = parsed.driveFolderId;
                     if (parsed.bibCount !== undefined) state.bibCount = parsed.bibCount;
+                    if (parsed.notionUrl) state.notionUrl = parsed.notionUrl;
+                    if (parsed.view) state.view = parsed.view;
                     return true;
-                } catch (e) {
-                    return false;
+                } catch (e) { return false; }
+            }
+
+            // ---------- HELPERS ----------
+            function getTaskCompletion(dayIdx) {
+                const task = state.tasks.find(t => t.dayIdx === dayIdx);
+                if (!task) return { done: 0, total: TASK_CATEGORIES.length, allDone: false };
+                const done = TASK_CATEGORIES.filter(cat => task.tasks[cat] === true).length;
+                return { done, total: TASK_CATEGORIES.length, allDone: done === TASK_CATEGORIES.length };
+            }
+
+            function getStreak() {
+                // Consecutive days fully completed from today backwards
+                let streak = 0;
+                const today = new Date();
+                const start = new Date(2026, 6, 1);
+                const diff = Math.floor((today - start) / (1000 * 60 * 60 * 24));
+                const maxIdx = Math.min(diff, dateRange.length - 1);
+                if (maxIdx < 0) return 0;
+                for (let i = maxIdx; i >= 0; i--) {
+                    const comp = getTaskCompletion(i);
+                    if (comp.allDone) streak++;
+                    else break;
                 }
+                return streak;
             }
 
             // ---------- COMPUTE SCORES ----------
             function computeScores() {
-                // Data Readiness: % of variables with status 'Integrated'
                 const totalVars = state.variables.length;
                 const integrated = state.variables.filter(v => v.status === 'Integrated').length;
                 const dataReadiness = totalVars === 0 ? 0 : Math.round((integrated / totalVars) * 100);
 
-                // Words
                 const words = Math.min(Number(state.diag.words) || 0, 60000);
                 const wordsPct = Math.round((words / 60000) * 100);
-
-                // Citations
                 const citations = Math.min(Number(state.diag.citations) || 0, 200);
                 const citationsPct = Math.round((citations / 200) * 100);
-
-                // Syllabus
                 const syllabus = Math.min(Number(state.diag.syllabus) || 0, 100);
-
-                // Code
                 const code = Math.min(Number(state.diag.code) || 0, 5);
                 const codePct = Math.round((code / 5) * 100);
 
-                // Weighted overall
                 const overall = Math.round(
                     (dataReadiness * 0.20) +
                     (wordsPct * 0.30) +
@@ -601,8 +600,8 @@
                     (codePct * 0.15)
                 );
 
-                // Days fully checked
-                const fullyChecked = state.tasks.filter(t => t.math && t.coding && t.writing).length;
+                const fullyChecked = state.tasks.filter(t => getTaskCompletion(t.dayIdx).allDone).length;
+                const streak = getStreak();
 
                 return {
                     dataReadiness,
@@ -615,62 +614,17 @@
                     words,
                     citations,
                     code,
+                    streak
                 };
             }
 
-            // ---------- UPDATE GAUGE & STATS ----------
-            function updateDashboard() {
-                const scores = computeScores();
-                const { dataReadiness, wordsPct, citationsPct, syllabus, codePct, overall, fullyChecked, words, citations,
-                    code } = scores;
+            // ---------- RENDER FUNCTIONS ----------
 
-                // Gauge
-                const clamped = Math.min(Math.max(overall, 0), 100);
-                const offset = GAUGE_CIRCUMFERENCE - (clamped / 100) * GAUGE_CIRCUMFERENCE;
-                gaugeRing.setAttribute('stroke-dashoffset', offset);
-                gaugeScore.textContent = clamped + '%';
-
-                // Color
-                let color = '#0F5132';
-                if (clamped < 30) color = '#ef4444';
-                else if (clamped < 80) color = '#C5A059';
-                gaugeRing.setAttribute('stroke', color);
-
-                // Stats
-                statWords.textContent = words;
-                statCitations.textContent = citations;
-                statSyllabus.textContent = syllabus + '%';
-                statCode.textContent = code;
-                statData.textContent = dataReadiness + '%';
-                statDaysDone.textContent = fullyChecked;
-
-                // Data readiness bar
-                dataReadinessBar.style.width = dataReadiness + '%';
-                dataReadinessLabel.textContent = dataReadiness + '%';
-
-                // Update variable cards
-                renderVariables();
-
-                // Update matrix
-                renderMatrix();
-
-                // Update report
-                generateReport();
-
-                // Save state
-                saveState();
-            }
-
-            // ---------- RENDER VARIABLES ----------
             function renderVariables() {
                 let html = '';
                 for (const v of state.variables) {
-                    const countryTags = v.countries.map(c =>
-                        `<span class="tag tag-country">${c}</span>`
-                    ).join(' ');
-                    const sourceTags = v.sources.map(s =>
-                        `<span class="tag tag-source">${s}</span>`
-                    ).join(' ');
+                    const countryTags = v.countries.map(c => `<span class="tag tag-country">${c}</span>`).join(' ');
+                    const sourceTags = v.sources.map(s => `<span class="tag tag-source">${s}</span>`).join(' ');
                     const opts = STATUSES.map(s =>
                         `<option value="${s}" ${s === v.status ? 'selected' : ''}>${s}</option>`
                     ).join('');
@@ -684,10 +638,8 @@
                         </div>
                     `;
                 }
-                variablesGrid.innerHTML = html;
-
-                // Attach change events
-                variablesGrid.querySelectorAll('select.status-select').forEach(sel => {
+                document.getElementById('variablesGrid').innerHTML = html;
+                document.querySelectorAll('#variablesGrid select.status-select').forEach(sel => {
                     sel.addEventListener('change', function() {
                         const id = parseInt(this.dataset.varid);
                         const v = state.variables.find(x => x.id === id);
@@ -699,58 +651,179 @@
                 });
             }
 
-            // ---------- RENDER MATRIX ----------
             function renderMatrix() {
-                const filter = matrixFilter.value;
-                let filtered = state.tasks;
-                if (filter !== 'all') {
-                    filtered = state.tasks.filter(t => t.month === filter);
-                }
-                // group by month for headers
+                const view = document.getElementById('matrixView').value;
+                state.view = view;
                 let html = '';
-                let currentMonth = '';
-                for (const t of filtered) {
-                    if (t.month !== currentMonth) {
-                        currentMonth = t.month;
-                        html += `<div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mt-3 mb-1.5">${currentMonth}</div>`;
+                if (view === 'daily') {
+                    // Show each day with checkboxes
+                    for (const t of state.tasks) {
+                        const comp = getTaskCompletion(t.dayIdx);
+                        const taskChecks = TASK_CATEGORIES.map(cat => {
+                            const checked = t.tasks[cat] ? 'checked' : '';
+                            return `<label class="flex items-center gap-1 text-xs">
+                                <input type="checkbox" class="task-check task-cat" data-dayidx="${t.dayIdx}" data-cat="${cat}" ${checked} />
+                                <span class="task-label">${TASK_LABELS[cat]}</span>
+                            </label>`;
+                        }).join(' ');
+                        const allDone = comp.allDone;
+                        html += `
+                            <div class="flex flex-wrap items-center gap-2 py-2 border-b border-slate-100/70 ${allDone ? 'bg-emerald/5 rounded' : ''}" data-dayidx="${t.dayIdx}">
+                                <span class="text-xs font-mono text-slate-400 w-20 flex-shrink-0">${t.dateStr}</span>
+                                <div class="flex flex-wrap gap-2">${taskChecks}</div>
+                                ${allDone ? '<span class="ml-auto text-[0.55rem] text-emerald font-medium"><i class="fas fa-check-circle"></i> Done</span>' : ''}
+                            </div>
+                        `;
                     }
-                    const checkedMath = t.math ? 'checked' : '';
-                    const checkedCoding = t.coding ? 'checked' : '';
-                    const checkedWriting = t.writing ? 'checked' : '';
-                    const allDone = t.math && t.coding && t.writing;
-                    html += `
-                        <div class="flex items-center gap-2 py-1.5 border-b border-slate-100/70 ${allDone ? 'bg-emerald/5 rounded' : ''}" data-dayidx="${t.dayIdx}">
-                            <span class="text-xs font-mono text-slate-400 w-16 flex-shrink-0">${t.dateStr}</span>
-                            <label class="flex items-center gap-1 text-xs"><input type="checkbox" class="task-check task-math" data-dayidx="${t.dayIdx}" ${checkedMath} /> <span class="task-label">Math</span></label>
-                            <label class="flex items-center gap-1 text-xs"><input type="checkbox" class="task-check task-coding" data-dayidx="${t.dayIdx}" ${checkedCoding} /> <span class="task-label">Coding</span></label>
-                            <label class="flex items-center gap-1 text-xs"><input type="checkbox" class="task-check task-writing" data-dayidx="${t.dayIdx}" ${checkedWriting} /> <span class="task-label">Writing</span></label>
-                            ${allDone ? '<span class="ml-auto text-[0.55rem] text-emerald font-medium"><i class="fas fa-check-circle"></i> Done</span>' : ''}
+                } else if (view === 'weekly') {
+                    // Group by week (every 7 days)
+                    const weeks = [];
+                    for (let i = 0; i < state.tasks.length; i += 7) {
+                        const weekTasks = state.tasks.slice(i, i + 7);
+                        const weekNumber = Math.floor(i / 7) + 1;
+                        const weekLabel = `Week ${weekNumber}`;
+                        const startDate = weekTasks[0]?.dateStr || '';
+                        const endDate = weekTasks[weekTasks.length - 1]?.dateStr || '';
+                        const doneCount = weekTasks.filter(t => getTaskCompletion(t.dayIdx).allDone).length;
+                        const total = weekTasks.length;
+                        const pct = total > 0 ? Math.round((doneCount / total) * 100) : 0;
+                        weeks.push({ weekNumber, label: weekLabel, range: `${startDate} – ${endDate}`, doneCount, total,
+                            pct, tasks: weekTasks });
+                    }
+                    for (const w of weeks) {
+                        html += `
+                            <div class="mb-4 p-3 bg-slate-50 rounded-xl">
+                                <div class="flex flex-wrap items-center justify-between">
+                                    <span class="font-semibold text-slate-700">${w.label}</span>
+                                    <span class="text-xs text-slate-500">${w.range}</span>
+                                    <span class="text-xs font-medium text-emerald">${w.doneCount}/${w.total} days</span>
+                                </div>
+                                <div class="week-progress mt-1">
+                                    <div class="week-progress-bar" style="width:${w.pct}%;"></div>
+                                </div>
+                                <div class="text-xs text-slate-400 mt-1">${w.pct}% complete</div>
+                            </div>
+                        `;
+                    }
+                } else if (view === 'monthly') {
+                    const months = ['July', 'August', 'September'];
+                    for (const month of months) {
+                        const monthTasks = state.tasks.filter(t => t.month === month);
+                        if (monthTasks.length === 0) continue;
+                        const doneCount = monthTasks.filter(t => getTaskCompletion(t.dayIdx).allDone).length;
+                        const total = monthTasks.length;
+                        const pct = total > 0 ? Math.round((doneCount / total) * 100) : 0;
+                        html += `
+                            <div class="month-card p-4 bg-white rounded-xl shadow-sm mb-3 border-l-4 border-gold">
+                                <div class="flex items-center justify-between">
+                                    <span class="font-semibold text-slate-700">${month}</span>
+                                    <span class="text-sm font-medium text-emerald">${doneCount}/${total} days</span>
+                                </div>
+                                <div class="week-progress mt-1">
+                                    <div class="week-progress-bar" style="width:${pct}%;"></div>
+                                </div>
+                                <div class="text-xs text-slate-400 mt-1">${pct}% complete</div>
+                            </div>
+                        `;
+                    }
+                } else if (view === 'quarterly') {
+                    const total = state.tasks.length;
+                    const doneCount = state.tasks.filter(t => getTaskCompletion(t.dayIdx).allDone).length;
+                    const pct = total > 0 ? Math.round((doneCount / total) * 100) : 0;
+                    html = `
+                        <div class="p-6 text-center">
+                            <div class="text-3xl font-bold text-emerald">${pct}%</div>
+                            <div class="text-slate-500 text-sm">Quarterly progress</div>
+                            <div class="week-progress mt-3 w-3/4 mx-auto">
+                                <div class="week-progress-bar" style="width:${pct}%;"></div>
+                            </div>
+                            <div class="mt-3 text-slate-600">${doneCount} of ${total} days fully completed</div>
+                            <div class="mt-2 text-xs text-slate-400">Target: 100% by Sep 30</div>
                         </div>
                     `;
                 }
-                if (!html) html = '<p class="text-sm text-slate-400 py-4">No tasks match this filter.</p>';
-                matrixContainer.innerHTML = html;
+                document.getElementById('matrixContainer').innerHTML = html;
 
                 // Attach checkbox events
-                matrixContainer.querySelectorAll('.task-check').forEach(cb => {
+                document.querySelectorAll('.task-cat').forEach(cb => {
                     cb.addEventListener('change', function() {
-                        const idx = parseInt(this.dataset.dayidx);
-                        const task = state.tasks.find(t => t.dayIdx === idx);
-                        if (!task) return;
-                        if (this.classList.contains('task-math')) task.math = this.checked;
-                        else if (this.classList.contains('task-coding')) task.coding = this.checked;
-                        else if (this.classList.contains('task-writing')) task.writing = this.checked;
-                        updateDashboard();
+                        const dayIdx = parseInt(this.dataset.dayidx);
+                        const cat = this.dataset.cat;
+                        const task = state.tasks.find(t => t.dayIdx === dayIdx);
+                        if (task) {
+                            task.tasks[cat] = this.checked;
+                            updateDashboard();
+                        }
                     });
                 });
 
                 // Update summary
                 const total = state.tasks.length;
-                const done = state.tasks.filter(t => t.math && t.coding && t.writing).length;
-                matrixSummary.textContent = `${done} / ${total} days complete`;
+                const done = state.tasks.filter(t => getTaskCompletion(t.dayIdx).allDone).length;
+                document.getElementById('matrixSummary').textContent = `${done} / ${total} days complete`;
             }
 
-            // ---------- GENERATE REPORT ----------
+            function updateDashboard() {
+                const scores = computeScores();
+                const {
+                    dataReadiness,
+                    wordsPct,
+                    citationsPct,
+                    syllabus,
+                    codePct,
+                    overall,
+                    fullyChecked,
+                    words,
+                    citations,
+                    code,
+                    streak
+                } = scores;
+
+                // Gauge
+                const clamped = Math.min(Math.max(overall, 0), 100);
+                const offset = GAUGE_CIRCUMFERENCE - (clamped / 100) * GAUGE_CIRCUMFERENCE;
+                document.getElementById('gaugeRing').setAttribute('stroke-dashoffset', offset);
+                document.getElementById('gaugeScore').textContent = clamped + '%';
+                let color = '#0F5132';
+                if (clamped < 30) color = '#ef4444';
+                else if (clamped < 80) color = '#C5A059';
+                document.getElementById('gaugeRing').setAttribute('stroke', color);
+
+                // Stats
+                document.getElementById('statWords').textContent = words;
+                document.getElementById('statCitations').textContent = citations;
+                document.getElementById('statSyllabus').textContent = syllabus + '%';
+                document.getElementById('statCode').textContent = code;
+                document.getElementById('statData').textContent = dataReadiness + '%';
+                document.getElementById('statDaysDone').textContent = fullyChecked;
+
+                // Data readiness bar
+                document.getElementById('dataReadinessBar').style.width = dataReadiness + '%';
+                document.getElementById('dataReadinessLabel').textContent = dataReadiness + '%';
+
+                // Streak
+                document.getElementById('streakCount').textContent = streak;
+
+                // Motivation quote (random, change occasionally)
+                const quoteEl = document.getElementById('motivationQuote');
+                if (!quoteEl.dataset.initialized) {
+                    const q = MOTIVATIONAL_QUOTES[Math.floor(Math.random() * MOTIVATIONAL_QUOTES.length)];
+                    quoteEl.textContent = '“' + q + '”';
+                    quoteEl.dataset.initialized = 'true';
+                }
+
+                // Report
+                generateReport();
+
+                // Re-render matrix (in case view changed)
+                renderMatrix();
+                // Re-render variables (in case statuses changed)
+                renderVariables();
+
+                saveState();
+            }
+
+            // ---------- REPORT ----------
             function generateReport() {
                 const s = computeScores();
                 const lines = [];
@@ -766,8 +839,8 @@
                 lines.push('');
                 lines.push(`TASK MATRIX: ${s.fullyChecked} / 92 days fully completed.`);
                 lines.push(`VARIABLES: ${state.variables.filter(v => v.status === 'Integrated').length}/17 integrated.`);
+                lines.push(`STREAK: ${s.streak} consecutive days.`);
                 lines.push('');
-                // Diagnostic comment
                 let comment = '';
                 if (s.overall >= 80) comment = 'Excellent progress. Ready for committee review.';
                 else if (s.overall >= 60) comment = 'Good progress. Focus on remaining weak areas.';
@@ -776,77 +849,43 @@
                 lines.push(`DIAGNOSTIC: ${comment}`);
                 lines.push('');
                 lines.push('─ End of Report ─');
-                reportBox.value = lines.join('\n');
+                document.getElementById('reportBox').value = lines.join('\n');
             }
 
-            // ---------- SYNC MATRIX (recalc days done and update EWS) ----------
-            function syncMatrix() {
-                // Just re-render and update — the checkboxes already drive state
-                // But we also re-count fully checked days
-                const done = state.tasks.filter(t => t.math && t.coding && t.writing).length;
-                // Update the diag fields from the matrix? No, matrix is separate.
-                // We just refresh the dashboard.
-                updateDashboard();
-                // Show a small feedback
-                syncMatrixBtn.innerHTML = '<i class="fas fa-check"></i> Synced';
-                setTimeout(() => {
-                    syncMatrixBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Sync';
-                }, 1500);
+            // ---------- NOTION INTEGRATION ----------
+            function loadNotion() {
+                const url = document.getElementById('notionUrl').value.trim();
+                if (!url) {
+                    alert('Please enter a Notion page URL or embed ID.');
+                    return;
+                }
+                state.notionUrl = url;
+                const container = document.getElementById('notionContainer');
+                container.classList.remove('hidden');
+                const iframe = document.getElementById('notionIframe');
+                // Check if it's a URL or embed ID
+                let src = url;
+                if (!url.startsWith('http')) {
+                    // assume embed ID, construct URL
+                    src = `https://www.notion.so/embed/${url}`;
+                }
+                iframe.src = src;
+                saveState();
+            }
+
+            function clearNotion() {
+                document.getElementById('notionUrl').value = '';
+                document.getElementById('notionContainer').classList.add('hidden');
+                document.getElementById('notionIframe').src = 'about:blank';
+                state.notionUrl = '';
+                saveState();
             }
 
             // ---------- BIB PARSING ----------
             function parseBibFile(text) {
-                // Count entries: @article, @book, @inproceedings, etc.
                 const matches = text.match(/@\w+\s*\{/g);
                 return matches ? matches.length : 0;
             }
-
-            // ---------- EVENT BINDINGS ----------
-
-            // Drive folder
-            loadDriveBtn.addEventListener('click', function() {
-                const id = driveFolderId.value.trim();
-                if (!id) {
-                    alert('Please enter a Google Drive Folder ID.');
-                    return;
-                }
-                state.driveFolderId = id;
-                driveIframe.src = `https://drive.google.com/embeddedfolderview?id=${id}#grid`;
-                saveState();
-            });
-
-            // Restore drive folder
-            if (state.driveFolderId) {
-                driveFolderId.value = state.driveFolderId;
-                driveIframe.src = `https://drive.google.com/embeddedfolderview?id=${state.driveFolderId}#grid`;
-            }
-
-            // Bib drag & drop
-            dropZone.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                this.classList.add('dragover');
-            });
-            dropZone.addEventListener('dragleave', function(e) {
-                e.preventDefault();
-                this.classList.remove('dragover');
-            });
-            dropZone.addEventListener('drop', function(e) {
-                e.preventDefault();
-                this.classList.remove('dragover');
-                const files = e.dataTransfer.files;
-                if (files.length > 0) {
-                    handleBibFile(files[0]);
-                }
-            });
-            dropZone.addEventListener('click', function() {
-                bibFileInput.click();
-            });
-            bibFileInput.addEventListener('change', function() {
-                if (this.files.length > 0) {
-                    handleBibFile(this.files[0]);
-                }
-                this.value = '';
-            });
 
             function handleBibFile(file) {
                 if (!file.name.endsWith('.bib')) {
@@ -858,9 +897,8 @@
                     const text = e.target.result;
                     const count = parseBibFile(text);
                     state.bibCount = count;
-                    bibEntryCount.textContent = count;
+                    document.getElementById('bibEntryCount').textContent = count;
                     saveState();
-                    // Optionally apply to citations
                 };
                 reader.onerror = function() {
                     alert('Error reading file.');
@@ -868,99 +906,133 @@
                 reader.readAsText(file);
             }
 
-            // Apply bib count to citations
-            bibApplyBtn.addEventListener('click', function() {
+            // ---------- SYNC MATRIX (just re-render and update) ----------
+            function syncMatrix() {
+                updateDashboard();
+                const btn = document.getElementById('syncMatrixBtn');
+                btn.innerHTML = '<i class="fas fa-check"></i> Synced';
+                setTimeout(() => { btn.innerHTML = '<i class="fas fa-sync-alt"></i> Sync'; }, 1500);
+            }
+
+            // ---------- EVENT BINDINGS ----------
+            // View selector
+            document.getElementById('matrixView').addEventListener('change', function() {
+                state.view = this.value;
+                renderMatrix();
+                saveState();
+            });
+
+            // Matrix sync
+            document.getElementById('syncMatrixBtn').addEventListener('click', syncMatrix);
+
+            // Notion
+            document.getElementById('loadNotionBtn').addEventListener('click', loadNotion);
+            document.getElementById('clearNotionBtn').addEventListener('click', clearNotion);
+
+            // Drive folder (keep existing)
+            document.getElementById('loadDriveBtn').addEventListener('click', function() {
+                const id = document.getElementById('driveFolderId').value.trim();
+                if (!id) { alert('Enter a Google Drive Folder ID.'); return; }
+                state.driveFolderId = id;
+                document.getElementById('driveIframe').src = `https://drive.google.com/embeddedfolderview?id=${id}#grid`;
+                saveState();
+            });
+
+            // Bib drag & drop
+            const dropZone = document.getElementById('dropZone');
+            const bibFileInput = document.getElementById('bibFileInput');
+            dropZone.addEventListener('dragover', function(e) { e.preventDefault();
+                this.classList.add('dragover'); });
+            dropZone.addEventListener('dragleave', function(e) { e.preventDefault();
+                this.classList.remove('dragover'); });
+            dropZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+                if (e.dataTransfer.files.length > 0) handleBibFile(e.dataTransfer.files[0]);
+            });
+            dropZone.addEventListener('click', function() { bibFileInput.click(); });
+            bibFileInput.addEventListener('change', function() {
+                if (this.files.length > 0) handleBibFile(this.files[0]);
+                this.value = '';
+            });
+            document.getElementById('bibApplyBtn').addEventListener('click', function() {
                 if (state.bibCount > 0) {
-                    diagCitations.value = Math.min(state.bibCount, 200);
-                    state.diag.citations = parseInt(diagCitations.value) || 0;
+                    document.getElementById('diagCitations').value = Math.min(state.bibCount, 200);
+                    state.diag.citations = parseInt(document.getElementById('diagCitations').value) || 0;
                     updateDashboard();
                 } else {
-                    alert('No .bib entries loaded. Drop a file first.');
+                    alert('No .bib entries loaded.');
                 }
             });
 
-            // Restore bib count
-            if (state.bibCount > 0) {
-                bibEntryCount.textContent = state.bibCount;
-            }
-
             // Diagnostic inputs
-            diagWords.addEventListener('input', function() {
-                state.diag.words = parseInt(this.value) || 0;
-                updateDashboard();
+            ['diagWords', 'diagCitations', 'diagSyllabus'].forEach(id => {
+                document.getElementById(id).addEventListener('input', function() {
+                    const key = id.replace('diag', '').toLowerCase();
+                    state.diag[key] = parseInt(this.value) || 0;
+                    updateDashboard();
+                });
             });
-            diagCitations.addEventListener('input', function() {
-                state.diag.citations = parseInt(this.value) || 0;
-                updateDashboard();
-            });
-            diagSyllabus.addEventListener('input', function() {
-                state.diag.syllabus = parseInt(this.value) || 0;
-                updateDashboard();
-            });
-            diagCode.addEventListener('change', function() {
+            document.getElementById('diagCode').addEventListener('change', function() {
                 state.diag.code = parseInt(this.value) || 0;
                 updateDashboard();
             });
 
-            // Restore diag values
-            diagWords.value = state.diag.words || 0;
-            diagCitations.value = state.diag.citations || 0;
-            diagSyllabus.value = state.diag.syllabus || 0;
-            diagCode.value = state.diag.code || 0;
-
-            // Matrix filter
-            matrixFilter.addEventListener('change', renderMatrix);
-
-            // Sync button
-            syncMatrixBtn.addEventListener('click', syncMatrix);
-
             // Copy report
-            copyReportBtn.addEventListener('click', function() {
-                reportBox.select();
+            document.getElementById('copyReportBtn').addEventListener('click', function() {
+                const box = document.getElementById('reportBox');
+                box.select();
                 try {
-                    navigator.clipboard.writeText(reportBox.value).then(() => {
+                    navigator.clipboard.writeText(box.value).then(() => {
                         const orig = this.innerHTML;
                         this.innerHTML = '<i class="fas fa-check"></i> Copied!';
                         setTimeout(() => { this.innerHTML = orig; }, 1500);
-                    }).catch(() => {
-                        document.execCommand('copy');
-                        alert('Report copied!');
-                    });
-                } catch (e) {
-                    document.execCommand('copy');
-                    alert('Report copied!');
-                }
+                    }).catch(() => { document.execCommand('copy');
+                        alert('Report copied!'); });
+                } catch (e) { document.execCommand('copy');
+                    alert('Report copied!'); }
             });
 
             // ---------- INIT ----------
-            // Try loading state
             const loaded = loadState();
-            // Ensure tasks cover all days
+            // Ensure tasks up to date
             initTasks();
-            // If loaded, restore diag inputs
             if (loaded) {
-                diagWords.value = state.diag.words || 0;
-                diagCitations.value = state.diag.citations || 0;
-                diagSyllabus.value = state.diag.syllabus || 0;
-                diagCode.value = state.diag.code || 0;
+                document.getElementById('diagWords').value = state.diag.words || 0;
+                document.getElementById('diagCitations').value = state.diag.citations || 0;
+                document.getElementById('diagSyllabus').value = state.diag.syllabus || 0;
+                document.getElementById('diagCode').value = state.diag.code || 0;
                 if (state.driveFolderId) {
-                    driveFolderId.value = state.driveFolderId;
-                    driveIframe.src = `https://drive.google.com/embeddedfolderview?id=${state.driveFolderId}#grid`;
+                    document.getElementById('driveFolderId').value = state.driveFolderId;
+                    document.getElementById('driveIframe').src =
+                        `https://drive.google.com/embeddedfolderview?id=${state.driveFolderId}#grid`;
                 }
                 if (state.bibCount > 0) {
-                    bibEntryCount.textContent = state.bibCount;
+                    document.getElementById('bibEntryCount').textContent = state.bibCount;
+                }
+                if (state.notionUrl) {
+                    document.getElementById('notionUrl').value = state.notionUrl;
+                    document.getElementById('notionContainer').classList.remove('hidden');
+                    let src = state.notionUrl;
+                    if (!src.startsWith('http')) src = `https://www.notion.so/embed/${src}`;
+                    document.getElementById('notionIframe').src = src;
+                }
+                if (state.view) {
+                    document.getElementById('matrixView').value = state.view;
                 }
             }
 
-            // First render
+            // Set current date
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric',
+                month: 'short', day: 'numeric' });
+
+            // Initial render
             renderVariables();
             renderMatrix();
             updateDashboard();
 
-            // Auto-save every 30s
+            // Auto-save
             setInterval(saveState, 30000);
-
-            // Also save on page unload
             window.addEventListener('beforeunload', saveState);
 
         });
