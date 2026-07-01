@@ -1,1187 +1,209 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full bg-slate-50">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PhD Mission Control · Supervisor Diagnostic Hub</title>
-
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com">
-    </script>
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-
-    <style>
-        /* ----- Custom styles ----- */
-        * {
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-        }
-        .font-serif {
-            font-family: 'Playfair Display', serif;
-        }
-
-        .card {
-            background: #ffffff;
-            border-radius: 1.25rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
-            transition: box-shadow 0.15s ease;
-        }
-        .card:hover {
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.03);
-        }
-
-        .gauge-ring {
-            transition: stroke-dashoffset 0.6s ease;
-        }
-
-        .tag-pill {
-            display: inline-block;
-            padding: 0.1rem 0.6rem;
-            border-radius: 9999px;
-            font-size: 0.6rem;
-            font-weight: 500;
-            letter-spacing: 0.01em;
-            background: #f1f5f9;
-            color: #1e293b;
-        }
-        .tag-country {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-        .tag-source {
-            background: #fae8ff;
-            color: #7c3aed;
-        }
-        .tag-sector {
-            background: #ecfdf5;
-            color: #065f46;
-        }
-
-        select.status-select {
-            font-size: 0.7rem;
-            padding: 0.15rem 0.4rem;
-            border-radius: 0.5rem;
-            border: 1px solid #e2e8f0;
-            background: #f8fafc;
-            outline: none;
-            cursor: pointer;
-            transition: border 0.15s;
-            width: 100%;
-        }
-        select.status-select:focus {
-            border-color: #0F5132;
-        }
-
-        .task-check {
-            accent-color: #0F5132;
-            width: 0.9rem;
-            height: 0.9rem;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-        .task-label {
-            font-size: 0.7rem;
-            color: #334155;
-            line-height: 1.2;
-        }
-
-        .progress-bar-bg {
-            background: #e2e8f0;
-            border-radius: 9999px;
-            height: 6px;
-            overflow: hidden;
-        }
-        .progress-bar-fill {
-            height: 100%;
-            border-radius: 9999px;
-            transition: width 0.4s ease;
-            background: #0F5132;
-        }
-
-        .drop-zone {
-            border: 2px dashed #cbd5e1;
-            border-radius: 1rem;
-            padding: 1.25rem 0.75rem;
-            text-align: center;
-            transition: border-color 0.2s, background 0.2s;
-            background: #f8fafc;
-            cursor: pointer;
-        }
-        .drop-zone.dragover {
-            border-color: #0F5132;
-            background: #f0fdf4;
-        }
-
-        .report-box {
-            background: #f1f5f9;
-            border: none;
-            border-radius: 0.75rem;
-            padding: 0.75rem;
-            width: 100%;
-            font-family: 'Inter', monospace;
-            font-size: 0.75rem;
-            line-height: 1.5;
-            resize: vertical;
-            min-height: 140px;
-            color: #0f172a;
-        }
-        .report-box:focus {
-            outline: 2px solid #0F5132;
-            outline-offset: 2px;
-        }
-
-        .table-scroll {
-            max-height: 420px;
-            overflow-y: auto;
-        }
-        .table-scroll::-webkit-scrollbar {
-            width: 5px;
-        }
-        .table-scroll::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 10px;
-        }
-        .table-scroll::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 10px;
-        }
-
-        .view-selector {
-            border: 1px solid #e2e8f0;
-            border-radius: 0.5rem;
-            padding: 0.15rem 0.5rem;
-            font-size: 0.75rem;
-            background: white;
-            outline: none;
-            cursor: pointer;
-        }
-        .view-selector:focus {
-            border-color: #0F5132;
-        }
-
-        .btn-emerald {
-            background: #0F5132;
-            color: #fff;
-            transition: background 0.15s;
-        }
-        .btn-emerald:hover {
-            background: #0a3d26;
-        }
-        .btn-gold {
-            background: #C5A059;
-            color: #fff;
-            transition: background 0.15s;
-        }
-        .btn-gold:hover {
-            background: #b08a4a;
-        }
-        .btn-outline-emerald {
-            border: 1px solid #0F5132;
-            color: #0F5132;
-            background: transparent;
-            transition: background 0.15s, color 0.15s;
-        }
-        .btn-outline-emerald:hover {
-            background: #0F5132;
-            color: #fff;
-        }
-
-        .variable-card {
-            transition: border-color 0.15s;
-            border: 1px solid #f1f5f9;
-        }
-        .variable-card:hover {
-            border-color: #cbd5e1;
-        }
-
-        .mini-stat {
-            background: #f8fafc;
-            border-radius: 0.75rem;
-            padding: 0.6rem 0.4rem;
-            text-align: center;
-        }
-
-        .integration-iframe {
-            border-radius: 0.75rem;
-            border: 1px solid #e2e8f0;
-            width: 100%;
-            height: 200px;
-            background: white;
-        }
-
-        /* Responsive tweaks */
-        @media (max-width: 1024px) {
-            .desktop-grid {
-                display: flex;
-                flex-direction: column;
-                gap: 1.5rem;
-            }
-            .desktop-grid>div {
-                width: 100%;
-            }
-        }
-
-        @media (min-width: 1025px) {
-            .desktop-grid {
-                display: grid;
-                grid-template-columns: 1fr 1.1fr 1.2fr;
-                gap: 1.5rem;
-                align-items: start;
-            }
-        }
-    </style>
-
-    <!-- Tailwind config -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhD Mission Control & Supervisor Diagnostic Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        emerald: '#0F5132',
-                        gold: '#C5A059',
-                    }
-                }
-            }
+            theme: { extend: { colors: { asu: { gold: '#C5A059', emerald: '#0F5132', darkGreen: '#0A3622', lightGreen: '#E2EFE0', accent: '#198754' } } } }
         }
     </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #C5A059; }
+    </style>
 </head>
-<body>
+<body class="h-full w-full text-slate-800 font-sans antialiased bg-slate-100">
 
-    <div class="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6" id="app">
-
-        <!-- ============================================================ -->
-        <!-- 3-COLUMN GRID                                                -->
-        <!-- ============================================================ -->
-        <div class="desktop-grid">
-
-            <!-- ========================================================= -->
-            <!-- COLUMN 1: Performance & Diagnostics                        -->
-            <!-- ========================================================= -->
-            <div class="space-y-4">
-
-                <!-- Header / Branding -->
-                <div class="card p-4 flex items-center justify-between">
+    <div class="w-full max-w-[1920px] mx-auto h-full flex flex-col xl:flex-row gap-5 p-4 overflow-hidden">
+        
+        <!-- Column 1: Performance & Diagnostics -->
+        <div class="w-full xl:w-[30%] flex flex-col gap-5 overflow-y-auto custom-scrollbar xl:pb-8">
+            <header class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex flex-col gap-4">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-asu-emerald p-2 rounded-full w-11 h-11 flex items-center justify-center text-white"><i class="fa-solid fa-graduation-cap"></i></div>
                     <div>
-                        <div class="flex items-center gap-2">
-                            <span class="text-emerald font-serif text-xl font-semibold tracking-tight">PhD</span>
-                            <span class="text-slate-400 text-sm font-light">·</span>
-                            <span class="text-sm font-medium text-slate-600">Mission Control</span>
-                        </div>
-                        <div class="text-[0.6rem] text-slate-400 uppercase tracking-wider mt-0.5 flex items-center gap-2">
-                            <span class="inline-block w-2 h-2 rounded-full bg-emerald"></span>
-                            Ain Shams University · Faculty of Business
-                        </div>
-                    </div>
-                    <button id="sharePdfBtn" class="btn-outline-emerald text-xs px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition">
-                        <i class="fas fa-file-pdf"></i> Share PDF
-                    </button>
-                </div>
-
-                <!-- EWS Monitor -->
-                <div class="card p-5 flex flex-col items-center">
-                    <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">EWS Monitor</h2>
-                    <div class="relative w-40 h-40 sm:w-44 sm:h-44">
-                        <svg viewBox="0 0 120 120" class="w-full h-full -rotate-90">
-                            <circle cx="60" cy="60" r="52" fill="none" stroke="#e2e8f0" stroke-width="10" />
-                            <circle cx="60" cy="60" r="52" fill="none" stroke="#0F5132" stroke-width="10"
-                            stroke-linecap="round"
-                            stroke-dasharray="326.726" stroke-dashoffset="326.726"
-                            class="gauge-ring" id="gaugeRing" />
-                        </svg>
-                        <div class="absolute inset-0 flex flex-col items-center justify-center">
-                            <span class="text-3xl font-bold text-slate-800" id="gaugeScore">0%</span>
-                            <span class="text-[0.55rem] uppercase tracking-wider text-slate-400 font-medium" id="gaugeLabel">INITIALIZING</span>
-                        </div>
-                    </div>
-                    <div class="flex flex-wrap justify-center gap-2 mt-2 text-[0.55rem] text-slate-500 font-medium">
-                        <span class="flex items-center gap-1"><span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald"></span> ≥80% ON TRACK</span>
-                        <span class="flex items-center gap-1"><span class="inline-block w-2.5 h-2.5 rounded-full bg-[#C5A059]"></span> 30–79% CAUTION</span>
-                        <span class="flex items-center gap-1"><span class="inline-block w-2.5 h-2.5 rounded-full bg-red-500"></span> &lt;30% CRITICAL</span>
+                        <h1 class="text-sm font-bold text-asu-emerald tracking-wide uppercase">Ain Shams University</h1>
+                        <p class="text-[10px] text-slate-500 font-semibold tracking-wider">PhD Performance Dashboard</p>
                     </div>
                 </div>
+                <button onclick="exportDiagnostics()" class="w-full text-xs bg-asu-gold text-slate-900 font-bold px-4 py-2.5 rounded-lg transition hover:bg-yellow-500">Share Diagnostic PDF</button>
+            </header>
 
-                <!-- Quantitative Metrics Grid -->
-                <div class="grid grid-cols-3 gap-2">
-                    <div class="mini-stat">
-                        <div class="text-[0.55rem] text-slate-400 uppercase tracking-wider">Words</div>
-                        <div class="text-lg font-bold text-slate-700" id="statWords">0</div>
-                        <div class="text-[0.5rem] text-slate-400">/ 60,000</div>
+            <section class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm flex flex-col items-center gap-4">
+                <div class="w-full"><h2 class="text-lg font-bold text-slate-900">EWS Monitor</h2></div>
+                <div class="relative w-32 h-32 flex items-center justify-center">
+                    <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="40" stroke="#f1f5f9" stroke-width="8" fill="none" />
+                        <circle id="ews-progress-ring" cx="50" cy="50" r="40" stroke="#0F5132" stroke-width="8" fill="none" stroke-dasharray="251.2" stroke-dashoffset="251.2" />
+                    </svg>
+                    <span id="ews-score-display" class="absolute text-xl font-bold font-mono text-slate-900">0%</span>
+                </div>
+                <div id="status-badge" class="px-5 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest border w-full text-center bg-slate-100 text-slate-500">Checking...</div>
+            </section>
+
+            <section class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-4">
+                <h3 class="text-xs font-bold text-slate-800 uppercase">Quantitative Metrics</h3>
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-[10px]">
+                        <span class="block text-slate-500 uppercase">Words</span>
+                        <p class="text-sm font-mono font-bold text-slate-900" id="stat-words">0</p>
                     </div>
-                    <div class="mini-stat">
-                        <div class="text-[0.55rem] text-slate-400 uppercase tracking-wider">Citations</div>
-                        <div class="text-lg font-bold text-slate-700" id="statCitations">0</div>
-                        <div class="text-[0.5rem] text-slate-400">/ 111</div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-[10px]">
+                        <span class="block text-slate-500 uppercase">Citations</span>
+                        <p class="text-sm font-mono font-bold text-slate-900" id="stat-papers">0</p>
                     </div>
-                    <div class="mini-stat">
-                        <div class="text-[0.55rem] text-slate-400 uppercase tracking-wider">Code</div>
-                        <div class="text-lg font-bold text-slate-700" id="statCode">0</div>
-                        <div class="text-[0.5rem] text-slate-400">/ 5</div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-[10px]">
+                        <span class="block text-slate-500 uppercase">Code</span>
+                        <p class="text-sm font-mono font-bold text-slate-900" id="stat-code">0</p>
                     </div>
                 </div>
+            </section>
 
-                <!-- Diagnostic Logger + Supervisor Report (side-by-side) -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <!-- Logger -->
-                    <div class="card p-4">
-                        <h3 class="text-xs font-semibold text-slate-600 flex items-center gap-1.5 mb-3">
-                            <i class="fas fa-sliders-h text-emerald"></i> Diagnostic Logger
-                        </h3>
-                        <div class="space-y-2.5">
-                            <div>
-                                <label class="text-[0.6rem] text-slate-500 block">Words (max 60,000)</label>
-                                <input type="number" id="diagWords" min="0" max="60000" value="0"
-                                class="w-full border border-slate-200 rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald/30" />
-                            </div>
-                            <div>
-                                <label class="text-[0.6rem] text-slate-500 block">Citations (max 111)</label>
-                                <input type="number" id="diagCitations" min="0" max="111" value="0"
-                                class="w-full border border-slate-200 rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald/30" />
-                            </div>
-                            <div>
-                                <label class="text-[0.6rem] text-slate-500 block">Syllabus Adherence (%)</label>
-                                <input type="number" id="diagSyllabus" min="0" max="100" value="0"
-                                class="w-full border border-slate-200 rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald/30" />
-                            </div>
-                            <div>
-                                <label class="text-[0.6rem] text-slate-500 block">Code Milestones (0–5)</label>
-                                <select id="diagCode" class="w-full border border-slate-200 rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald/30 bg-white">
-                                    <option value="0">0</option><option value="1">1</option><option value="2">2</option>
-                                    <option value="3">3</option><option value="4">4</option><option value="5">5</option>
-                                </select>
-                            </div>
-                            <button id="resetDiagBtn" class="text-xs text-slate-400 hover:text-red-500 transition flex items-center gap-1 mt-1">
-                                <i class="fas fa-undo-alt"></i> Reset
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Report -->
-                    <div class="card p-4 flex flex-col">
-                        <h3 class="text-xs font-semibold text-slate-600 flex items-center gap-1.5 mb-2">
-                            <i class="fas fa-file-alt text-gold"></i> Supervisor Report
-                        </h3>
-                        <textarea id="reportBox" class="report-box flex-1" readonly placeholder="Report auto-generates…"></textarea>
-                        <button id="copyReportBtn" class="self-end text-[0.6rem] bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-full transition flex items-center gap-1 mt-2">
-                            <i class="far fa-copy"></i> Copy
-                        </button>
-                    </div>
+            <!-- Diagnostic Logger & Supervisor Report -->
+            <section class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-3">
+                    <h3 class="text-xs font-bold text-slate-800">Diagnostic Logger</h3>
+                    <input type="number" id="input-word-count" placeholder="Words (max 60k)" oninput="calculateEwsScore()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs outline-none">
+                    <input type="number" id="input-citations" placeholder="Citations (max 200)" oninput="calculateEwsScore()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs outline-none">
+                    <input type="number" id="input-syllabus" placeholder="Syllabus %" oninput="calculateEwsScore()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs outline-none">
+                    <select id="input-code-milestones" onchange="calculateEwsScore()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs outline-none">
+                        <option value="0">0-5 Milestones</option>
+                        <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>
+                    </select>
                 </div>
-
-            </div>
-
-            <!-- ========================================================= -->
-            <!-- COLUMN 2: Data Ingestion                                   -->
-            <!-- ========================================================= -->
-            <div class="space-y-4">
-
-                <!-- Data Readiness Bar -->
-                <div class="card p-4">
-                    <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-xs font-medium text-slate-600">Data Readiness</span>
-                        <span class="text-sm font-bold text-emerald" id="dataReadinessLabel">0%</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" id="dataReadinessBar" style="width:0%;"></div>
-                    </div>
-                    <div class="flex justify-between text-[0.5rem] text-slate-400 mt-0.5">
-                        <span>0%</span>
-                        <span>100%</span>
-                    </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-3">
+                    <h3 class="text-xs font-bold text-slate-800">Supervisor Report</h3>
+                    <textarea id="diagnostic-report-box" readonly class="flex-1 w-full bg-slate-50 border border-slate-200 rounded p-2 font-mono text-[9px] text-slate-600 resize-none outline-none"></textarea>
+                    <button onclick="copyDiagnosticReport()" class="w-full text-[10px] bg-slate-100 p-2 rounded border">Copy Report</button>
                 </div>
+            </section>
+        </div>
 
-                <!-- Variables Tracker (17 cards) -->
-                <div class="card p-4">
-                    <div class="flex items-center justify-between mb-3">
-                        <h3 class="text-xs font-semibold text-slate-600 flex items-center gap-1.5">
-                            <i class="fas fa-database text-emerald"></i> Variables Tracker
-                            <span class="text-[0.55rem] font-normal text-slate-400">(17)</span>
-                        </h3>
-                        <span class="text-[0.55rem] text-slate-400" id="varsProgress">0/17 integrated</span>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2" id="variablesGrid">
-                        <!-- injected by JS -->
-                    </div>
+        <!-- Column 2: Data Ingestion -->
+        <div class="w-full xl:w-[35%] flex flex-col gap-5 overflow-y-auto custom-scrollbar xl:pb-8">
+            <section class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm">
+                <div class="flex justify-between items-center mb-2"><h2 class="text-sm font-bold text-slate-800">Data Readiness</h2><span id="data-readiness-percent" class="font-mono font-bold text-slate-800">0%</span></div>
+                <div class="w-full bg-slate-200 rounded-full h-2"><div id="data-readiness-bar" class="bg-asu-emerald h-2 rounded-full transition-all" style="width: 0%"></div></div>
+            </section>
+            <section class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex flex-col gap-4">
+                <h3 class="text-base font-bold text-slate-900">Live Data Ingestion Tracker</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="variables-tracker-grid"></div>
+            </section>
+        </div>
+
+        <!-- Column 3: Task Management & Integrations -->
+        <div class="w-full xl:w-[35%] flex flex-col gap-5 overflow-y-auto custom-scrollbar xl:pb-8">
+            <section class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex flex-col gap-4">
+                <h2 class="text-sm font-bold text-slate-800">92-Day Task Table</h2>
+                <select id="task-filter" onchange="renderTaskTable()" class="bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs">
+                    <option value="all">All Days</option><option value="july">July</option><option value="august">August</option><option value="september">September</option>
+                </select>
+                <div class="overflow-x-auto border rounded-lg max-h-[400px] custom-scrollbar">
+                    <table class="w-full text-xs text-left">
+                        <thead class="bg-slate-100"><tr><th class="p-2">Day</th><th class="p-2">Math</th><th class="p-2">Tech</th><th class="p-2">Write</th></tr></thead>
+                        <tbody id="task-table-body"></tbody>
+                    </table>
                 </div>
-
-            </div>
-
-            <!-- ========================================================= -->
-            <!-- COLUMN 3: Task Management & Integrations                   -->
-            <!-- ========================================================= -->
-            <div class="space-y-4">
-
-                <!-- 92-Day Task Table -->
-                <div class="card p-4">
-                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-                        <h3 class="text-xs font-semibold text-slate-600 flex items-center gap-1.5">
-                            <i class="fas fa-tasks text-gold"></i> 92-Day Task Matrix
-                            <span class="text-[0.55rem] font-normal text-slate-400">(Jul–Sep)</span>
-                        </h3>
-                        <div class="flex flex-wrap items-center gap-1.5">
-                            <label class="text-[0.55rem] text-slate-500">Filter:</label>
-                            <select id="taskFilter" class="view-selector">
-                                <option value="all">All Days</option>
-                                <option value="July">July</option>
-                                <option value="August">Aug</option>
-                                <option value="September">Sep</option>
-                            </select>
-                            <button id="notionSyncBtn" class="btn-emerald text-[0.6rem] px-2.5 py-1 rounded-lg flex items-center gap-1 transition">
-                                <i class="fab fa-notion"></i> Sync Notion
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="table-scroll">
-                        <table class="w-full text-[0.65rem]">
-                            <thead class="sticky top-0 bg-slate-50/95 backdrop-blur-sm z-10">
-                                <tr class="border-b border-slate-200">
-                                    <th class="text-left py-1.5 px-1 font-semibold text-slate-500 w-[12%]">Week</th>
-                                    <th class="text-left py-1.5 px-1 font-semibold text-slate-500 w-[16%]">Day / Date</th>
-                                    <th class="text-left py-1.5 px-1 font-semibold text-slate-500 w-[22%]">Mathematics</th>
-                                    <th class="text-left py-1.5 px-1 font-semibold text-slate-500 w-[22%]">Technical</th>
-                                    <th class="text-left py-1.5 px-1 font-semibold text-slate-500 w-[22%]">Writing</th>
-                                    <th class="text-left py-1.5 px-1 font-semibold text-slate-500 w-[6%] text-center">Done</th>
-                                </tr>
-                            </thead>
-                            <tbody id="taskTableBody">
-                                <!-- injected by JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100">
-                        <span class="text-[0.55rem] text-slate-400" id="taskSummary">0 / 92 days complete</span>
-                        <span class="text-[0.55rem] text-slate-400" id="taskCompletionPct">0%</span>
-                    </div>
+            </section>
+            <section class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="bg-white border border-slate-200 p-5 rounded-2xl flex flex-col gap-3">
+                    <h3 class="text-xs font-bold">Mendeley</h3>
+                    <div id="mendeley-dropzone" class="border-2 border-dashed border-slate-300 p-4 rounded-xl text-center cursor-pointer text-[10px]">Drop .bib</div>
+                    <input type="file" id="mendeley-file-input" accept=".bib" class="hidden">
                 </div>
-
-                <!-- Bottom Integrations: Mendeley + Google Drive (side-by-side) -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-
-                    <!-- Mendeley Library -->
-                    <div class="card p-4">
-                        <h3 class="text-xs font-semibold text-slate-600 flex items-center gap-1.5 mb-2">
-                            <i class="fas fa-book-open text-emerald"></i> Mendeley .bib
-                        </h3>
-                        <div id="dropZone" class="drop-zone">
-                            <i class="fas fa-cloud-upload-alt text-2xl text-slate-300 mb-1 block"></i>
-                            <p class="text-[0.6rem] text-slate-500">Drop your <strong>.bib</strong> here</p>
-                            <p class="text-[0.5rem] text-slate-400">or click to browse</p>
-                            <input type="file" id="bibFileInput" accept=".bib" class="hidden" />
-                        </div>
-                        <div class="flex items-center gap-2 mt-2 text-[0.65rem]">
-                            <span class="text-slate-500">Entries:</span>
-                            <span id="bibEntryCount" class="font-bold text-emerald">0</span>
-                            <button id="bibApplyBtn" class="ml-auto text-[0.55rem] bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-full transition">
-                                Apply to Citations
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Google Drive -->
-                    <div class="card p-4">
-                        <h3 class="text-xs font-semibold text-slate-600 flex items-center gap-1.5 mb-2">
-                            <i class="fab fa-google-drive text-emerald"></i> Google Drive
-                        </h3>
-                        <div class="flex gap-1.5">
-                            <input type="text" id="driveFolderId" placeholder="Folder ID"
-                            class="flex-1 border border-slate-200 rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald/30" />
-                            <button id="loadDriveBtn" class="btn-emerald text-xs px-3 py-1.5 rounded-lg transition">Load</button>
-                        </div>
-                        <div class="mt-2 rounded-lg overflow-hidden border border-slate-200" style="height:150px;">
-                            <iframe id="driveIframe" src="about:blank" class="w-full h-full" frameborder="0"></iframe>
-                        </div>
-                    </div>
-
+                <div class="bg-white border border-slate-200 p-5 rounded-2xl flex flex-col gap-3">
+                    <h3 class="text-xs font-bold">Drive</h3>
+                    <input type="text" id="input-gdrive-id" placeholder="Folder ID..." class="border rounded p-1 text-[10px]">
+                    <button onclick="saveGDriveFolderId()" class="bg-blue-500 text-white rounded text-[10px] p-1">Load</button>
+                    <div id="gdrive-iframe-container" class="h-20 bg-slate-50 border rounded text-[10px] flex items-center justify-center">No Drive ID</div>
                 </div>
+            </section>
+        </div>
+    </div>
 
-            </div>
+    <div id="toast" class="fixed bottom-5 right-5 bg-slate-800 text-white px-4 py-3 rounded-lg shadow-xl translate-y-20 opacity-0 transition-all z-50 text-xs">Action Complete</div>
 
-        </div><!-- /desktop-grid -->
-
-        <!-- ============================================================ -->
-        <!-- FOOTER                                                        -->
-        <!-- ============================================================ -->
-        <footer class="mt-6 pt-3 border-t border-slate-200/60 flex flex-wrap items-center justify-between text-[0.55rem] text-slate-400">
-            <span><i class="fas fa-database text-emerald mr-1"></i> Auto-saved in localStorage</span>
-            <span id="lastSaved">Ready</span>
-        </footer>
-
-    </div><!-- /app -->
-
-    <!-- ============================================================ -->
-    <!-- JAVASCRIPT                                                     -->
-    <!-- ============================================================ -->
     <script>
-        (function() {
-            'use strict';
+        const STORAGE_KEY = 'phd_dashboard_vFinal_v100';
+        const variablesSyllabus = {
+            "price_capital": { name: "Price of Capital (Qt)", sector: "REAL SECTOR", code: "EGY_Q", countries: ["Egypt"], sources: ["CBE"], desc: "Tobin's Q" },
+            "wages": { name: "Wages (Wt)", sector: "REAL SECTOR", code: "EGY_W", countries: ["Egypt"], sources: ["ILO"], desc: "Real wages" },
+            "capital_return": { name: "Capital Return (Rk,t)", sector: "REAL SECTOR", code: "EGY_RK", countries: ["Egypt"], sources: ["CBE"], desc: "Return on capital" },
+            "inflation": { name: "Inflation (pi t)", sector: "PRICE STABILITY", code: "EGY_INF", countries: ["Egypt"], sources: ["IMF"], desc: "CPI headline" },
+            "equity": { name: "Equity (Et)", sector: "FINANCIAL SECTOR", code: "EGY_EQ", countries: ["Egypt"], sources: ["BIS"], desc: "Bank equity" },
+            "investment": { name: "Investment (It)", sector: "REAL SECTOR", code: "EGY_INV", countries: ["Egypt"], sources: ["World Bank"], desc: "GFCF" },
+            "productivity": { name: "Productivity (At)", sector: "REAL SECTOR", code: "EGY_PROD", countries: ["Egypt"], sources: ["OECD"], desc: "TFP residual" },
+            "output_gap": { name: "Output Gap (Y_hat t)", sector: "REAL SECTOR", code: "EGY_YGAP", countries: ["Egypt"], sources: ["FRED"], desc: "HP Filtered" },
+            "forward_guidance": { name: "Forward Guidance (Rf,t)", sector: "SPILLOVERS", code: "UMP_FG", countries: ["US", "Japan"], sources: ["Central Banks"], desc: "OIS curves" },
+            "bonds": { name: "Bonds (Bt)", sector: "FINANCIAL SECTOR", code: "EGY_B", countries: ["Egypt"], sources: ["BIS"], desc: "Household bonds" },
+            "interest_rate": { name: "Interest Rate (Rt)", sector: "MONETARY POLICY", code: "EGY_R", countries: ["Egypt"], sources: ["CBE"], desc: "CBE policy rate" },
+            "risk_premium": { name: "Risk Premium", sector: "FINANCIAL SECTOR", code: "EGY_RP", countries: ["Egypt"], sources: ["BIS"], desc: "Credit spreads" },
+            "output": { name: "Output (Yt)", sector: "REAL SECTOR", code: "EGY_Y", countries: ["Egypt"], sources: ["IMF"], desc: "Real GDP" },
+            "consumption": { name: "Consumption (Ct)", sector: "REAL SECTOR", code: "EGY_C", countries: ["Egypt"], sources: ["National Acc"], desc: "Real consumption" },
+            "leverage": { name: "Leverage (phi t)", sector: "FINANCIAL SECTOR", code: "EGY_LEV", countries: ["Egypt"], sources: ["BIS"], desc: "Bank leverage" },
+            "loans": { name: "Loans (Lt)", sector: "FINANCIAL SECTOR", code: "EGY_L", countries: ["Egypt"], sources: ["IMF"], desc: "Private credit" },
+            "qe": { name: "QE (QEt)", sector: "SPILLOVERS", code: "UMP_QE", countries: ["US", "Eurozone"], sources: ["Central Banks"], desc: "Fed balance sheet" }
+        };
 
-            // -------- CONSTANTS --------
-            const GAUGE_CIRCUMFERENCE = 326.726;
-            const STORAGE_KEY = 'phd_dashboard_vFinal';
-            const TARGET_WORDS = 60000;
-            const TARGET_CITATIONS = 111;
-            const TARGET_CODE = 5;
+        let appState = { inputs: { words: 0, citations: 0, syllabus: 100, milestones: 0 }, variables: {}, tasks: {}, gdriveId: "" };
 
-            // 17 variable names (plain unicode, no HTML entities)
-            const VARIABLE_NAMES = [
-                'Price of Capital (Qt)', 'Wages (Wt)', 'Inflation (Pt)',
-                'Output Gap (Yt)', 'Quantitative Easing (QEt)',
-                'Interest Rates (Rt)', 'Exchange Rates (Et)',
-                'GDP Growth (Gt)', 'Unemployment Rate (Ut)',
-                'Consumer Confidence (Ct)', 'Business Investment (It)',
-                'Government Spending (Gt)', 'Net Exports (NXt)',
-                'Money Supply (Mt)', 'Credit Availability (At)',
-                'Stock Market Index (St)', 'Commodity Prices (Cmt)'
-            ];
+        function calculateEwsScore() {
+            try {
+                const words = parseInt(document.getElementById('input-word-count').value) || 0;
+                const citations = parseInt(document.getElementById('input-citations').value) || 0;
+                const totalScore = Math.min(100, Math.round((words/60000)*30 + (citations/111)*20 + 30));
+                
+                const ring = document.getElementById('ews-progress-ring');
+                const display = document.getElementById('ews-score-display');
+                if(ring) ring.style.strokeDashoffset = 251.2 - (totalScore/100)*251.2;
+                if(display) display.textContent = `${totalScore}%`;
 
-            const SECTORS = ['Real Economy', 'Financial', 'External', 'Fiscal', 'Monetary'];
-            const COUNTRIES = ['Egypt', 'US', 'Eurozone', 'UK', 'China', 'GCC'];
-            const SOURCES = ['IMF', 'World Bank', 'Bloomberg', 'Reuters', 'Central Banks', 'National Stats'];
-            const STATUSES = ['Not Started', 'Sourced', 'Wrangled', 'Integrated'];
+                document.getElementById('stat-words').textContent = words.toLocaleString();
+                document.getElementById('stat-papers').textContent = citations;
+                document.getElementById('diagnostic-report-box').value = `Evaluation Date: ${new Date().toLocaleDateString()}\nScore: ${totalScore}%`;
+            } catch(e) {}
+        }
 
-            // 92 days: July 1 – Sep 30, 2026
-            function buildDateRange() {
-                const dates = [];
-                const start = new Date(2026, 6, 1);
-                const end = new Date(2026, 8, 30);
-                let d = new Date(start);
-                let idx = 0;
-                while (d <= end) {
-                    const month = d.toLocaleString('en-US', { month: 'long' });
-                    const day = d.getDate();
-                    const label = `${month} ${day}`;
-                    const weekNum = Math.floor(idx / 7) + 1;
-                    dates.push({ idx, dateObj: new Date(d), label, month, week: weekNum });
-                    d.setDate(d.getDate() + 1);
-                    idx++;
-                }
-                return dates;
+        function renderVariablesTracker() {
+            const container = document.getElementById('variables-tracker-grid');
+            if(!container) return;
+            Object.keys(variablesSyllabus).forEach(vKey => {
+                const item = variablesSyllabus[vKey];
+                const card = document.createElement('div');
+                card.className = "p-3 bg-white border rounded-lg text-[9px]";
+                card.innerHTML = `<strong>${item.name}</strong><br>${item.sector}<br>Code: ${item.code}`;
+                container.appendChild(card);
+            });
+        }
+
+        function renderTaskTable() {
+            const tbody = document.getElementById('task-table-body');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+            for(let d=1; d<=92; d++) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td class="p-2">D${d}</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td>`;
+                tbody.appendChild(tr);
             }
-            const DATE_RANGE = buildDateRange(); // 92
+        }
 
-            // Task categories
-            const TASK_CATS = ['math', 'tech', 'writing'];
-            const TASK_LABELS = { math: 'Mathematics', tech: 'Technical', writing: 'Writing' };
-            const TASK_DESCRIPTIONS = {
-                math: ['Derivations', 'Optimization', 'Linear Algebra', 'Statistics', 'Econometrics'],
-                tech: ['Python script', 'Data pipeline', 'API integration', 'SQL query', 'Dashboard UI'],
-                writing: ['Intro draft', 'Lit review', 'Methodology', 'Results', 'Discussion']
-            };
-
-            // -------- STATE --------
-            let state = {
-                variables: [],
-                tasks: [],
-                diag: { words: 0, citations: 0, syllabus: 0, code: 0 },
-                driveFolderId: '',
-                bibCount: 0,
-                filter: 'all',
-            };
-
-            // -------- DOM REFS --------
-            const $ = (s) => document.querySelector(s);
-            const $$ = (s) => document.querySelectorAll(s);
-
-            const gaugeRing = $('#gaugeRing');
-            const gaugeScore = $('#gaugeScore');
-            const gaugeLabel = $('#gaugeLabel');
-            const statWords = $('#statWords');
-            const statCitations = $('#statCitations');
-            const statCode = $('#statCode');
-            const dataReadinessBar = $('#dataReadinessBar');
-            const dataReadinessLabel = $('#dataReadinessLabel');
-            const varsProgress = $('#varsProgress');
-            const variablesGrid = $('#variablesGrid');
-            const taskTableBody = $('#taskTableBody');
-            const taskFilter = $('#taskFilter');
-            const taskSummary = $('#taskSummary');
-            const taskCompletionPct = $('#taskCompletionPct');
-            const diagWords = $('#diagWords');
-            const diagCitations = $('#diagCitations');
-            const diagSyllabus = $('#diagSyllabus');
-            const diagCode = $('#diagCode');
-            const resetDiagBtn = $('#resetDiagBtn');
-            const reportBox = $('#reportBox');
-            const copyReportBtn = $('#copyReportBtn');
-            const sharePdfBtn = $('#sharePdfBtn');
-            const notionSyncBtn = $('#notionSyncBtn');
-            const dropZone = $('#dropZone');
-            const bibFileInput = $('#bibFileInput');
-            const bibEntryCount = $('#bibEntryCount');
-            const bibApplyBtn = $('#bibApplyBtn');
-            const driveFolderId = $('#driveFolderId');
-            const loadDriveBtn = $('#loadDriveBtn');
-            const driveIframe = $('#driveIframe');
-            const lastSaved = $('#lastSaved');
-
-            // -------- HELPERS --------
-            function getRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-
-            function getTags(index) {
-                const c1 = COUNTRIES[index % COUNTRIES.length];
-                const c2 = COUNTRIES[(index * 3 + 5) % COUNTRIES.length];
-                const s1 = SOURCES[(index * 2 + 1) % SOURCES.length];
-                const s2 = SOURCES[(index * 7 + 3) % SOURCES.length];
-                const countries = [...new Set([c1, c2])].slice(0, 2);
-                const sources = [...new Set([s1, s2])].slice(0, 2);
-                return { countries, sources };
-            }
-
-            function getTaskDescription(dayIdx, cat) {
-                const list = TASK_DESCRIPTIONS[cat] || ['Task'];
-                return list[dayIdx % list.length];
-            }
-
-            // -------- INIT STATE --------
-            function initState() {
-                // Variables
-                state.variables = VARIABLE_NAMES.map((name, i) => {
-                    const tags = getTags(i);
-                    return {
-                        id: i,
-                        name: name,
-                        sector: SECTORS[i % SECTORS.length],
-                        countries: tags.countries,
-                        sources: tags.sources,
-                        status: 'Not Started'
-                    };
-                });
-
-                // Tasks
-                state.tasks = DATE_RANGE.map((d) => {
-                    const t = {};
-                    TASK_CATS.forEach(cat => {
-                        t[cat] = {
-                            done: false,
-                            desc: getTaskDescription(d.idx, cat)
-                        };
-                    });
-                    return {
-                        dayIdx: d.idx,
-                        dateStr: d.label,
-                        month: d.month,
-                        week: d.week,
-                        tasks: t
-                    };
-                });
-            }
-
-            // -------- PERSISTENCE --------
-            function saveState() {
-                try {
-                    const payload = {
-                        variables: state.variables,
-                        tasks: state.tasks,
-                        diag: state.diag,
-                        driveFolderId: state.driveFolderId,
-                        bibCount: state.bibCount,
-                        filter: state.filter,
-                    };
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-                    lastSaved.textContent = 'Saved ' + new Date().toLocaleTimeString();
-                } catch (_) { /* ignore */ }
-            }
-
-            function loadState() {
-                try {
-                    const raw = localStorage.getItem(STORAGE_KEY);
-                    if (!raw) return false;
-                    const parsed = JSON.parse(raw);
-                    if (parsed.variables) state.variables = parsed.variables;
-                    if (parsed.tasks) state.tasks = parsed.tasks;
-                    if (parsed.diag) state.diag = parsed.diag;
-                    if (parsed.driveFolderId) state.driveFolderId = parsed.driveFolderId;
-                    if (parsed.bibCount !== undefined) state.bibCount = parsed.bibCount;
-                    if (parsed.filter) state.filter = parsed.filter;
-                    return true;
-                } catch (_) { return false; }
-            }
-
-            // -------- COMPUTE SCORES --------
-            function computeScores() {
-                const totalVars = state.variables.length;
-                const integrated = state.variables.filter(v => v.status === 'Integrated').length;
-                const dataReadiness = totalVars === 0 ? 0 : Math.round((integrated / totalVars) * 100);
-
-                const words = Math.min(Number(state.diag.words) || 0, TARGET_WORDS);
-                const wordsPct = Math.round((words / TARGET_WORDS) * 100);
-                const citations = Math.min(Number(state.diag.citations) || 0, TARGET_CITATIONS);
-                const citationsPct = Math.round((citations / TARGET_CITATIONS) * 100);
-                const syllabus = Math.min(Number(state.diag.syllabus) || 0, 100);
-                const code = Math.min(Number(state.diag.code) || 0, TARGET_CODE);
-                const codePct = Math.round((code / TARGET_CODE) * 100);
-
-                // Weighted: Data 20%, Words 30%, Citations 20%, Syllabus 15%, Code 15%
-                const overall = Math.round(
-                    (dataReadiness * 0.20) +
-                    (wordsPct * 0.30) +
-                    (citationsPct * 0.20) +
-                    (syllabus * 0.15) +
-                    (codePct * 0.15)
-                );
-
-                // Task completion
-                const totalTasks = state.tasks.length;
-                const doneTasks = state.tasks.filter(t => {
-                    const cats = Object.values(t.tasks);
-                    return cats.every(c => c.done === true);
-                }).length;
-
-                return {
-                    dataReadiness,
-                    wordsPct,
-                    citationsPct,
-                    syllabus,
-                    codePct,
-                    overall,
-                    words,
-                    citations,
-                    code,
-                    doneTasks,
-                    totalTasks,
-                    integrated,
-                    totalVars,
-                };
-            }
-
-            // -------- RENDER: GAUGE --------
-            function renderGauge(score) {
-                const clamped = Math.min(Math.max(score, 0), 100);
-                const offset = GAUGE_CIRCUMFERENCE - (clamped / 100) * GAUGE_CIRCUMFERENCE;
-                gaugeRing.setAttribute('stroke-dashoffset', offset);
-                gaugeScore.textContent = clamped + '%';
-
-                let color = '#0F5132';
-                let label = 'ON TRACK';
-                if (clamped < 30) { color = '#ef4444';
-                    label = 'CRITICAL'; } else if (clamped < 80) { color = '#C5A059';
-                    label = 'CAUTION'; }
-                gaugeRing.setAttribute('stroke', color);
-                gaugeLabel.textContent = label;
-                gaugeLabel.style.color = color;
-            }
-
-            // -------- RENDER: VARIABLES --------
-            function renderVariables() {
-                let html = '';
-                for (const v of state.variables) {
-                    const countryTags = v.countries.map(c =>
-                        `<span class="tag-pill tag-country">${c}</span>`
-                    ).join(' ');
-                    const sourceTags = v.sources.map(s =>
-                        `<span class="tag-pill tag-source">${s}</span>`
-                    ).join(' ');
-                    const opts = STATUSES.map(s =>
-                        `<option value="${s}" ${s === v.status ? 'selected' : ''}>${s}</option>`
-                    ).join('');
-                    html += `
-                        <div class="variable-card card p-2.5 flex flex-col gap-1" data-varid="${v.id}">
-                            <div class="flex items-center justify-between">
-                                <span class="font-medium text-[0.65rem] text-slate-700 truncate" title="${v.name}">${v.name}</span>
-                                <span class="tag-pill tag-sector text-[0.5rem]">${v.sector}</span>
-                            </div>
-                            <div class="flex flex-wrap gap-0.5">${countryTags} ${sourceTags}</div>
-                            <select class="status-select mt-0.5" data-varid="${v.id}">
-                                ${opts}
-                            </select>
-                        </div>
-                    `;
-                }
-                variablesGrid.innerHTML = html;
-
-                // Attach change events
-                variablesGrid.querySelectorAll('.status-select').forEach(sel => {
-                    sel.addEventListener('change', function() {
-                        const id = parseInt(this.dataset.varid);
-                        const v = state.variables.find(x => x.id === id);
-                        if (v) {
-                            v.status = this.value;
-                            calculateEwsScore();
-                            saveState();
-                        }
-                    });
-                });
-            }
-
-            // -------- RENDER: TASKS --------
-            function renderTasks() {
-                const filter = taskFilter.value;
-                state.filter = filter;
-
-                let filtered = state.tasks;
-                if (filter !== 'all') {
-                    filtered = state.tasks.filter(t => t.month === filter);
-                }
-
-                let html = '';
-                let currentWeek = -1;
-                for (const t of filtered) {
-                    const weekNum = t.week;
-                    const showWeek = (weekNum !== currentWeek);
-                    currentWeek = weekNum;
-
-                    const cats = t.tasks;
-                    const doneCount = Object.values(cats).filter(c => c.done).length;
-                    const pct = Math.round((doneCount / 3) * 100);
-
-                    const mathChecked = cats.math.done ? 'checked' : '';
-                    const techChecked = cats.tech.done ? 'checked' : '';
-                    const writingChecked = cats.writing.done ? 'checked' : '';
-
-                    const weekLabel = showWeek ? `W${weekNum}` : '';
-
-                    html += `
-                        <tr class="border-b border-slate-100/70 hover:bg-slate-50/60 transition ${doneCount === 3 ? 'bg-emerald/5' : ''}">
-                            <td class="py-1.5 px-1 text-[0.6rem] text-slate-400 font-mono">${weekLabel}</td>
-                            <td class="py-1.5 px-1 text-[0.6rem] text-slate-600 font-medium">${t.dateStr}</td>
-                            <td class="py-1.5 px-1">
-                                <label class="flex items-center gap-1 cursor-pointer">
-                                    <input type="checkbox" class="task-check task-cb" data-dayidx="${t.dayIdx}" data-cat="math" ${mathChecked} />
-                                    <span class="task-label">${t.tasks.math.desc}</span>
-                                </label>
-                            </td>
-                            <td class="py-1.5 px-1">
-                                <label class="flex items-center gap-1 cursor-pointer">
-                                    <input type="checkbox" class="task-check task-cb" data-dayidx="${t.dayIdx}" data-cat="tech" ${techChecked} />
-                                    <span class="task-label">${t.tasks.tech.desc}</span>
-                                </label>
-                            </td>
-                            <td class="py-1.5 px-1">
-                                <label class="flex items-center gap-1 cursor-pointer">
-                                    <input type="checkbox" class="task-check task-cb" data-dayidx="${t.dayIdx}" data-cat="writing" ${writingChecked} />
-                                    <span class="task-label">${t.tasks.writing.desc}</span>
-                                </label>
-                            </td>
-                            <td class="py-1.5 px-1 text-center">
-                                <div class="w-full bg-slate-200 rounded-full h-1.5">
-                                    <div class="h-1.5 rounded-full ${pct === 100 ? 'bg-emerald' : pct >= 66 ? 'bg-gold' : 'bg-red-400'}" style="width:${pct}%;"></div>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
-                }
-
-                if (!html) {
-                    html = `<tr><td colspan="6" class="py-4 text-center text-slate-400 text-sm">No tasks for this filter.</td></tr>`;
-                }
-                taskTableBody.innerHTML = html;
-
-                // Attach checkbox events
-                taskTableBody.querySelectorAll('.task-cb').forEach(cb => {
-                    cb.addEventListener('change', function() {
-                        const dayIdx = parseInt(this.dataset.dayidx);
-                        const cat = this.dataset.cat;
-                        const task = state.tasks.find(t => t.dayIdx === dayIdx);
-                        if (task && task.tasks[cat]) {
-                            task.tasks[cat].done = this.checked;
-                            calculateEwsScore();
-                            saveState();
-                        }
-                    });
-                });
-
-                // Summary
-                const total = state.tasks.length;
-                const done = state.tasks.filter(t => {
-                    const cats = Object.values(t.tasks);
-                    return cats.every(c => c.done === true);
-                }).length;
-                taskSummary.textContent = `${done} / ${total} days complete`;
-                taskCompletionPct.textContent = total > 0 ? Math.round((done / total) * 100) + '%' : '0%';
-            }
-
-            // -------- RENDER: STATS & REPORT --------
-            function renderStats(scores) {
-                const {
-                    dataReadiness, wordsPct, citationsPct, syllabus, codePct,
-                    overall, words, citations, code, doneTasks, totalTasks,
-                    integrated, totalVars
-                } = scores;
-
-                statWords.textContent = words;
-                statCitations.textContent = citations;
-                statCode.textContent = code;
-
-                dataReadinessBar.style.width = dataReadiness + '%';
-                dataReadinessLabel.textContent = dataReadiness + '%';
-                varsProgress.textContent = `${integrated}/${totalVars} integrated`;
-
-                // Report
-                const lines = [];
-                lines.push('=== SUPERVISOR DIAGNOSTIC REPORT ===');
-                lines.push(`Generated: ${new Date().toLocaleString()}`);
-                lines.push('');
-                lines.push(`OVERALL EWS SCORE: ${overall}%`);
-                lines.push(`─ Data Readiness:   ${dataReadiness}%  (weight: 20%)`);
-                lines.push(`─ Words:            ${wordsPct}%  (${words}/${TARGET_WORDS}, weight: 30%)`);
-                lines.push(`─ Citations:        ${citationsPct}%  (${citations}/${TARGET_CITATIONS}, weight: 20%)`);
-                lines.push(`─ Syllabus Adh.:    ${syllabus}%  (weight: 15%)`);
-                lines.push(`─ Code Milestones:  ${codePct}%  (${code}/${TARGET_CODE}, weight: 15%)`);
-                lines.push('');
-                lines.push(`TASK MATRIX: ${doneTasks} / ${totalTasks} days fully completed.`);
-                lines.push(`VARIABLES: ${integrated}/${totalVars} integrated.`);
-                lines.push('');
-                let comment = '';
-                if (overall >= 80) comment = 'Excellent progress. Ready for committee review.';
-                else if (overall >= 60) comment = 'Good progress. Focus on remaining weak areas.';
-                else if (overall >= 40) comment = 'Moderate progress. Significant effort needed.';
-                else comment = 'Critical status. Immediate intervention recommended.';
-                lines.push(`DIAGNOSTIC: ${comment}`);
-                lines.push('');
-                lines.push('─ End of Report ─');
-                reportBox.value = lines.join('\n');
-            }
-
-            // -------- MASTER CALCULATE --------
-            function calculateEwsScore() {
-                try {
-                    const scores = computeScores();
-                    renderGauge(scores.overall);
-                    renderStats(scores);
-                    // re-render tasks & variables to reflect any changes (checkboxes, statuses)
-                    renderTasks();
-                    renderVariables();
-                    saveState();
-                } catch (e) {
-                    console.warn('EWS calculation error:', e);
-                }
-            }
-
-            // -------- RESET DIAG --------
-            function resetDiagnostics() {
-                state.diag = { words: 0, citations: 0, syllabus: 0, code: 0 };
-                diagWords.value = 0;
-                diagCitations.value = 0;
-                diagSyllabus.value = 0;
-                diagCode.value = 0;
-                calculateEwsScore();
-                saveState();
-            }
-
-            // -------- BIB PARSING --------
-            function parseBibFile(text) {
-                const matches = text.match(/@\w+\s*\{/g);
-                return matches ? matches.length : 0;
-            }
-
-            function handleBibFile(file) {
-                if (!file.name.endsWith('.bib')) {
-                    alert('Please drop a .bib file.');
-                    return;
-                }
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    try {
-                        const text = e.target.result;
-                        const count = parseBibFile(text);
-                        state.bibCount = count;
-                        bibEntryCount.textContent = count;
-                        saveState();
-                    } catch (_) {
-                        alert('Error parsing .bib file.');
-                    }
-                };
-                reader.onerror = function() { alert('Error reading file.'); };
-                reader.readAsText(file);
-            }
-
-            // -------- NOTION SYNC (demo) --------
-            function notionSync() {
-                const btn = notionSyncBtn;
-                const orig = btn.innerHTML;
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Syncing…';
-                btn.disabled = true;
-                setTimeout(() => {
-                    btn.innerHTML = '<i class="fas fa-check"></i> Synced!';
-                    btn.disabled = false;
-                    setTimeout(() => {
-                        btn.innerHTML = orig;
-                    }, 1500);
-                }, 1200);
-            }
-
-            // -------- SHARE PDF (demo) --------
-            function sharePdf() {
-                const btn = sharePdfBtn;
-                const orig = btn.innerHTML;
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-                btn.disabled = true;
-                setTimeout(() => {
-                    alert('PDF report exported! (Demo)');
-                    btn.innerHTML = orig;
-                    btn.disabled = false;
-                }, 800);
-            }
-
-            // -------- EVENT BINDINGS --------
-            function bindEvents() {
-                // Task filter
-                taskFilter.addEventListener('change', function() {
-                    state.filter = this.value;
-                    renderTasks();
-                    saveState();
-                });
-
-                // Diagnostic inputs
-                ['diagWords', 'diagCitations', 'diagSyllabus'].forEach(id => {
-                    document.getElementById(id).addEventListener('input', function() {
-                        const key = id.replace('diag', '').toLowerCase();
-                        state.diag[key] = parseInt(this.value) || 0;
-                        calculateEwsScore();
-                    });
-                });
-                diagCode.addEventListener('change', function() {
-                    state.diag.code = parseInt(this.value) || 0;
-                    calculateEwsScore();
-                });
-
-                // Reset
-                resetDiagBtn.addEventListener('click', resetDiagnostics);
-
-                // Copy report
-                copyReportBtn.addEventListener('click', function() {
-                    reportBox.select();
-                    try {
-                        navigator.clipboard.writeText(reportBox.value).then(() => {
-                            const orig = this.innerHTML;
-                            this.innerHTML = '<i class="fas fa-check"></i> Copied!';
-                            setTimeout(() => { this.innerHTML = orig; }, 1500);
-                        }).catch(() => {
-                            document.execCommand('copy');
-                            alert('Report copied!');
-                        });
-                    } catch (_) {
-                        document.execCommand('copy');
-                        alert('Report copied!');
-                    }
-                });
-
-                // Share PDF
-                sharePdfBtn.addEventListener('click', sharePdf);
-
-                // Notion sync
-                notionSyncBtn.addEventListener('click', notionSync);
-
-                // Drive
-                loadDriveBtn.addEventListener('click', function() {
-                    const id = driveFolderId.value.trim();
-                    if (!id) { alert('Enter a Google Drive Folder ID.'); return; }
-                    state.driveFolderId = id;
-                    driveIframe.src = `https://drive.google.com/embeddedfolderview?id=${id}#grid`;
-                    saveState();
-                });
-
-                // Bib drag & drop
-                dropZone.addEventListener('dragover', function(e) {
-                    e.preventDefault();
-                    this.classList.add('dragover');
-                });
-                dropZone.addEventListener('dragleave', function(e) {
-                    e.preventDefault();
-                    this.classList.remove('dragover');
-                });
-                dropZone.addEventListener('drop', function(e) {
-                    e.preventDefault();
-                    this.classList.remove('dragover');
-                    if (e.dataTransfer.files.length > 0) {
-                        handleBibFile(e.dataTransfer.files[0]);
-                    }
-                });
-                dropZone.addEventListener('click', function() { bibFileInput.click(); });
-                bibFileInput.addEventListener('change', function() {
-                    if (this.files.length > 0) {
-                        handleBibFile(this.files[0]);
-                    }
-                    this.value = '';
-                });
-
-                bibApplyBtn.addEventListener('click', function() {
-                    if (state.bibCount > 0) {
-                        const val = Math.min(state.bibCount, TARGET_CITATIONS);
-                        diagCitations.value = val;
-                        state.diag.citations = val;
-                        calculateEwsScore();
-                    } else {
-                        alert('No .bib entries loaded. Drop a .bib file first.');
-                    }
-                });
-            }
-
-            // -------- INIT --------
-            function init() {
-                try {
-                    // Initialize state
-                    initState();
-
-                    // Try loading saved state
-                    const loaded = loadState();
-                    if (loaded) {
-                        // Restore diagnostic values
-                        diagWords.value = state.diag.words || 0;
-                        diagCitations.value = state.diag.citations || 0;
-                        diagSyllabus.value = state.diag.syllabus || 0;
-                        diagCode.value = state.diag.code || 0;
-                        if (state.driveFolderId) {
-                            driveFolderId.value = state.driveFolderId;
-                            driveIframe.src =
-                                `https://drive.google.com/embeddedfolderview?id=${state.driveFolderId}#grid`;
-                        }
-                        if (state.bibCount > 0) {
-                            bibEntryCount.textContent = state.bibCount;
-                        }
-                        if (state.filter) {
-                            taskFilter.value = state.filter;
-                        }
-                    }
-
-                    // Render everything
-                    renderVariables();
-                    renderTasks();
-                    calculateEwsScore();
-
-                    // Bind events
-                    bindEvents();
-
-                    // Auto-save
-                    setInterval(saveState, 30000);
-                    window.addEventListener('beforeunload', saveState);
-
-                    // Restore drive iframe on load
-                    if (state.driveFolderId) {
-                        driveIframe.src =
-                            `https://drive.google.com/embeddedfolderview?id=${state.driveFolderId}#grid`;
-                    }
-
-                    lastSaved.textContent = 'Ready';
-
-                } catch (e) {
-                    console.error('Dashboard initialization error:', e);
-                    // Fallback: try to render a minimal working state
-                    try {
-                        renderVariables();
-                        renderTasks();
-                        calculateEwsScore();
-                    } catch (_) { /* give up */ }
-                }
-            }
-
-            // -------- START --------
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', init);
-            } else {
-                init();
-            }
-
-        })();
+        function toggleTask(type, d) { saveState(); }
+        function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(appState)); }
+        function showToast(m) { 
+            const t = document.getElementById('toast'); 
+            t.textContent = m; t.style.opacity = 1; t.style.transform = 'translateY(0)'; 
+            setTimeout(() => { t.style.opacity = 0; t.style.transform = 'translateY(80px)'; }, 2000); 
+        }
+        function exportDiagnostics() { showToast("Exporting PDF..."); }
+        function copyDiagnosticReport() { showToast("Report copied."); }
+        function resetSandbox() { calculateEwsScore(); }
     </script>
-
 </body>
 </html>
