@@ -10,11 +10,11 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f2f5;
+            background-color: #f4f5f7;
         }
         
         /* Custom scrollbar for a cleaner look */
-        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
@@ -33,465 +33,356 @@
         
         .dial-progress {
             fill: none;
-            stroke: #00e676;
+            stroke: #00b140; /* Primary Green */
             stroke-width: 12;
-            stroke-dasharray: 400;
-            stroke-dashoffset: 40; /* 90% progress */
+            stroke-dasharray: 377; /* 2 * pi * r (r=60) */
+            stroke-dashoffset: 377; /* Starts at 0% */
             stroke-linecap: round;
             transform: rotate(-90deg);
             transform-origin: 50% 50%;
-            transition: stroke-dashoffset 1s ease-in-out;
+            transition: stroke-dashoffset 0.8s ease-in-out, stroke 0.3s;
         }
 
-        .dial-inner {
-            fill: none;
-            stroke: #00b140;
-            stroke-width: 4;
-            stroke-dasharray: 300;
-            stroke-dashoffset: 30;
-            transform: rotate(-90deg);
-            transform-origin: 50% 50%;
+        .transition-width {
+            transition: width 0.8s ease-in-out;
         }
     </style>
 </head>
-<body class="p-4 md:p-8 text-gray-800 flex justify-center">
+<body class="p-4 sm:p-6 lg:p-8 text-gray-800 flex justify-center min-h-screen">
 
-    <div class="max-w-3xl w-full flex flex-col gap-6">
+    <div class="max-w-[850px] w-full flex flex-col gap-6">
         
         <!-- Header -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="h-3 w-full bg-[#0b5e32]"></div>
-            <div class="p-6 flex items-center gap-4">
-                <div class="w-16 h-16 bg-gray-100 rounded flex items-center justify-center text-[#0b5e32] border border-gray-200">
-                    <i class="fa-solid fa-university text-3xl"></i>
+            <div class="h-2.5 w-full bg-[#0b5e32]"></div>
+            <div class="p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <div class="w-14 h-14 bg-gray-50 rounded flex shrink-0 items-center justify-center text-[#0b5e32] border border-gray-200">
+                    <i class="fa-solid fa-university text-2xl"></i>
                 </div>
                 <div>
-                    <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Ain Shams University</h2>
-                    <h1 class="text-xl md:text-2xl font-bold text-gray-900 mt-1">PhD Performance Dashboard & Supervisor Portal</h1>
+                    <h2 class="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-1">Ain Shams University</h2>
+                    <h1 class="text-xl sm:text-2xl font-bold text-gray-900 leading-tight">PhD Performance Dashboard & Supervisor Portal</h1>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <!-- EWS Monitor -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-6">
             <h3 class="font-bold text-lg text-gray-800">EWS Monitor</h3>
-            <p class="text-sm text-gray-500 mb-6">Dynamic circular dial</p>
+            <p class="text-sm text-gray-500 mb-6">Dynamic tracking aggregate</p>
             
-            <div class="flex flex-col md:flex-row items-center justify-center md:justify-start gap-12 md:pl-8">
-                <div class="dial-container flex items-center justify-center relative">
+            <div class="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-8 sm:gap-12 sm:pl-8">
+                <div class="dial-container flex items-center justify-center shrink-0">
                     <svg class="w-full h-full absolute top-0 left-0" viewBox="0 0 150 150">
                         <circle class="dial-bg" cx="75" cy="75" r="60"></circle>
-                        <circle class="dial-inner" cx="75" cy="75" r="50"></circle>
-                        <circle class="dial-progress" cx="75" cy="75" r="60"></circle>
+                        <circle id="ewsDial" class="dial-progress" cx="75" cy="75" r="60"></circle>
                     </svg>
-                    <span class="text-3xl font-bold text-gray-900 relative z-10">90%</span>
+                    <span id="ewsText" class="text-3xl font-bold text-gray-900 relative z-10">0%</span>
                 </div>
-                <div class="text-center md:text-left">
-                    <h2 class="text-2xl font-bold text-[#00b140] tracking-wide">GREEN: ON TRACK</h2>
-                    <h2 class="text-xl font-bold text-gray-900 mt-2 tracking-wide">GREEN: ON TRACK</h2>
+                <div class="text-center sm:text-left">
+                    <h2 id="ewsStatusColor" class="text-2xl font-black text-gray-400 tracking-wide mb-1 transition-colors">INITIALIZING</h2>
+                    <p id="ewsStatusText" class="text-sm text-gray-500 font-medium">Awaiting data inputs...</p>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <!-- Quantitative Metrics Grid -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-6">
             <h3 class="font-bold text-lg text-gray-800 mb-1">Quantitative Metrics Grid</h3>
-            <p class="text-sm text-gray-500 mb-4">Visualizer progress dials are shared</p>
+            <p class="text-sm text-gray-500 mb-5">Visualizer progress dials are synced to Logger</p>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <!-- Metric 1 -->
-                <div class="border border-gray-200 rounded-lg p-4 flex flex-col justify-between">
-                    <div>
-                        <h4 class="text-sm font-semibold text-gray-700">Drafted Words</h4>
-                        <div class="text-3xl font-bold text-gray-900 my-2">60,000</div>
-                    </div>
-                    <div>
-                        <div class="text-xs text-right text-gray-500 mb-1">60,000 target</div>
-                        <div class="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
-                            <div class="h-full bg-[#0b5e32] w-full"></div>
-                        </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <h4 class="text-sm font-semibold text-gray-700">Drafted Words</h4>
+                    <div id="displayWords" class="text-3xl font-bold text-gray-900 my-2">0</div>
+                    <div class="text-xs text-right text-gray-500 mb-1">60,000 target</div>
+                    <div class="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
+                        <div id="progressWords" class="h-full bg-[#0b5e32] transition-width" style="width: 0%"></div>
                     </div>
                 </div>
-                <!-- Metric 2 -->
-                <div class="border border-gray-200 rounded-lg p-4 flex flex-col justify-between">
-                    <div>
-                        <h4 class="text-sm font-semibold text-gray-700">Papers Citations</h4>
-                        <div class="text-3xl font-bold text-gray-900 my-2">111</div>
-                    </div>
-                    <div>
-                        <div class="text-xs text-right text-gray-500 mb-1">111 target</div>
-                        <div class="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
-                            <div class="h-full bg-[#b89535] w-full"></div>
-                        </div>
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <h4 class="text-sm font-semibold text-gray-700">Papers Citations</h4>
+                    <div id="displayCitations" class="text-3xl font-bold text-gray-900 my-2">0</div>
+                    <div class="text-xs text-right text-gray-500 mb-1">111 target</div>
+                    <div class="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
+                        <div id="progressCitations" class="h-full bg-[#8b6d20] transition-width" style="width: 0%"></div>
                     </div>
                 </div>
-                <!-- Metric 3 -->
-                <div class="border border-gray-200 rounded-lg p-4 flex flex-col justify-between">
-                    <div>
-                        <h4 class="text-sm font-semibold text-gray-700">Code Milestones</h4>
-                        <div class="text-3xl font-bold text-gray-900 my-2">5</div>
-                    </div>
-                    <div>
-                        <div class="text-xs text-right text-gray-500 mb-1">5 targets</div>
-                        <div class="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
-                            <div class="h-full bg-[#b89535] w-full"></div>
-                        </div>
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <h4 class="text-sm font-semibold text-gray-700">Code Milestones</h4>
+                    <div id="displayMilestones" class="text-3xl font-bold text-gray-900 my-2">0</div>
+                    <div class="text-xs text-right text-gray-500 mb-1">5 targets</div>
+                    <div class="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
+                        <div id="progressMilestones" class="h-full bg-[#8b6d20] transition-width" style="width: 0%"></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col justify-center">
+        <!-- Data Readiness Bar -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-6">
             <div class="flex justify-between items-center mb-3">
                 <h3 class="font-bold text-gray-800">Data Readiness Bar</h3>
-                <span class="font-bold text-gray-900">92%</span>
+                <span id="displayReadiness" class="font-bold text-gray-900">0%</span>
             </div>
-            <div class="h-2.5 w-full bg-gray-200 rounded-full overflow-hidden relative flex items-center">
-                <div class="absolute w-3 h-3 bg-gray-300 rounded-full left-0 -ml-1"></div>
-                <div class="h-full bg-[#0b5e32] w-[92%] rounded-full"></div>
+            <div class="h-2.5 w-full bg-gray-100 rounded-full overflow-hidden">
+                <div id="progressReadiness" class="h-full bg-[#0b5e32] rounded-full transition-width" style="width: 0%"></div>
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <!-- Live Data & Variables Ingestion Tracker -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-6 mb-2">
             <h3 class="font-bold text-lg text-gray-800 mb-1">Live Data & Variables Ingestion Tracker</h3>
-            <p class="text-sm text-gray-500 mb-6">Several unique layouts, standardized</p>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Card Generator Script - Generating 6 Cards to match layout -->
-                <script>
-                    const cardData = [
-                        { title: "Price of Capital (Qt)", status: "Integrated", type: "Qt" },
-                        { title: "Price of Capital (Qt)", status: "Integrated", type: "Qt" },
-                        { title: "Price of Capital (Qt)", status: "Integrated", type: "Qt" },
-                        { title: "Price of Capital (Q1)", status: "Integrated", type: "Q1" },
-                        { title: "Price of Capital (Q1)", status: "Wrangled", type: "Q1" },
-                        { title: "Price of Capital (Q1)", status: "Not Started", type: "Q1" }
-                    ];
-
-                    cardData.forEach(card => {
-                        document.write(`
-                        <div class="border border-gray-200 rounded-lg p-4">
-                            <h4 class="font-bold text-gray-900">${card.title}</h4>
-                            <p class="text-xs text-gray-500 mb-3">Target Sector</p>
-                            
-                            <div class="mb-3">
-                                <p class="text-xs font-semibold text-gray-700 mb-1">Countries</p>
-                                <div class="flex flex-wrap gap-1">
-                                    <span class="px-2 py-0.5 text-[10px] font-bold text-white bg-[#0b5e32] rounded-full">Egypt</span>
-                                    <span class="px-2 py-0.5 text-[10px] font-bold text-white bg-[#1a5b82] rounded-full">US</span>
-                                    <span class="px-2 py-0.5 text-[10px] font-bold text-white bg-[#702082] rounded-full">Eurozone</span>
-                                    <span class="px-2 py-0.5 text-[10px] font-bold text-white bg-[#201060] rounded-full">ETS</span>
-                                </div>
-                            </div>
-
-                            <div class="mb-4">
-                                <p class="text-xs font-semibold text-gray-700 mb-1">Sources</p>
-                                <div class="flex flex-wrap gap-1">
-                                    <span class="px-2 py-0.5 text-[10px] font-bold text-white bg-[#d98b26] rounded-full">Bloomberg</span>
-                                    <span class="px-2 py-0.5 text-[10px] font-bold text-white bg-[#201060] rounded-full">BIS</span>
-                                    <span class="px-2 py-0.5 text-[10px] font-bold text-white bg-[#a83232] rounded-full">CSE</span>
-                                    <span class="px-2 py-0.5 text-[10px] font-bold text-white bg-[#c46868] rounded-full">Roses</span>
-                                </div>
-                            </div>
-
-                            <select class="w-full text-sm border border-gray-300 rounded p-1.5 text-gray-700 focus:outline-none focus:border-gray-500">
-                                <option ${card.status === 'Integrated' ? 'selected' : ''}>Integrated</option>
-                                <option ${card.status === 'Wrangled' ? 'selected' : ''}>Wrangled</option>
-                                <option ${card.status === 'Not Started' ? 'selected' : ''}>Not Started</option>
-                            </select>
-                        </div>
-                        `);
-                    });
-                </script>
+            <p class="text-sm text-gray-500 mb-5">Database schema and source integration status synced from Notion.</p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-h-[500px] overflow-y-auto pr-2" style="scrollbar-width: thin;">
+                <!-- Variable 1 -->
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col gap-3 bg-white hover:shadow-md transition-shadow">
+                    <h4 class="font-bold text-gray-800 text-sm">Price of Capital (Q<sub>t</sub>)</h4>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Countries</div><div class="flex flex-wrap gap-1"><span class="text-[10px] px-1.5 py-0.5 rounded bg-[#d3e5ef] text-[#183347]">Egypt</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-[#f4e0e9] text-[#7a3b54]">US</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800">Eurozone</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800">UK</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-red-100 text-red-800">Switzerland</span></div></div>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Sources</div><div class="flex flex-wrap gap-1"><span class="text-[9px] px-1.5 py-0.5 rounded bg-pink-50 text-pink-700 border border-pink-100">Central Banks</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-yellow-50 text-yellow-700 border border-yellow-100">Bloomberg</span></div></div>
+                    <select class="mt-auto w-full text-xs border border-gray-300 rounded p-1.5 text-gray-700 focus:outline-none focus:ring-1 focus:ring-[#0b5e32] bg-gray-50"><option>Not Started</option><option>In Progress</option><option>Wrangled</option><option>Integrated</option></select>
+                </div>
+                <!-- Variable 2 -->
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col gap-3 bg-white hover:shadow-md transition-shadow">
+                    <h4 class="font-bold text-gray-800 text-sm">Wages (W<sub>t</sub>)</h4>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Countries</div><div class="flex flex-wrap gap-1"><span class="text-[10px] px-1.5 py-0.5 rounded bg-[#d3e5ef] text-[#183347]">Egypt</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-[#f4e0e9] text-[#7a3b54]">US</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800">Eurozone</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800">UK</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-red-100 text-red-800">Switzerland</span></div></div>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Sources</div><div class="flex flex-wrap gap-1"><span class="text-[9px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-700 border border-gray-200">ILO</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-orange-50 text-orange-700 border border-orange-100">National Accounts</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-700 border border-gray-200">World Bank</span></div></div>
+                    <select class="mt-auto w-full text-xs border border-gray-300 rounded p-1.5 text-gray-700 focus:outline-none focus:ring-1 focus:ring-[#0b5e32] bg-gray-50"><option>Not Started</option><option>In Progress</option><option>Wrangled</option><option>Integrated</option></select>
+                </div>
+                <!-- Variable 3 -->
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col gap-3 bg-white hover:shadow-md transition-shadow">
+                    <h4 class="font-bold text-gray-800 text-sm">Capital Return (R<sub>kt</sub>)</h4>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Countries</div><div class="flex flex-wrap gap-1"><span class="text-[10px] px-1.5 py-0.5 rounded bg-[#d3e5ef] text-[#183347]">Egypt</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-[#f4e0e9] text-[#7a3b54]">US</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800">Eurozone</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800">UK</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-red-100 text-red-800">Switzerland</span></div></div>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Sources</div><div class="flex flex-wrap gap-1"><span class="text-[9px] px-1.5 py-0.5 rounded bg-pink-50 text-pink-700 border border-pink-100">Central Banks</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-orange-50 text-orange-700 border border-orange-100">National Accounts</span></div></div>
+                    <select class="mt-auto w-full text-xs border border-gray-300 rounded p-1.5 text-gray-700 focus:outline-none focus:ring-1 focus:ring-[#0b5e32] bg-gray-50"><option>Not Started</option><option>In Progress</option><option>Wrangled</option><option>Integrated</option></select>
+                </div>
+                <!-- Variable 4 -->
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col gap-3 bg-white hover:shadow-md transition-shadow">
+                    <h4 class="font-bold text-gray-800 text-sm">Inflation (π<sub>t</sub>)</h4>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Countries</div><div class="flex flex-wrap gap-1"><span class="text-[10px] px-1.5 py-0.5 rounded bg-[#d3e5ef] text-[#183347]">Egypt</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-[#f4e0e9] text-[#7a3b54]">US</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800">Eurozone</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800">UK</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-red-100 text-red-800">Switzerland</span></div></div>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Sources</div><div class="flex flex-wrap gap-1"><span class="text-[9px] px-1.5 py-0.5 rounded bg-pink-50 text-pink-700 border border-pink-100">Central Banks</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-red-50 text-red-700 border border-red-100">IMF</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-700 border border-gray-200">World Bank</span></div></div>
+                    <select class="mt-auto w-full text-xs border border-gray-300 rounded p-1.5 text-gray-700 focus:outline-none focus:ring-1 focus:ring-[#0b5e32] bg-gray-50"><option>Not Started</option><option>In Progress</option><option>Wrangled</option><option>Integrated</option></select>
+                </div>
+                <!-- Variable 5 -->
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col gap-3 bg-white hover:shadow-md transition-shadow">
+                    <h4 class="font-bold text-gray-800 text-sm">Equity (E<sub>t</sub>)</h4>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Countries</div><div class="flex flex-wrap gap-1"><span class="text-[10px] px-1.5 py-0.5 rounded bg-[#d3e5ef] text-[#183347]">Egypt</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-[#f4e0e9] text-[#7a3b54]">US</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800">Eurozone</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800">UK</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-red-100 text-red-800">Switzerland</span></div></div>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Sources</div><div class="flex flex-wrap gap-1"><span class="text-[9px] px-1.5 py-0.5 rounded bg-pink-50 text-pink-700 border border-pink-100">Central Banks</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-green-50 text-green-700 border border-green-100">BIS</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-yellow-50 text-yellow-700 border border-yellow-100">Bloomberg</span></div></div>
+                    <select class="mt-auto w-full text-xs border border-gray-300 rounded p-1.5 text-gray-700 focus:outline-none focus:ring-1 focus:ring-[#0b5e32] bg-gray-50"><option>Not Started</option><option>In Progress</option><option>Wrangled</option><option>Integrated</option></select>
+                </div>
+                <!-- Variable 6 -->
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col gap-3 bg-white hover:shadow-md transition-shadow">
+                    <h4 class="font-bold text-gray-800 text-sm">Investment (I<sub>t</sub>)</h4>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Countries</div><div class="flex flex-wrap gap-1"><span class="text-[10px] px-1.5 py-0.5 rounded bg-[#d3e5ef] text-[#183347]">Egypt</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-[#f4e0e9] text-[#7a3b54]">US</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800">Eurozone</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800">UK</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-red-100 text-red-800">Switzerland</span></div></div>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Sources</div><div class="flex flex-wrap gap-1"><span class="text-[9px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-700 border border-gray-200">World Bank</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-red-50 text-red-700 border border-red-100">IMF</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-orange-50 text-orange-700 border border-orange-100">National Accounts</span></div></div>
+                    <select class="mt-auto w-full text-xs border border-gray-300 rounded p-1.5 text-gray-700 focus:outline-none focus:ring-1 focus:ring-[#0b5e32] bg-gray-50"><option>Not Started</option><option>In Progress</option><option>Wrangled</option><option>Integrated</option></select>
+                </div>
+                <!-- Variable 7 -->
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col gap-3 bg-white hover:shadow-md transition-shadow">
+                    <h4 class="font-bold text-gray-800 text-sm">Productivity (A<sub>t</sub>)</h4>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Countries</div><div class="flex flex-wrap gap-1"><span class="text-[10px] px-1.5 py-0.5 rounded bg-[#d3e5ef] text-[#183347]">Egypt</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-[#f4e0e9] text-[#7a3b54]">US</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800">Eurozone</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800">UK</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-red-100 text-red-800">Switzerland</span></div></div>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Sources</div><div class="flex flex-wrap gap-1"><span class="text-[9px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-700 border border-gray-200">World Bank</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-orange-50 text-orange-700 border border-orange-100">OECD</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-red-50 text-red-700 border border-red-100">IMF</span></div></div>
+                    <select class="mt-auto w-full text-xs border border-gray-300 rounded p-1.5 text-gray-700 focus:outline-none focus:ring-1 focus:ring-[#0b5e32] bg-gray-50"><option>Not Started</option><option>In Progress</option><option>Wrangled</option><option>Integrated</option></select>
+                </div>
+                <!-- Variable 8 -->
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col gap-3 bg-white hover:shadow-md transition-shadow">
+                    <h4 class="font-bold text-gray-800 text-sm">Output Gap (Ỹ<sub>t</sub>)</h4>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Countries</div><div class="flex flex-wrap gap-1"><span class="text-[10px] px-1.5 py-0.5 rounded bg-[#d3e5ef] text-[#183347]">Egypt</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-[#f4e0e9] text-[#7a3b54]">US</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800">Eurozone</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800">UK</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-red-100 text-red-800">Switzerland</span></div></div>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Sources</div><div class="flex flex-wrap gap-1"><span class="text-[9px] px-1.5 py-0.5 rounded bg-red-50 text-red-700 border border-red-100">FRED</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-orange-50 text-orange-700 border border-orange-100">OECD</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-red-50 text-red-700 border border-red-100">IMF</span></div></div>
+                    <select class="mt-auto w-full text-xs border border-gray-300 rounded p-1.5 text-gray-700 focus:outline-none focus:ring-1 focus:ring-[#0b5e32] bg-gray-50"><option>Not Started</option><option>In Progress</option><option>Wrangled</option><option>Integrated</option></select>
+                </div>
+                <!-- Variable 9 -->
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col gap-3 bg-white hover:shadow-md transition-shadow">
+                    <h4 class="font-bold text-gray-800 text-sm">Forward Guidance (R<sub>t,i</sub>)</h4>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Countries</div><div class="flex flex-wrap gap-1"><span class="text-[10px] px-1.5 py-0.5 rounded bg-[#f4e0e9] text-[#7a3b54]">US</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800">Eurozone</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800">UK</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-red-100 text-red-800">Switzerland</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-green-100 text-green-800">Japan</span></div></div>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Sources</div><div class="flex flex-wrap gap-1"><span class="text-[9px] px-1.5 py-0.5 rounded bg-pink-50 text-pink-700 border border-pink-100">Central Banks</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-yellow-50 text-yellow-700 border border-yellow-100">Bloomberg</span></div></div>
+                    <select class="mt-auto w-full text-xs border border-gray-300 rounded p-1.5 text-gray-700 focus:outline-none focus:ring-1 focus:ring-[#0b5e32] bg-gray-50"><option>Not Started</option><option>In Progress</option><option>Wrangled</option><option>Integrated</option></select>
+                </div>
+                <!-- Variable 10 -->
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col gap-3 bg-white hover:shadow-md transition-shadow">
+                    <h4 class="font-bold text-gray-800 text-sm">Bonds (B<sub>t</sub>)</h4>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Countries</div><div class="flex flex-wrap gap-1"><span class="text-[10px] px-1.5 py-0.5 rounded bg-[#d3e5ef] text-[#183347]">Egypt</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-[#f4e0e9] text-[#7a3b54]">US</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800">Eurozone</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800">UK</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-red-100 text-red-800">Switzerland</span></div></div>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Sources</div><div class="flex flex-wrap gap-1"><span class="text-[9px] px-1.5 py-0.5 rounded bg-pink-50 text-pink-700 border border-pink-100">Central Banks</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-green-50 text-green-700 border border-green-100">BIS</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-orange-50 text-orange-700 border border-orange-100">National Accounts</span></div></div>
+                    <select class="mt-auto w-full text-xs border border-gray-300 rounded p-1.5 text-gray-700 focus:outline-none focus:ring-1 focus:ring-[#0b5e32] bg-gray-50"><option>Not Started</option><option>In Progress</option><option>Wrangled</option><option>Integrated</option></select>
+                </div>
+                <!-- Variable 11 -->
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col gap-3 bg-white hover:shadow-md transition-shadow">
+                    <h4 class="font-bold text-gray-800 text-sm">Interest Rate (R<sub>t</sub>)</h4>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Countries</div><div class="flex flex-wrap gap-1"><span class="text-[10px] px-1.5 py-0.5 rounded bg-[#d3e5ef] text-[#183347]">Egypt</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-[#f4e0e9] text-[#7a3b54]">US</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800">Eurozone</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800">UK</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-red-100 text-red-800">Switzerland</span></div></div>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Sources</div><div class="flex flex-wrap gap-1"><span class="text-[9px] px-1.5 py-0.5 rounded bg-pink-50 text-pink-700 border border-pink-100">Central Banks</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-red-50 text-red-700 border border-red-100">FRED</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-yellow-50 text-yellow-700 border border-yellow-100">Bloomberg</span></div></div>
+                    <select class="mt-auto w-full text-xs border border-gray-300 rounded p-1.5 text-gray-700 focus:outline-none focus:ring-1 focus:ring-[#0b5e32] bg-gray-50"><option>Not Started</option><option>In Progress</option><option>Wrangled</option><option>Integrated</option></select>
+                </div>
+                <!-- Variable 12 -->
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col gap-3 bg-white hover:shadow-md transition-shadow">
+                    <h4 class="font-bold text-gray-800 text-sm">Risk Premium (R<sub>kt</sub> - R<sub>t</sub>)</h4>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Countries</div><div class="flex flex-wrap gap-1"><span class="text-[10px] px-1.5 py-0.5 rounded bg-[#d3e5ef] text-[#183347]">Egypt</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-[#f4e0e9] text-[#7a3b54]">US</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800">Eurozone</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800">UK</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-red-100 text-red-800">Switzerland</span></div></div>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Sources</div><div class="flex flex-wrap gap-1"><span class="text-[9px] px-1.5 py-0.5 rounded bg-pink-50 text-pink-700 border border-pink-100">Central Banks</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-green-50 text-green-700 border border-green-100">BIS</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-yellow-50 text-yellow-700 border border-yellow-100">Bloomberg</span></div></div>
+                    <select class="mt-auto w-full text-xs border border-gray-300 rounded p-1.5 text-gray-700 focus:outline-none focus:ring-1 focus:ring-[#0b5e32] bg-gray-50"><option>Not Started</option><option>In Progress</option><option>Wrangled</option><option>Integrated</option></select>
+                </div>
+                <!-- Variable 13 -->
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col gap-3 bg-white hover:shadow-md transition-shadow">
+                    <h4 class="font-bold text-gray-800 text-sm">Output (Y<sub>t</sub>)</h4>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Countries</div><div class="flex flex-wrap gap-1"><span class="text-[10px] px-1.5 py-0.5 rounded bg-[#d3e5ef] text-[#183347]">Egypt</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-[#f4e0e9] text-[#7a3b54]">US</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800">Eurozone</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800">UK</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-red-100 text-red-800">Switzerland</span></div></div>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Sources</div><div class="flex flex-wrap gap-1"><span class="text-[9px] px-1.5 py-0.5 rounded bg-red-50 text-red-700 border border-red-100">IMF</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-700 border border-gray-200">World Bank</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-pink-50 text-pink-700 border border-pink-100">Central Banks</span></div></div>
+                    <select class="mt-auto w-full text-xs border border-gray-300 rounded p-1.5 text-gray-700 focus:outline-none focus:ring-1 focus:ring-[#0b5e32] bg-gray-50"><option>Not Started</option><option>In Progress</option><option>Wrangled</option><option>Integrated</option></select>
+                </div>
+                <!-- Variable 14 -->
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col gap-3 bg-white hover:shadow-md transition-shadow">
+                    <h4 class="font-bold text-gray-800 text-sm">Consumption (C<sub>t</sub>)</h4>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Countries</div><div class="flex flex-wrap gap-1"><span class="text-[10px] px-1.5 py-0.5 rounded bg-[#d3e5ef] text-[#183347]">Egypt</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-[#f4e0e9] text-[#7a3b54]">US</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800">Eurozone</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800">UK</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-red-100 text-red-800">Switzerland</span></div></div>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Sources</div><div class="flex flex-wrap gap-1"><span class="text-[9px] px-1.5 py-0.5 rounded bg-pink-50 text-pink-700 border border-pink-100">Central Banks</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-orange-50 text-orange-700 border border-orange-100">National Accounts</span></div></div>
+                    <select class="mt-auto w-full text-xs border border-gray-300 rounded p-1.5 text-gray-700 focus:outline-none focus:ring-1 focus:ring-[#0b5e32] bg-gray-50"><option>Not Started</option><option>In Progress</option><option>Wrangled</option><option>Integrated</option></select>
+                </div>
+                <!-- Variable 15 -->
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col gap-3 bg-white hover:shadow-md transition-shadow">
+                    <h4 class="font-bold text-gray-800 text-sm">Leverage (φ<sub>t</sub>)</h4>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Countries</div><div class="flex flex-wrap gap-1"><span class="text-[10px] px-1.5 py-0.5 rounded bg-[#d3e5ef] text-[#183347]">Egypt</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-[#f4e0e9] text-[#7a3b54]">US</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800">Eurozone</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800">UK</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-red-100 text-red-800">Switzerland</span></div></div>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Sources</div><div class="flex flex-wrap gap-1"><span class="text-[9px] px-1.5 py-0.5 rounded bg-pink-50 text-pink-700 border border-pink-100">Central Banks</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-green-50 text-green-700 border border-green-100">BIS</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-yellow-50 text-yellow-700 border border-yellow-100">Bloomberg</span></div></div>
+                    <select class="mt-auto w-full text-xs border border-gray-300 rounded p-1.5 text-gray-700 focus:outline-none focus:ring-1 focus:ring-[#0b5e32] bg-gray-50"><option>Not Started</option><option>In Progress</option><option>Wrangled</option><option>Integrated</option></select>
+                </div>
+                <!-- Variable 16 -->
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col gap-3 bg-white hover:shadow-md transition-shadow">
+                    <h4 class="font-bold text-gray-800 text-sm">Loans (L<sub>t</sub>)</h4>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Countries</div><div class="flex flex-wrap gap-1"><span class="text-[10px] px-1.5 py-0.5 rounded bg-[#d3e5ef] text-[#183347]">Egypt</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-[#f4e0e9] text-[#7a3b54]">US</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800">Eurozone</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800">UK</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-red-100 text-red-800">Switzerland</span></div></div>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Sources</div><div class="flex flex-wrap gap-1"><span class="text-[9px] px-1.5 py-0.5 rounded bg-pink-50 text-pink-700 border border-pink-100">Central Banks</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-green-50 text-green-700 border border-green-100">BIS</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-red-50 text-red-700 border border-red-100">IMF</span></div></div>
+                    <select class="mt-auto w-full text-xs border border-gray-300 rounded p-1.5 text-gray-700 focus:outline-none focus:ring-1 focus:ring-[#0b5e32] bg-gray-50"><option>Not Started</option><option>In Progress</option><option>Wrangled</option><option>Integrated</option></select>
+                </div>
+                <!-- Variable 17 -->
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col gap-3 bg-white hover:shadow-md transition-shadow">
+                    <h4 class="font-bold text-gray-800 text-sm">Quantitative Easing (QE<sub>t</sub>)</h4>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Countries</div><div class="flex flex-wrap gap-1"><span class="text-[10px] px-1.5 py-0.5 rounded bg-[#f4e0e9] text-[#7a3b54]">US</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800">Eurozone</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800">UK</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-red-100 text-red-800">Switzerland</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-green-100 text-green-800">Japan</span></div></div>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Sources</div><div class="flex flex-wrap gap-1"><span class="text-[9px] px-1.5 py-0.5 rounded bg-pink-50 text-pink-700 border border-pink-100">Central Banks</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-green-50 text-green-700 border border-green-100">BIS</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-red-50 text-red-700 border border-red-100">FRED</span></div></div>
+                    <select class="mt-auto w-full text-xs border border-gray-300 rounded p-1.5 text-gray-700 focus:outline-none focus:ring-1 focus:ring-[#0b5e32] bg-gray-50"><option>Not Started</option><option>In Progress</option><option>Wrangled</option><option>Integrated</option></select>
+                </div>
+                <!-- Variable 18 -->
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col gap-3 bg-white hover:shadow-md transition-shadow">
+                    <h4 class="font-bold text-gray-800 text-sm">Capital (K<sub>t</sub>)</h4>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Countries</div><div class="flex flex-wrap gap-1"><span class="text-[10px] px-1.5 py-0.5 rounded bg-[#d3e5ef] text-[#183347]">Egypt</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-[#f4e0e9] text-[#7a3b54]">US</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800">Eurozone</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800">UK</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-red-100 text-red-800">Switzerland</span></div></div>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Sources</div><div class="flex flex-wrap gap-1"><span class="text-[9px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-700 border border-gray-200">World Bank</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-red-50 text-red-700 border border-red-100">IMF</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-orange-50 text-orange-700 border border-orange-100">National Accounts</span></div></div>
+                    <select class="mt-auto w-full text-xs border border-gray-300 rounded p-1.5 text-gray-700 focus:outline-none focus:ring-1 focus:ring-[#0b5e32] bg-gray-50"><option>Not Started</option><option>In Progress</option><option>Wrangled</option><option>Integrated</option></select>
+                </div>
+                <!-- Variable 19 -->
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col gap-3 bg-white hover:shadow-md transition-shadow">
+                    <h4 class="font-bold text-gray-800 text-sm">Labor (N<sub>t</sub>)</h4>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Countries</div><div class="flex flex-wrap gap-1"><span class="text-[10px] px-1.5 py-0.5 rounded bg-[#d3e5ef] text-[#183347]">Egypt</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-[#f4e0e9] text-[#7a3b54]">US</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800">Eurozone</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800">UK</span> <span class="text-[10px] px-1.5 py-0.5 rounded bg-red-100 text-red-800">Switzerland</span></div></div>
+                    <div><div class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mb-1">Sources</div><div class="flex flex-wrap gap-1"><span class="text-[9px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-700 border border-gray-200">ILO</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-orange-50 text-orange-700 border border-orange-100">National Accounts</span> <span class="text-[9px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-700 border border-gray-200">World Bank</span></div></div>
+                    <select class="mt-auto w-full text-xs border border-gray-300 rounded p-1.5 text-gray-700 focus:outline-none focus:ring-1 focus:ring-[#0b5e32] bg-gray-50"><option>Not Started</option><option>In Progress</option><option>Wrangled</option><option>Integrated</option></select>
+                </div>
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
+        <!-- 92-Day Task Table -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-6 mb-8">
+            <div class="flex flex-col sm:flex-row sm:items-start justify-between mb-5 gap-3">
                 <div>
                     <h3 class="font-bold text-lg text-gray-800">92-Day Task Table (Weekly & Daily Detail)</h3>
-                    <p class="text-sm text-gray-500">Phase 1: Foundation & Prototyping (Start Date: July 1, 2026)</p>
+                    <p class="text-sm text-gray-500 mt-1">Phase 1: Foundation & Prototyping (Start Date: July 1, 2026)</p>
                 </div>
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg border border-gray-200">
                     <label class="text-sm font-semibold text-gray-700">Select View:</label>
-                    <select class="border border-gray-300 rounded p-1.5 text-sm focus:outline-none bg-gray-50">
-                        <option>All Days</option>
-                        <option>Week 1</option>
-                        <option>Week 2</option>
+                    <select id="taskViewFilter" class="border border-gray-300 rounded p-1 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#0b5e32] bg-white cursor-pointer shadow-sm">
+                        <option value="daily">Daily Detail (92 Days)</option>
+                        <option value="weekly">Weekly Summary (13 Weeks)</option>
+                        <option value="monthly">Monthly Summary (3 Months)</option>
+                        <option value="phase1">Phase 1 Overview</option>
                     </select>
                 </div>
             </div>
 
-            <div class="w-full overflow-x-auto border border-gray-200 rounded-lg">
-                <table class="w-full text-sm text-left border-collapse min-w-[800px]">
-                    <thead class="bg-gray-100 text-gray-700 font-semibold text-xs uppercase tracking-wide">
-                        <tr>
-                            <th class="p-3 border-b border-gray-200 w-24">Week</th>
-                            <th class="p-3 border-b border-gray-200 w-24">Day / Date</th>
-                            <th class="p-3 border-b border-gray-200">Mathematics Tasks</th>
-                            <th class="p-3 border-b border-gray-200">Technical Tasks</th>
-                            <th class="p-3 border-b border-gray-200">Writing Tasks</th>
-                            <th class="p-3 border-b border-gray-200 w-32">Daily Completion</th>
+            <!-- Table Wrapper for mobile scrolling -->
+            <div class="w-full border border-gray-200 rounded-lg max-h-[600px] overflow-y-auto relative" style="scrollbar-width: thin;">
+                <table class="w-full text-sm text-left border-collapse min-w-[900px]">
+                    <thead class="bg-gray-100 text-gray-700 font-semibold text-xs uppercase tracking-wider sticky top-0 z-10 shadow-sm">
+                        <tr id="tableHeaderRow">
+                            <th class="p-3 border-b border-r border-gray-200 w-24">Timeline</th>
+                            <th class="p-3 border-b border-r border-gray-200 w-24">Date / Period</th>
+                            <th class="p-3 border-b border-r border-gray-200 w-1/4">Mathematics Tasks</th>
+                            <th class="p-3 border-b border-r border-gray-200 w-1/4">Technical Tasks</th>
+                            <th class="p-3 border-b border-r border-gray-200 w-1/4">Writing Tasks</th>
+                            <th class="p-3 border-b border-gray-200 w-32">Completion</th>
                         </tr>
                     </thead>
-                    <tbody class="text-gray-700 align-top">
-                        <!-- Week 1, Day 1 -->
-                        <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
-                            <td class="p-3 border-r border-gray-200 bg-gray-50 text-center font-bold text-gray-800" rowspan="3">
-                                Week 1<br><span class="text-xs font-normal text-gray-500">(July 1-7)</span>
-                            </td>
-                            <td class="p-3 border-r border-gray-200 font-semibold text-gray-800">
-                                Day 1<br><span class="text-xs font-normal text-gray-500">July 1</span>
-                            </td>
-                            <td class="p-3 border-r border-gray-200">
-                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
-                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]"> Review Linear Algebra
-                                </label>
-                            </td>
-                            <td class="p-3 border-r border-gray-200">
-                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
-                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]" checked> Git/GitHub Primer
-                                </label>
-                            </td>
-                            <td class="p-3 border-r border-gray-200">
-                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
-                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]"> Draft Ch 1: Intro Outline
-                                </label>
-                            </td>
-                            <td class="p-3">
-                                <div class="flex items-center justify-between text-xs font-bold text-gray-700 mb-1">
-                                    <span>33%</span>
-                                </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2">
-                                    <div class="bg-[#0b5e32] h-2 rounded-full transition-all" style="width: 33%"></div>
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- Week 1, Day 2 -->
-                        <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
-                            <td class="p-3 border-r border-gray-200 font-semibold text-gray-800">
-                                Day 2<br><span class="text-xs font-normal text-gray-500">July 2</span>
-                            </td>
-                            <td class="p-3 border-r border-gray-200">
-                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
-                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]" checked> Calculus Basics
-                                </label>
-                            </td>
-                            <td class="p-3 border-r border-gray-200">
-                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
-                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]" checked> Python Crash Course
-                                </label>
-                            </td>
-                            <td class="p-3 border-r border-gray-200">
-                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
-                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]" checked> Draft Ch 1: Background
-                                </label>
-                            </td>
-                            <td class="p-3">
-                                <div class="flex items-center justify-between text-xs font-bold text-[#00b140] mb-1">
-                                    <span>100%</span>
-                                </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2">
-                                    <div class="bg-[#00b140] h-2 rounded-full transition-all" style="width: 100%"></div>
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- Week 1, Day 3 -->
-                        <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
-                            <td class="p-3 border-r border-gray-200 font-semibold text-gray-800">
-                                Day 3<br><span class="text-xs font-normal text-gray-500">July 3</span>
-                            </td>
-                            <td class="p-3 border-r border-gray-200">
-                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
-                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]"> ODE Course Start
-                                </label>
-                            </td>
-                            <td class="p-3 border-r border-gray-200">
-                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
-                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]" checked> Pandas Data Cleaning
-                                </label>
-                            </td>
-                            <td class="p-3 border-r border-gray-200">
-                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
-                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]" checked> Outline Ch 2: Lit Review
-                                </label>
-                            </td>
-                            <td class="p-3">
-                                <div class="flex items-center justify-between text-xs font-bold text-gray-700 mb-1">
-                                    <span>66%</span>
-                                </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2">
-                                    <div class="bg-[#0b5e32] h-2 rounded-full transition-all" style="width: 66%"></div>
-                                </div>
-                            </td>
-                        </tr>
-                        
-                        <!-- Week 2, Day 4 -->
-                        <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
-                            <td class="p-3 border-r border-gray-200 bg-gray-50 text-center font-bold text-gray-800" rowspan="2">
-                                Week 2<br><span class="text-xs font-normal text-gray-500">(July 8-14)</span>
-                            </td>
-                            <td class="p-3 border-r border-gray-200 font-semibold text-gray-800">
-                                Day 4<br><span class="text-xs font-normal text-gray-500">July 8</span>
-                            </td>
-                            <td class="p-3 border-r border-gray-200">
-                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
-                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]"> Variables & Functions
-                                </label>
-                            </td>
-                            <td class="p-3 border-r border-gray-200">
-                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
-                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]" checked> Intro to R / Import Data
-                                </label>
-                            </td>
-                            <td class="p-3 border-r border-gray-200">
-                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
-                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]"> Synthesize Lit Review
-                                </label>
-                            </td>
-                            <td class="p-3">
-                                <div class="flex items-center justify-between text-xs font-bold text-gray-700 mb-1">
-                                    <span>33%</span>
-                                </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2">
-                                    <div class="bg-[#0b5e32] h-2 rounded-full transition-all" style="width: 33%"></div>
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- Week 2, Day 5 -->
-                        <tr class="hover:bg-gray-50 transition-colors">
-                            <td class="p-3 border-r border-gray-200 font-semibold text-gray-800">
-                                Day 5<br><span class="text-xs font-normal text-gray-500">July 9</span>
-                            </td>
-                            <td class="p-3 border-r border-gray-200">
-                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
-                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]" checked> Conditionals & Loops
-                                </label>
-                            </td>
-                            <td class="p-3 border-r border-gray-200">
-                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
-                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]" checked> Titanic Dataset (Kaggle)
-                                </label>
-                            </td>
-                            <td class="p-3 border-r border-gray-200">
-                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
-                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]"> Draft Ch 2 context
-                                </label>
-                            </td>
-                            <td class="p-3">
-                                <div class="flex items-center justify-between text-xs font-bold text-gray-700 mb-1">
-                                    <span>66%</span>
-                                </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2">
-                                    <div class="bg-[#0b5e32] h-2 rounded-full transition-all" style="width: 66%"></div>
-                                </div>
-                            </td>
-                        </tr>
+                    <tbody id="taskTableBody" class="text-gray-700 align-top bg-white divide-y divide-gray-200">
+                        <!-- Content rendered by JavaScript -->
                     </tbody>
                 </table>
             </div>
+            <p class="text-xs text-gray-400 text-center mt-3">Scroll down or use the filter to view more daily records for Phase 1.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             
-            <!-- Left Sub-column -->
-            <div class="flex flex-col gap-6">
-                <!-- Diagnostic Logger -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="font-bold text-gray-800 flex items-center gap-2"><i class="fa-solid fa-sliders text-gray-500"></i> Diagnostic Logger</h3>
-                        <i class="fa-solid fa-gear text-gray-400 cursor-pointer hover:text-gray-600"></i>
-                    </div>
-                    
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm text-gray-600 mb-1">Words (max 60,000)</label>
-                            <input type="number" value="0" class="w-full border border-gray-300 rounded-lg p-2 text-gray-800 focus:outline-none focus:border-[#0b5e32]">
-                        </div>
-                        <div>
-                            <label class="block text-sm text-gray-600 mb-1">Citations (max 200)</label>
-                            <input type="number" value="0" class="w-full border border-gray-300 rounded-lg p-2 text-gray-800 focus:outline-none focus:border-[#0b5e32]">
-                        </div>
-                        <div>
-                            <label class="block text-sm text-gray-600 mb-1">Syllabus Adherence (%)</label>
-                            <input type="number" value="0" class="w-full border border-gray-300 rounded-lg p-2 text-gray-800 focus:outline-none focus:border-[#0b5e32]">
-                        </div>
-                        <div>
-                            <label class="block text-sm text-gray-600 mb-1">Code Milestones (0-5)</label>
-                            <select class="w-full border border-gray-300 rounded-lg p-2 text-gray-800 focus:outline-none focus:border-[#0b5e32] appearance-none">
-                                <option>0</option> <option>1</option> <option>2</option> <option>3</option> <option>4</option> <option>5</option>
-                            </select>
-                        </div>
-                    </div>
+            <!-- Diagnostic Logger -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-6">
+                <div class="flex items-center justify-between mb-5">
+                    <h3 class="font-bold text-gray-800 flex items-center gap-2"><i class="fa-solid fa-sliders text-gray-500"></i> Diagnostic Logger</h3>
+                    <span class="text-xs font-semibold px-2 py-1 bg-green-100 text-green-700 rounded-full">LIVE</span>
                 </div>
-
-                <!-- Mendeley Library -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                    <h3 class="font-bold text-gray-800 flex items-center gap-2 mb-4 text-red-700">
-                        <i class="fa-solid fa-book-journal-whills"></i> MENDELEY Library
-                    </h3>
-                    <div class="relative mb-4">
-                        <input type="text" placeholder="Search..." class="w-full border border-gray-300 rounded-lg p-2 pl-3 bg-gray-50 text-sm focus:outline-none">
-                        <i class="fa-solid fa-magnifying-glass absolute right-3 top-2.5 text-gray-400"></i>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Words (max 60,000)</label>
+                        <input type="number" id="inputWords" value="0" min="0" max="60000" class="w-full border border-gray-300 rounded-lg p-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0b5e32] focus:border-transparent transition-shadow">
                     </div>
-                    
-                    <table class="w-full text-sm text-left text-gray-700">
-                        <thead class="text-xs text-gray-500 border-b border-gray-200">
-                            <tr>
-                                <th class="pb-2 font-medium">Title</th>
-                                <th class="pb-2 font-medium">Year</th>
-                                <th class="pb-2"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="border-b border-gray-100">
-                                <td class="py-2">Mendeley ref. Smets (2007)</td>
-                                <td>Author Year</td>
-                                <td class="text-right"><input type="checkbox" class="accent-[#0b5e32]"></td>
-                            </tr>
-                            <tr class="border-b border-gray-100">
-                                <td class="py-2">Mendeley ref. Smets (2007)</td>
-                                <td>Author Year</td>
-                                <td class="text-right"><input type="checkbox" class="accent-[#0b5e32]"></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Citations (max 111)</label>
+                        <input type="number" id="inputCitations" value="0" min="0" max="111" class="w-full border border-gray-300 rounded-lg p-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0b5e32] focus:border-transparent transition-shadow">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Data Readiness (%)</label>
+                        <input type="number" id="inputReadiness" value="0" min="0" max="100" class="w-full border border-gray-300 rounded-lg p-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0b5e32] focus:border-transparent transition-shadow">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Code Milestones (0-5)</label>
+                        <select id="inputMilestones" class="w-full border border-gray-300 rounded-lg p-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0b5e32] focus:border-transparent appearance-none bg-white">
+                            <option value="0">0 - Just Started</option> 
+                            <option value="1">1 - Environment Setup</option> 
+                            <option value="2">2 - Data Cleaned</option> 
+                            <option value="3">3 - First Model Ran</option> 
+                            <option value="4">4 - Advanced Model Draft</option> 
+                            <option value="5">5 - Final Code Complete</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
-            <!-- Right Sub-column -->
-            <div class="flex flex-col gap-6">
-                <!-- Supervisor Report -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 h-full flex flex-col">
-                    <h3 class="font-bold text-gray-800 flex items-center gap-2 mb-4"><i class="fa-regular fa-file-lines text-[#b89535]"></i> Supervisor Report</h3>
-                    <textarea class="w-full flex-grow border-none bg-gray-50 rounded-lg p-3 text-sm text-gray-600 focus:outline-none resize-none min-h-[150px]" placeholder="Report auto-generates..."></textarea>
-                    <div class="flex justify-end mt-4">
-                        <button class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm" onclick="alert('Report copied to clipboard!')">
-                            <i class="fa-regular fa-copy"></i> Copy
-                        </button>
-                    </div>
+            <!-- Supervisor Report -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-6 h-full flex flex-col">
+                <h3 class="font-bold text-gray-800 flex items-center gap-2 mb-3"><i class="fa-regular fa-file-lines text-[#8b6d20]"></i> Auto-Generated Report</h3>
+                <p class="text-xs text-gray-500 mb-3">Updates automatically based on log inputs.</p>
+                
+                <textarea id="supervisorReportText" class="w-full flex-grow border border-gray-200 bg-gray-50 rounded-lg p-3 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#8b6d20] resize-none min-h-[180px] font-mono leading-relaxed" readonly></textarea>
+                
+                <div class="flex justify-end mt-4">
+                    <button onclick="copyReport()" class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-200">
+                        <i id="copyIcon" class="fa-regular fa-copy"></i> <span id="copyText">Copy to Clipboard</span>
+                    </button>
                 </div>
             </div>
 
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-10">
-            <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
+        <!-- Embedded Google Drive Section -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-6 mb-8">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
                 <div>
                     <h3 class="font-bold text-lg text-gray-800 flex items-center gap-2">
                         <svg viewBox="0 0 40 40" class="w-6 h-6"><path fill="#FFC107" d="M14.5 14l-7.25 12.5h25.5L25.5 14z"/><path fill="#1976D2" d="M25.5 14L18.25 1.5 5.5 24h14.5z"/><path fill="#4CAF50" d="M20 26.5h14.5L27.25 14z"/></svg>
-                        Google Drive Integration
+                        Research Archive (Google Drive)
                     </h3>
-                    <p class="text-sm text-gray-500">Embedded access to econometric datasets.</p>
+                    <p class="text-sm text-gray-500">Live access to econometric datasets and working papers.</p>
                 </div>
-                <div class="flex items-center gap-2 text-sm text-gray-500">
-                    Live Folder Sync <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                <div class="flex items-center gap-2 text-sm font-semibold text-gray-600 bg-gray-50 px-3 py-1.5 rounded-full border border-gray-200">
+                    Live Sync <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                 </div>
             </div>
 
-            <div class="w-full bg-white rounded-lg border border-gray-200 overflow-hidden" style="height: 400px;">
+            <div class="w-full bg-gray-50 rounded-lg border border-gray-200 overflow-hidden relative" style="padding-top: 56.25%;"> <!-- 16:9 Aspect Ratio for responsive iframe -->
                 <iframe 
                     src="https://drive.google.com/embeddedfolderview?id=1L0hR40kKxyhhvapEq0ZWR67XcQP568TO#grid" 
                     title="Google Drive Research Folder"
-                    class="w-full h-full border-none"
+                    class="absolute top-0 left-0 w-full h-full border-none"
                     allowfullscreen>
                 </iframe>
             </div>
@@ -499,5 +390,468 @@
 
     </div>
 
+    <script>
+        // Constants & Targets
+        const TARGET_WORDS = 60000;
+        const TARGET_CITATIONS = 111;
+        const TARGET_MILESTONES = 5;
+        const CIRCUMFERENCE = 377; // 2 * pi * 60
+
+        // DOM Elements
+        const inputs = {
+            words: document.getElementById('inputWords'),
+            citations: document.getElementById('inputCitations'),
+            readiness: document.getElementById('inputReadiness'),
+            milestones: document.getElementById('inputMilestones')
+        };
+
+        const displays = {
+            words: document.getElementById('displayWords'),
+            citations: document.getElementById('displayCitations'),
+            milestones: document.getElementById('displayMilestones'),
+            readiness: document.getElementById('displayReadiness'),
+            ewsText: document.getElementById('ewsText'),
+            ewsStatusColor: document.getElementById('ewsStatusColor'),
+            ewsStatusText: document.getElementById('ewsStatusText'),
+            report: document.getElementById('supervisorReportText')
+        };
+
+        const progressBars = {
+            words: document.getElementById('progressWords'),
+            citations: document.getElementById('progressCitations'),
+            milestones: document.getElementById('progressMilestones'),
+            readiness: document.getElementById('progressReadiness'),
+            ewsDial: document.getElementById('ewsDial')
+        };
+
+        // Task State Dictionary to preserve checked status across views
+        let taskState = {};
+        let totalSystemTasks = 0;
+
+        // The complete 13-week (92 days) curriculum for Phase 1
+        const roadmapData = [
+            { week: 1, month: 1, dates: 'July 1-7', days: [
+                ['July 1', 'Set up Calculus syllabus', 'Install Python & IDE', 'Outline Chapter 1 Structure'],
+                ['July 2', 'Review Limits & Continuity', 'Python Variables & Types', 'Literature Search (UMP)'],
+                ['July 3', 'Derivatives Intro', 'Python Loops & Functions', 'Draft Intro Section'],
+                ['July 4', 'Maxima & Minima', 'Create GitHub Repo', 'Summarize 3 Key Papers'],
+                ['July 5', 'Integration Basics', 'Push first script to Git', 'Draft Lit Review Structure'],
+                ['July 6', 'Weekly Math Review', 'Git Branching Practice', 'Refine Chapter 1 Text'],
+                ['July 7', 'Rest & Digest', 'Rest & Digest', 'Rest & Digest']
+            ]},
+            { week: 2, month: 1, dates: 'July 8-14', days: [
+                ['July 8', 'Vectors & Matrices Intro', 'Intro to Pandas Library', 'Draft Ch 2 Lit Outline'],
+                ['July 9', 'Matrix Multiplication', 'Import Data (CSV) in Python', 'Compile Data Sources'],
+                ['July 10', 'Inverse Matrices', 'Filter & Sort Data (Pandas)', 'Write Methodology Draft'],
+                ['July 11', 'Eigenvalues/Vectors', 'Handle Missing Data', 'Summarize Empirical Papers'],
+                ['July 12', 'Linear Algebra Review', 'Basic Plotting (Matplotlib)', 'Integrate Feedback in Ch 1'],
+                ['July 13', 'Math Application Test', 'Push week\'s work to Git', 'Review Lit Review Section'],
+                ['July 14', 'Rest & Digest', 'Rest & Digest', 'Rest & Digest']
+            ]},
+            { week: 3, month: 1, dates: 'July 15-21', days: [
+                ['July 15', 'ODE Basics', 'Install R & RStudio', 'Draft Ch 1 Background'],
+                ['July 16', 'First-order ODEs', 'R Syntax & Data Types', 'Read UMP transmission channels'],
+                ['July 17', 'Second-order ODEs', 'Dataframes in R', 'Write UMP theory section'],
+                ['July 18', 'Systems of ODEs', 'dplyr library basics', 'Draft Ch 2 Intro'],
+                ['July 19', 'ODE Application in Econ', 'Data cleaning in R', 'Review UMP literature'],
+                ['July 20', 'Weekly Math Review', 'Create first R Markdown', 'Edit Chapter 1'],
+                ['July 21', 'Rest & Digest', 'Rest & Digest', 'Rest & Digest']
+            ]},
+            { week: 4, month: 1, dates: 'July 22-28', days: [
+                ['July 22', 'Multivariable Calc Intro', 'Advanced Git branching', 'Draft Ch 1 Objectives'],
+                ['July 23', 'Partial Derivatives', 'Merge conflicts resolution', 'Write Research Questions'],
+                ['July 24', 'Optimization (Multiple)', 'Python/R workflow integration', 'Format Ch 1 References'],
+                ['July 25', 'Lagrange Multipliers', 'Kaggle Dataset Practice', 'Draft Ch 2 Gap Analysis'],
+                ['July 26', 'Calculus Final Review', 'Build simple analysis script', 'Synthesize lit review findings'],
+                ['July 27', 'Math Application Test', 'Push portfolio to GitHub', 'Review full Month 1 drafts'],
+                ['July 28', 'Rest & Digest', 'Rest & Digest', 'Rest & Digest']
+            ]},
+            { week: 5, month: 2, dates: 'Jul 29 - Aug 4', days: [
+                ['July 29', 'Advanced Linear Algebra', 'Data Viz (ggplot2)', 'Finish Ch 1 First Draft'],
+                ['July 30', 'Matrix Decompositions', 'Data Viz (seaborn)', 'Review Ch 1 with Supervisor'],
+                ['July 31', 'Definiteness of Matrices', 'Time Series plotting in R', 'Incorporate Supervisor edits'],
+                ['Aug 1', 'Dynamic Optimization Intro', 'Customizing plot aesthetics', 'Draft Ch 2 Main Body'],
+                ['Aug 2', 'Bellman Equations', 'Exporting graphs for LaTeX', 'Write empirical lit review'],
+                ['Aug 3', 'Weekly Math Review', 'Organize code repository', 'Edit Ch 2 structure'],
+                ['Aug 4', 'Rest & Digest', 'Rest & Digest', 'Rest & Digest']
+            ]},
+            { week: 6, month: 2, dates: 'Aug 5-11', days: [
+                ['Aug 5', 'Macro Theory (Romer Ch 1)', 'Intro to EViews', 'Draft Ch 2 Data section'],
+                ['Aug 6', 'Solow Model Math', 'Importing data into EViews', 'Write variable definitions'],
+                ['Aug 7', 'Ramsey-Cass-Koopmans', 'Summary stats in EViews', 'Draft hypothesis section'],
+                ['Aug 8', 'Overlapping Generations', 'Basic OLS in EViews', 'Review related DSGE papers'],
+                ['Aug 9', 'Macro Theory Review', 'Testing for Unit Roots', 'Write model justification'],
+                ['Aug 10', 'Math Application Test', 'Compare R and EViews output', 'Consolidate Ch 2 draft'],
+                ['Aug 11', 'Rest & Digest', 'Rest & Digest', 'Rest & Digest']
+            ]},
+            { week: 7, month: 2, dates: 'Aug 12-18', days: [
+                ['Aug 12', 'Difference Equations', 'Time Series intro in R', 'Finalize thesis dataset'],
+                ['Aug 13', 'First-order Difference', 'ARIMA modeling basics', 'Write data methodology'],
+                ['Aug 14', 'Second-order Difference', 'Forecasting in R', 'Draft empirical strategy'],
+                ['Aug 15', 'Systems of Difference Eq.', 'VAR model intro (EViews)', 'Outline Chapter 3 (Model)'],
+                ['Aug 16', 'Stability Analysis', 'Impulse Response Functions', 'Review Ch 2 with Supervisor'],
+                ['Aug 17', 'Weekly Math Review', 'Document empirical workflow', 'Edit Ch 2 based on feedback'],
+                ['Aug 18', 'Rest & Digest', 'Rest & Digest', 'Rest & Digest']
+            ]},
+            { week: 8, month: 2, dates: 'Aug 19-25', days: [
+                ['Aug 19', 'Romer Ch 5 (Traditional)', 'Install Octave/MATLAB', 'Finish Ch 2 First Draft'],
+                ['Aug 20', 'Romer Ch 6 (Nominal Rigid.)', 'Octave Syntax Basics', 'Start Chapter 3 (DSGE Setup)'],
+                ['Aug 21', 'Romer Ch 7 (Dynamic Inc.)', 'Matrix operations in Octave', 'Write household problem'],
+                ['Aug 22', 'Romer Ch 8 (Consumption)', 'Writing functions in Octave', 'Write firm problem'],
+                ['Aug 23', 'Macro Theory Review 2', 'Plotting in Octave', 'Draft central bank policy rule'],
+                ['Aug 24', 'Math Application Test', 'Replicate basic model math', 'Review model equations'],
+                ['Aug 25', 'Rest & Digest', 'Rest & Digest', 'Rest & Digest']
+            ]},
+            { week: 9, month: 3, dates: 'Aug 26 - Sep 1', days: [
+                ['Aug 26', 'Intro to DSGE Math', 'Install Dynare', 'Write equilibrium conditions'],
+                ['Aug 27', 'Log-linearization', 'Dynare syntax (.mod files)', 'Draft steady-state section'],
+                ['Aug 28', 'Solving DSGE by hand', 'Run benchmark RBC model', 'Write model calibration plan'],
+                ['Aug 29', 'Blanchard-Kahn conditions', 'Interpret Dynare output', 'Draft Chapter 3 Methodology'],
+                ['Aug 30', 'DSGE Math Review', 'Modify RBC parameters', 'Review Ch 3 with Supervisor'],
+                ['Aug 31', 'Weekly Math Review', 'Push Dynare code to Git', 'Incorporate Ch 3 edits'],
+                ['Sep 1', 'Rest & Digest', 'Rest & Digest', 'Rest & Digest']
+            ]},
+            { week: 10, month: 3, dates: 'Sep 2-8', days: [
+                ['Sep 2', 'Advanced Log-linearization', 'Code NK model in Dynare', 'Refine Chapter 1 narrative'],
+                ['Sep 3', 'Financial Frictions Math', 'Add sticky prices to .mod', 'Refine Chapter 2 literature'],
+                ['Sep 4', 'Bernanke-Gertler-Gilchrist', 'Run NK model simulations', 'Cross-reference datasets'],
+                ['Sep 5', 'Gertler-Karadi basics', 'Plot NK Impulse Responses', 'Write calibration justification'],
+                ['Sep 6', 'Math Application Test', 'Debug Dynare errors', 'Draft Ch 3 Results section'],
+                ['Sep 7', 'Review past math tests', 'Document DSGE code', 'Compile preliminary bibliography'],
+                ['Sep 8', 'Rest & Digest', 'Rest & Digest', 'Rest & Digest']
+            ]},
+            { week: 11, month: 3, dates: 'Sep 9-15', days: [
+                ['Sep 9', 'UMP in DSGE Math', 'Add QE to Dynare model', 'Format thesis document'],
+                ['Sep 10', 'Modeling Credit Spreads', 'Simulate financial shock', 'Draft Chapter 3 Conclusion'],
+                ['Sep 11', 'Zero Lower Bound Math', 'Compare UMP vs No-UMP', 'Review all chapters drafted'],
+                ['Sep 12', 'Review Dynamic Opt.', 'Export Dynare graphs to R', 'Edit formatting and figures'],
+                ['Sep 13', 'Review Macro Theory', 'Finalize model parameters', 'Write Phase 1 Summary'],
+                ['Sep 14', 'Weekly Math Review', 'Clean up GitHub repo', 'Prepare presentation slides'],
+                ['Sep 15', 'Rest & Digest', 'Rest & Digest', 'Rest & Digest']
+            ]},
+            { week: 12, month: 3, dates: 'Sep 16-22', days: [
+                ['Sep 16', 'Comprehensive Math Exam', 'Run robustness checks', 'Finalize Chapters 1-3'],
+                ['Sep 17', 'Review Exam Results', 'Backup all data/code', 'Proofread all text'],
+                ['Sep 18', 'Address weak areas', 'Verify reproducibility', 'Check citations (Mendeley)'],
+                ['Sep 19', 'Study Session 1', 'Final code documentation', 'Print drafts for review'],
+                ['Sep 20', 'Study Session 2', 'Create Readme.md', 'Submit Drafts to Supervisor'],
+                ['Sep 21', 'Final Phase 1 Test', 'Portfolio Review', 'Phase 1 Retrospective'],
+                ['Sep 22', 'Rest & Digest', 'Rest & Digest', 'Rest & Digest']
+            ]},
+            { week: 13, month: 3, dates: 'Sep 23-29', days: [
+                ['Sep 23', 'Buffer Day', 'Software updates & maintenance', 'Read new literature'],
+                ['Sep 24', 'Buffer Day', 'Explore advanced Dynare', 'Outline Chapter 4'],
+                ['Sep 25', 'Buffer Day', 'Explore Panel Data in EViews', 'Brainstorm empirical strategy'],
+                ['Sep 26', 'Buffer Day', 'Review Python for Data Sci', 'Review Phase 2 Roadmap'],
+                ['Sep 27', 'Buffer Day', 'Review R causal inference', 'Set goals for Month 4'],
+                ['Sep 28', 'Buffer Day', 'Organize Drive folders', 'Draft updated timeline'],
+                ['Sep 29', 'Rest & Digest', 'Rest & Digest', 'Rest & Digest']
+            ]}
+        ];
+        
+        // Add Day 92
+        roadmapData.push({ week: 14, month: 3, dates: 'Sep 30', days: [
+            ['Sep 30', 'Phase 1 Final Review', 'System Architecture Sign-off', 'Submit Phase 1 Official Report']
+        ]});
+
+        // Initialize total task count
+        roadmapData.forEach((w, wIdx) => {
+            w.days.forEach((d, dIdx) => {
+                if(d[1] !== 'Rest & Digest') totalSystemTasks += 3;
+            });
+        });
+
+        function renderTaskTable() {
+            const view = document.getElementById('taskViewFilter').value;
+            const tbody = document.getElementById('taskTableBody');
+            tbody.innerHTML = '';
+            
+            let html = '';
+
+            if (view === 'daily') {
+                let currentDayCount = 1;
+                roadmapData.forEach((weekObj, wIdx) => {
+                    weekObj.days.forEach((dayData, dIdx) => {
+                        const isRest = dayData[1] === 'Rest & Digest';
+                        const rowClass = isRest ? "bg-gray-50/50 border-b-2 border-gray-300" : "hover:bg-gray-50/50 transition-colors";
+                        
+                        html += `<tr class="task-row ${rowClass}">`;
+                        
+                        // Week column spanning
+                        if (dIdx === 0) {
+                            html += `<td rowspan="${weekObj.days.length}" class="p-3 bg-gray-50 border-r border-gray-200 font-medium text-center align-middle border-b">Week ${weekObj.week}<br><span class="text-xs text-gray-500 font-normal">(${weekObj.dates})</span></td>`;
+                        }
+
+                        // Day Date
+                        html += `<td class="p-3 bg-gray-50 border-r border-gray-200 font-medium ${dIdx===0?'border-t border-gray-200':''}">Day ${currentDayCount}<br><span class="text-xs text-gray-500 font-normal">${dayData[0]}</span></td>`;
+
+                        // Tasks
+                        if (isRest) {
+                            html += `<td class="p-3 border-r border-gray-200 text-gray-400 italic text-xs align-middle text-center" colspan="3">Rest & Digest</td>`;
+                            html += `<td class="p-3 align-middle"><div class="flex justify-between text-xs text-gray-500 mb-1 font-semibold"><span>100%</span></div><div class="h-2 w-full bg-gray-200 rounded-full overflow-hidden"><div class="h-full bg-[#0b5e32]" style="width: 100%"></div></div></td>`;
+                        } else {
+                            const t1Id = `task_${wIdx}_${dIdx}_1`;
+                            const t2Id = `task_${wIdx}_${dIdx}_2`;
+                            const t3Id = `task_${wIdx}_${dIdx}_3`;
+                            
+                            html += `<td class="p-3 border-r border-gray-200"><label class="flex items-start gap-2 cursor-pointer group"><input type="checkbox" id="${t1Id}" class="mt-0.5 rounded task-checkbox accent-[#0b5e32] w-4 h-4" ${taskState[t1Id] ? 'checked' : ''} onchange="handleTaskToggle(this)"><span class="group-hover:text-[#0b5e32] transition-colors leading-tight">${dayData[1]}</span></label></td>`;
+                            html += `<td class="p-3 border-r border-gray-200"><label class="flex items-start gap-2 cursor-pointer group"><input type="checkbox" id="${t2Id}" class="mt-0.5 rounded task-checkbox accent-[#0b5e32] w-4 h-4" ${taskState[t2Id] ? 'checked' : ''} onchange="handleTaskToggle(this)"><span class="group-hover:text-[#0b5e32] transition-colors leading-tight">${dayData[2]}</span></label></td>`;
+                            html += `<td class="p-3 border-r border-gray-200"><label class="flex items-start gap-2 cursor-pointer group"><input type="checkbox" id="${t3Id}" class="mt-0.5 rounded task-checkbox accent-[#0b5e32] w-4 h-4" ${taskState[t3Id] ? 'checked' : ''} onchange="handleTaskToggle(this)"><span class="group-hover:text-[#0b5e32] transition-colors leading-tight">${dayData[3]}</span></label></td>`;
+                            
+                            // Row Progress
+                            let checked = (taskState[t1Id]?1:0) + (taskState[t2Id]?1:0) + (taskState[t3Id]?1:0);
+                            let pct = Math.round((checked / 3) * 100);
+                            html += `<td class="p-3 align-middle"><div class="flex justify-between text-xs text-gray-500 mb-1 font-semibold"><span>${pct}%</span></div><div class="h-2 w-full bg-gray-200 rounded-full overflow-hidden"><div class="h-full bg-[#0b5e32] transition-all duration-500" style="width: ${pct}%"></div></div></td>`;
+                        }
+                        
+                        html += `</tr>`;
+                        currentDayCount++;
+                    });
+                });
+            } else if (view === 'weekly') {
+                roadmapData.forEach((weekObj, wIdx) => {
+                    let weekChecked = 0;
+                    let weekTotal = 0;
+                    weekObj.days.forEach((dayData, dIdx) => {
+                        if (dayData[1] !== 'Rest & Digest') {
+                            weekTotal += 3;
+                            if(taskState[`task_${wIdx}_${dIdx}_1`]) weekChecked++;
+                            if(taskState[`task_${wIdx}_${dIdx}_2`]) weekChecked++;
+                            if(taskState[`task_${wIdx}_${dIdx}_3`]) weekChecked++;
+                        }
+                    });
+                    
+                    let pct = weekTotal > 0 ? Math.round((weekChecked / weekTotal) * 100) : 100;
+                    
+                    html += `<tr class="task-row hover:bg-gray-50 transition-colors">
+                        <td class="p-3 bg-gray-50 border-r border-gray-200 font-medium">Week ${weekObj.week}</td>
+                        <td class="p-3 border-r border-gray-200">${weekObj.dates}</td>
+                        <td class="p-3 border-r border-gray-200 text-gray-600">Calculus & Linear Algebra Modules</td>
+                        <td class="p-3 border-r border-gray-200 text-gray-600">Python/R/Dynare Setup</td>
+                        <td class="p-3 border-r border-gray-200 text-gray-600">Draft Chapters 1 & 2</td>
+                        <td class="p-3 align-middle">
+                            <div class="flex justify-between text-xs text-gray-500 mb-1 font-semibold"><span>${weekChecked}/${weekTotal} Tasks</span> <span>${pct}%</span></div>
+                            <div class="h-2 w-full bg-gray-200 rounded-full overflow-hidden"><div class="h-full bg-[#0b5e32] transition-all duration-500" style="width: ${pct}%"></div></div>
+                        </td>
+                    </tr>`;
+                });
+            } else if (view === 'monthly') {
+                [1, 2, 3].forEach(mIdx => {
+                    let monthChecked = 0;
+                    let monthTotal = 0;
+                    let monthName = mIdx === 1 ? 'Month 1 (July)' : mIdx === 2 ? 'Month 2 (August)' : 'Month 3 (September)';
+                    
+                    roadmapData.filter(w => w.month === mIdx).forEach((weekObj) => {
+                        let wIdx = roadmapData.indexOf(weekObj);
+                        weekObj.days.forEach((dayData, dIdx) => {
+                            if (dayData[1] !== 'Rest & Digest') {
+                                monthTotal += 3;
+                                if(taskState[`task_${wIdx}_${dIdx}_1`]) monthChecked++;
+                                if(taskState[`task_${wIdx}_${dIdx}_2`]) monthChecked++;
+                                if(taskState[`task_${wIdx}_${dIdx}_3`]) monthChecked++;
+                            }
+                        });
+                    });
+                    
+                    let pct = monthTotal > 0 ? Math.round((monthChecked / monthTotal) * 100) : 100;
+                    
+                    html += `<tr class="task-row hover:bg-gray-50 transition-colors">
+                        <td class="p-4 bg-gray-50 border-r border-gray-200 font-bold text-[#0b5e32]">${monthName}</td>
+                        <td class="p-4 border-r border-gray-200 font-medium">Weeks ${(mIdx-1)*4 + 1} - ${mIdx*4}</td>
+                        <td class="p-4 border-r border-gray-200 text-gray-600" colspan="3">Comprehensive aggregation of Foundation & Prototyping curriculum.</td>
+                        <td class="p-4 align-middle">
+                            <div class="flex justify-between text-xs text-gray-500 mb-1 font-semibold"><span>${monthChecked}/${monthTotal} Tasks</span> <span>${pct}%</span></div>
+                            <div class="h-2.5 w-full bg-gray-200 rounded-full overflow-hidden"><div class="h-full bg-[#0b5e32] transition-all duration-500" style="width: ${pct}%"></div></div>
+                        </td>
+                    </tr>`;
+                });
+            } else if (view === 'phase1') {
+                let totalChecked = Object.keys(taskState).filter(k => taskState[k]).length;
+                let pct = totalSystemTasks > 0 ? Math.round((totalChecked / totalSystemTasks) * 100) : 0;
+                
+                html += `<tr class="task-row bg-[#0b5e32]/5">
+                    <td class="p-5 font-black text-[#0b5e32] text-lg border-r border-gray-200" colspan="2">PHASE 1 OVERVIEW<br><span class="text-xs font-normal text-gray-500">July - September 2026</span></td>
+                    <td class="p-5 border-r border-gray-200"><ul class="list-disc pl-4 text-gray-700"><li>Foundation Math</li><li>DSGE Equations</li></ul></td>
+                    <td class="p-5 border-r border-gray-200"><ul class="list-disc pl-4 text-gray-700"><li>Python & R Mastery</li><li>Dynare Models</li></ul></td>
+                    <td class="p-5 border-r border-gray-200"><ul class="list-disc pl-4 text-gray-700"><li>Chapter 1 Draft</li><li>Chapter 2 Draft</li></ul></td>
+                    <td class="p-5 align-middle">
+                        <div class="flex justify-between text-sm text-gray-800 mb-2 font-bold"><span>Total Progress</span> <span>${pct}%</span></div>
+                        <div class="h-3 w-full bg-gray-200 rounded-full overflow-hidden shadow-inner"><div class="h-full bg-[#0b5e32] transition-all duration-1000" style="width: ${pct}%"></div></div>
+                    </td>
+                </tr>`;
+            }
+
+            tbody.innerHTML = html;
+        }
+
+        // Global handler for dynamic checkboxes
+        window.handleTaskToggle = function(checkbox) {
+            taskState[checkbox.id] = checkbox.checked;
+            updateDashboard(); // Recalculate everything
+            renderTaskTable(); // Re-render to update row progress bars
+        };
+
+        // Helper function to format numbers with commas
+        const formatNum = (num) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        // Main update function
+        function updateDashboard() {
+            // Get values from inputs (clamp to targets)
+            let wordsVal = Math.min(Math.max(parseInt(inputs.words.value) || 0, 0), TARGET_WORDS);
+            let citVal = Math.min(Math.max(parseInt(inputs.citations.value) || 0, 0), TARGET_CITATIONS);
+            let readVal = Math.min(Math.max(parseInt(inputs.readiness.value) || 0, 0), 100);
+            let mileVal = parseInt(inputs.milestones.value) || 0;
+
+            // Calculate Percentages
+            let wordsPct = (wordsVal / TARGET_WORDS) * 100;
+            let citPct = (citVal / TARGET_CITATIONS) * 100;
+            let milePct = (mileVal / TARGET_MILESTONES) * 100;
+
+            // Calculate Overall Aggregate (EWS)
+            let checkedTasks = Object.keys(taskState).filter(k => taskState[k]).length;
+            let taskPct = totalSystemTasks > 0 ? (checkedTasks / totalSystemTasks) * 100 : 0;
+            
+            // Average of the 5 main progress indicators
+            let overallPct = Math.round((wordsPct + citPct + milePct + readVal + taskPct) / 5);
+
+            // Update Text Displays
+            displays.words.innerText = formatNum(wordsVal);
+            displays.citations.innerText = formatNum(citVal);
+            displays.milestones.innerText = mileVal;
+            displays.readiness.innerText = readVal + "%";
+            displays.ewsText.innerText = overallPct + "%";
+
+            // Update Progress Bar Widths
+            progressBars.words.style.width = wordsPct + "%";
+            progressBars.citations.style.width = citPct + "%";
+            progressBars.milestones.style.width = milePct + "%";
+            progressBars.readiness.style.width = readVal + "%";
+
+            // Update Circular Dial (Stroke Dashoffset)
+            let offset = CIRCUMFERENCE - (overallPct / 100) * CIRCUMFERENCE;
+            progressBars.ewsDial.style.strokeDashoffset = offset;
+
+            const rows = document.querySelectorAll('.task-row.daily');
+            rows.forEach(row => {
+                const rowBoxes = row.querySelectorAll('.task-checkbox');
+                if (rowBoxes.length > 0) {
+                    const rowChecked = row.querySelectorAll('.task-checkbox:checked').length;
+                    const rowPct = Math.round((rowChecked / rowBoxes.length) * 100);
+                    
+                    const pctText = row.querySelector('.row-pct');
+                    const bar = row.querySelector('.row-bar');
+                    
+                    if (pctText) pctText.innerText = rowPct + '%';
+                    if (bar) bar.style.width = rowPct + '%';
+                }
+            });
+
+            // EWS Status Logic
+            if (overallPct === 0 && taskPct === 0) {
+                displays.ewsStatusColor.innerText = "PHASE 1 START";
+                displays.ewsStatusColor.style.color = "#9ca3af"; // Gray
+                displays.ewsStatusText.innerText = "Awaiting initial progress...";
+                progressBars.ewsDial.style.stroke = "#9ca3af";
+            } else if (overallPct < 25) {
+                displays.ewsStatusColor.innerText = "YELLOW: RAMPING UP";
+                displays.ewsStatusColor.style.color = "#d97706"; // Amber
+                displays.ewsStatusText.innerText = "Foundation building in progress.";
+                progressBars.ewsDial.style.stroke = "#d97706";
+            } else if (overallPct < 75) {
+                displays.ewsStatusColor.innerText = "GREEN: ON TRACK";
+                displays.ewsStatusColor.style.color = "#00b140"; // Green
+                displays.ewsStatusText.innerText = "Consistent progress maintained.";
+                progressBars.ewsDial.style.stroke = "#00b140";
+            } else {
+                displays.ewsStatusColor.innerText = "BLUE: ACCELERATED";
+                displays.ewsStatusColor.style.color = "#2563eb"; // Blue
+                displays.ewsStatusText.innerText = "Exceeding planned milestones!";
+                progressBars.ewsDial.style.stroke = "#2563eb";
+            }
+
+            // Generate Supervisor Report
+            generateReport(wordsVal, citVal, readVal, mileVal, overallPct, checkedTasks, totalSystemTasks);
+        }
+
+        function generateReport(words, citations, readiness, milestones, overall, tasksDone, totalTasks) {
+            const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            
+            let statusText = "";
+            if (overall === 0) statusText = "I am officially commencing Phase 1 of the research roadmap today.";
+            else if (overall < 25) statusText = "Initial foundational work is underway, focusing on required courses and environment setup.";
+            else statusText = "Steady progress is being made across literature review, technical setup, and data acquisition.";
+
+            const reportStr = `Date: ${date}
+Subject: Bi-Weekly PhD Progress Update
+
+Dear Supervisor,
+
+${statusText}
+
+CURRENT METRICS:
+• Thesis Draft: ${formatNum(words)} / ${formatNum(TARGET_WORDS)} words
+• Bibliography: ${citations} citations reviewed
+• Data Readiness: ${readiness}% complete
+• Software/Code: Milestone ${milestones} of 5
+• Short-term Tasks: ${tasksDone} of ${totalTasks} completed
+
+Overall EWS (Early Warning System) indicates my trajectory is at ${overall}%.
+
+Next phase will focus on advancing the task table milestones. 
+Data repository has been synced to the shared Drive.
+
+Best regards,
+Mohamed Samir`;
+
+            displays.report.value = reportStr;
+        }
+
+        document.getElementById('taskViewFilter').addEventListener('change', function() {
+            renderTaskTable();
+        });
+
+        function copyReport() {
+            displays.report.select();
+            document.execCommand('copy');
+            
+            const btnText = document.getElementById('copyText');
+            const btnIcon = document.getElementById('copyIcon');
+            
+            btnText.innerText = "Copied!";
+            btnIcon.className = "fa-solid fa-check";
+            
+            setTimeout(() => {
+                btnText.innerText = "Copy to Clipboard";
+                btnIcon.className = "fa-regular fa-copy";
+                window.getSelection().removeAllRanges();
+            }, 2000);
+        }
+
+        function filterTasks() {
+            const filter = document.getElementById('taskViewFilter').value;
+            const rows = document.querySelectorAll('.task-row');
+            
+            rows.forEach(row => {
+                if (filter === 'all' || row.classList.contains(filter)) {
+                    row.style.display = 'table-row';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Attach Event Listeners
+        Object.values(inputs).forEach(input => {
+            input.addEventListener('input', updateDashboard);
+            input.addEventListener('change', updateDashboard);
+        });
+
+        // Initialize on load
+        window.onload = () => {
+            renderTaskTable();
+            updateDashboard();
+        };
+
+    </script>
 </body>
 </html>
