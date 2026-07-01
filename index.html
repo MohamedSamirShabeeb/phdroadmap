@@ -1,411 +1,970 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-slate-50">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PhD Mission Control & Supervisor Diagnostic Hub</title>
-    <!-- Tailwind CSS for high-fidelity responsive styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        asu: {
-                            gold: '#C5A059',
-                            emerald: '#0F5132',
-                            darkGreen: '#0A3622',
-                            lightGreen: '#E2EFE0',
-                            accent: '#198754'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
-                    }
-                }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PhD Mission Control &amp; Supervisor Diagnostic Hub</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+
+    <style>
+        /* Custom styles */
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Gauge ring */
+        .gauge-ring {
+            transition: stroke-dashoffset 0.6s ease;
+        }
+
+        /* Cards */
+        .card {
+            background: #ffffff;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+            transition: box-shadow 0.15s ease;
+        }
+        .card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.03);
+        }
+
+        /* Variable card tag */
+        .tag {
+            display: inline-block;
+            padding: 0.1rem 0.6rem;
+            border-radius: 9999px;
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        .tag-country {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+        .tag-source {
+            background: #fae8ff;
+            color: #7c3aed;
+        }
+
+        /* Dropdown */
+        select.status-select {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            outline: none;
+            cursor: pointer;
+            transition: border 0.15s;
+        }
+        select.status-select:focus {
+            border-color: #0F5132;
+        }
+
+        /* Task checklist */
+        .task-check {
+            accent-color: #0F5132;
+            width: 1rem;
+            height: 1rem;
+            cursor: pointer;
+        }
+        .task-label {
+            font-size: 0.8rem;
+            color: #334155;
+        }
+
+        /* Scrollable matrix */
+        .matrix-scroll {
+            max-height: 480px;
+            overflow-y: auto;
+        }
+        .matrix-scroll::-webkit-scrollbar {
+            width: 5px;
+        }
+        .matrix-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        .matrix-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        /* Drag & drop zone */
+        .drop-zone {
+            border: 2px dashed #cbd5e1;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            transition: border-color 0.2s, background 0.2s;
+            background: #f8fafc;
+        }
+        .drop-zone.dragover {
+            border-color: #0F5132;
+            background: #f0fdf4;
+        }
+
+        /* Report textarea */
+        .report-box {
+            background: #f1f5f9;
+            border: none;
+            border-radius: 1rem;
+            padding: 1rem;
+            width: 100%;
+            font-family: 'Inter', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            resize: vertical;
+            min-height: 140px;
+            color: #0f172a;
+        }
+        .report-box:focus {
+            outline: 2px solid #0F5132;
+            outline-offset: 2px;
+        }
+
+        /* Responsive tweaks */
+        @media (max-width: 640px) {
+            .card {
+                border-radius: 1rem;
+            }
+            .gauge-container {
+                max-width: 200px;
+                margin: 0 auto;
             }
         }
-    </script>
-    <style>
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+
+        /* Progress bar fill */
+        .progress-fill {
+            transition: width 0.4s ease;
         }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(15, 81, 50, 0.05);
+
+        /* Utility */
+        .bg-emerald {
+            background-color: #0F5132;
         }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #C5A059;
-            border-radius: 6px;
+        .text-emerald {
+            color: #0F5132;
         }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #0F5132;
+        .border-emerald {
+            border-color: #0F5132;
+        }
+        .bg-gold {
+            background-color: #C5A059;
+        }
+        .text-gold {
+            color: #C5A059;
+        }
+        .border-gold {
+            border-color: #C5A059;
+        }
+        .ring-emerald {
+            --tw-ring-color: #0F5132;
         }
     </style>
 </head>
-<body class="min-h-full text-slate-800 font-sans antialiased flex flex-col justify-between selection:bg-asu-gold selection:text-white">
+<body>
 
-    <!-- Brand Header -->
-    <header class="w-full bg-white border-b border-slate-200 px-6 py-4 flex flex-col lg:flex-row justify-between items-center z-30 sticky top-0 shadow-sm">
-        <div class="flex items-center space-x-4 mb-4 lg:mb-0">
-            <div class="bg-asu-emerald p-2.5 rounded-full flex items-center justify-center w-12 h-11 shadow-inner">
-                <svg class="w-7 h-7 text-white" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="6"/>
-                    <path d="M50 20 L50 80 M20 50 L80 50" stroke="currentColor" stroke-width="3" stroke-dasharray="3 3"/>
-                    <polygon points="50,30 58,48 42,48" fill="currentColor"/>
-                    <circle cx="50" cy="50" r="8" fill="none" stroke="currentColor" stroke-width="4"/>
-                </svg>
-            </div>
-            <div>
-                <h1 class="text-lg font-serif font-extrabold text-asu-emerald tracking-wide uppercase">Ain Shams University</h1>
-                <p class="text-sm text-slate-600 font-semibold tracking-wider">Faculty of Business — Supervisor Portal & Performance EWS</p>
-            </div>
-        </div>
-        <div class="flex items-center space-x-3">
-            <span class="text-sm bg-asu-lightGreen border border-asu-emerald/20 text-asu-emerald font-bold px-4 py-2 rounded-full flex items-center shadow-sm">
-                <i class="fa-solid fa-signal mr-2 text-asu-gold"></i> Live Tracking Dashboard
-            </span>
-            <button onclick="exportDiagnostics()" class="text-sm bg-asu-gold hover:bg-yellow-500 text-slate-950 font-bold px-4 py-2 rounded-lg transition duration-150 flex items-center space-x-1.5 shadow-md shadow-asu-gold/10">
-                <i class="fa-solid fa-file-export"></i> <span>Share Diagnostic PDF</span>
-            </button>
-        </div>
-    </header>
+    <div class="max-w-4xl mx-auto px-4 py-6 sm:py-10" id="app">
 
-    <!-- Main Content Portrait Layout (Sequential Scrolling View) -->
-    <main class="flex-1 w-full max-w-7xl mx-auto p-4 lg:p-8 flex flex-col gap-8">
-        
-        <!-- SECTION 1: Performance Overview & EWS Monitor Card -->
-        <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl shadow-sm flex flex-col md:flex-row items-center justify-between gap-8">
-            <div class="space-y-4 max-w-xl">
-                <span class="text-xs font-bold text-asu-emerald uppercase tracking-widest bg-asu-lightGreen/50 px-3 py-1 rounded-full border border-asu-emerald/25 inline-block">Supervisor Dashboard</span>
-                <h2 class="text-2xl md:text-3xl font-serif font-extrabold text-slate-900">Performance EWS Monitor</h2>
-                <p class="text-sm md:text-base text-slate-600 leading-relaxed">
-                    This diagnostic monitor calculates your performance index against the locked 24-month roadmap, evaluating your data, programming progress, and citation health in real time.
-                </p>
-            </div>
-            
-            <!-- Circular Metric Dial -->
-            <div class="flex flex-col items-center gap-4 min-w-[200px]">
-                <div class="relative w-40 h-40 flex items-center justify-center">
-                    <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r="40" stroke="#f1f5f9" stroke-width="8" fill="none" />
-                        <circle id="ews-progress-ring" cx="50" cy="50" r="40" stroke="#0F5132" stroke-width="8" fill="none" stroke-dasharray="251.2" stroke-dashoffset="251.2" class="transition-all duration-500" />
+        <!-- ===== HEADER ===== -->
+        <header class="mb-8">
+            <h1 class="font-serif text-3xl sm:text-4xl font-semibold text-slate-800 tracking-tight">
+                <span class="text-emerald">PhD</span> Mission Control
+                <span class="text-gold">&amp;</span> Supervisor Diagnostic Hub
+            </h1>
+            <p class="text-slate-500 text-sm mt-1 flex items-center gap-2">
+                <i class="fas fa-graduation-cap text-emerald"></i>
+                Ain Shams University · Faculty of Business
+                <span class="mx-1 text-slate-300">|</span>
+                <i class="far fa-calendar-alt text-gold"></i>
+                <span id="currentDate"></span>
+            </p>
+        </header>
+
+        <!-- ===== EWS MONITOR + GAUGE ===== -->
+        <section class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
+            <!-- Gauge -->
+            <div class="md:col-span-2 card p-6 flex flex-col items-center justify-center">
+                <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2">EWS Monitor</h2>
+                <div class="gauge-container relative w-48 h-48">
+                    <svg viewBox="0 0 120 120" class="w-full h-full -rotate-90">
+                        <!-- Background ring -->
+                        <circle cx="60" cy="60" r="52" fill="none" stroke="#e2e8f0" stroke-width="10" />
+                        <!-- Foreground ring -->
+                        <circle cx="60" cy="60" r="52" fill="none" stroke="#0F5132" stroke-width="10"
+                        stroke-linecap="round"
+                        stroke-dasharray="326.726" stroke-dashoffset="326.726"
+                        class="gauge-ring" id="gaugeRing" />
                     </svg>
-                    <div class="absolute flex flex-col items-center text-center">
-                        <span id="ews-score-display" class="text-3xl font-bold font-mono tracking-tighter text-slate-900">20%</span>
-                        <span id="ews-label-display" class="text-xs font-bold uppercase tracking-wider text-slate-400">Loading</span>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center">
+                        <span class="text-3xl font-bold text-slate-800" id="gaugeScore">0%</span>
+                        <span class="text-[0.6rem] uppercase tracking-wider text-slate-400">Overall</span>
                     </div>
                 </div>
-                <div id="status-badge" class="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest border transition duration-200 text-center w-full shadow-sm bg-slate-100 text-slate-600 border-slate-200">
-                    Checking...
+                <div class="flex flex-wrap justify-center gap-3 mt-3 text-xs text-slate-500">
+                    <span><span class="inline-block w-2 h-2 rounded-full bg-emerald mr-1"></span> ≥80%</span>
+                    <span><span class="inline-block w-2 h-2 rounded-full bg-gold mr-1"></span> 30–79%</span>
+                    <span><span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1"></span> &lt;30%</span>
+                </div>
+            </div>
+
+            <!-- Quick stats -->
+            <div class="md:col-span-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <div class="card p-4 text-center">
+                    <div class="text-xs text-slate-400 uppercase tracking-wider">Words</div>
+                    <div class="text-xl font-bold text-slate-700" id="statWords">0</div>
+                    <div class="text-[0.6rem] text-slate-400">/ 60,000</div>
+                </div>
+                <div class="card p-4 text-center">
+                    <div class="text-xs text-slate-400 uppercase tracking-wider">Citations</div>
+                    <div class="text-xl font-bold text-slate-700" id="statCitations">0</div>
+                    <div class="text-[0.6rem] text-slate-400">/ 200</div>
+                </div>
+                <div class="card p-4 text-center">
+                    <div class="text-xs text-slate-400 uppercase tracking-wider">Syllabus</div>
+                    <div class="text-xl font-bold text-slate-700" id="statSyllabus">0%</div>
+                    <div class="text-[0.6rem] text-slate-400">Adherence</div>
+                </div>
+                <div class="card p-4 text-center">
+                    <div class="text-xs text-slate-400 uppercase tracking-wider">Code</div>
+                    <div class="text-xl font-bold text-slate-700" id="statCode">0</div>
+                    <div class="text-[0.6rem] text-slate-400">/ 5</div>
+                </div>
+                <div class="card p-4 text-center">
+                    <div class="text-xs text-slate-400 uppercase tracking-wider">Data</div>
+                    <div class="text-xl font-bold text-slate-700" id="statData">0%</div>
+                    <div class="text-[0.6rem] text-slate-400">Readiness</div>
+                </div>
+                <div class="card p-4 text-center">
+                    <div class="text-xs text-slate-400 uppercase tracking-wider">Days Done</div>
+                    <div class="text-xl font-bold text-slate-700" id="statDaysDone">0</div>
+                    <div class="text-[0.6rem] text-slate-400">/ 92</div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 2: Quantitative Progress Indicators Grid -->
-        <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 flex flex-col justify-between shadow-sm">
-                <div class="flex justify-between items-start mb-3">
-                    <span class="text-xs font-extrabold tracking-wider text-slate-400 uppercase">1. Drafting Progress</span>
-                    <span class="text-asu-emerald text-xl"><i class="fa-solid fa-pen-fancy"></i></span>
-                </div>
-                <div>
-                    <h4 class="text-sm font-bold text-slate-700">Chapter Word Counts</h4>
-                    <p class="text-2xl font-mono font-bold text-slate-900 mt-1" id="stat-words">0 / 60,000</p>
-                </div>
-                <div class="w-full bg-slate-100 rounded-full h-1.5 mt-4">
-                    <div id="bar-words" class="bg-asu-gold h-1.5 rounded-full transition-all duration-300" style="width: 0%"></div>
-                </div>
-            </div>
-
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 flex flex-col justify-between shadow-sm">
-                <div class="flex justify-between items-start mb-3">
-                    <span class="text-xs font-extrabold tracking-wider text-slate-400 uppercase">2. Research Library</span>
-                    <span class="text-asu-emerald text-xl"><i class="fa-solid fa-folder-open"></i></span>
-                </div>
-                <div>
-                    <h4 class="text-sm font-bold text-slate-700">Verified Lit Citations</h4>
-                    <p class="text-2xl font-mono font-bold text-slate-900 mt-1" id="stat-papers">0 Papers</p>
-                </div>
-                <div class="w-full bg-slate-100 rounded-full h-1.5 mt-4">
-                    <div id="bar-papers" class="bg-asu-emerald h-1.5 rounded-full transition-all duration-300" style="width: 0%"></div>
-                </div>
-            </div>
-
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 flex flex-col justify-between shadow-sm">
-                <div class="flex justify-between items-start mb-3">
-                    <span class="text-xs font-extrabold tracking-wider text-slate-400 uppercase">3. Technical Checkpoint</span>
-                    <span class="text-asu-emerald text-xl"><i class="fa-solid fa-code-branch"></i></span>
-                </div>
-                <div>
-                    <h4 class="text-sm font-bold text-slate-700">Code Milestones</h4>
-                    <p class="text-2xl font-mono font-bold text-slate-900 mt-1" id="stat-code">0 / 5 Completed</p>
-                </div>
-                <div class="w-full bg-slate-100 rounded-full h-1.5 mt-4">
-                    <div id="bar-code" class="bg-asu-accent h-1.5 rounded-full transition-all duration-300" style="width: 0%"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 3: Interlinked Systems Integration Panel -->
-        <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl shadow-sm space-y-6">
-            <h3 class="text-lg font-serif font-extrabold text-slate-900 flex items-center">
-                <i class="fa-solid fa-circle-nodes mr-2.5 text-asu-gold animate-pulse"></i> Live External Integrations Tracker
-            </h3>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Google Drive Card -->
-                <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col justify-between space-y-4">
-                    <div class="flex justify-between items-start">
-                        <div class="space-y-1">
-                            <h4 class="text-sm font-bold text-slate-800">Google Drive Folder Sync</h4>
-                            <p class="text-xs text-slate-500 leading-normal">
-                                Folder ID: <span id="sync-gdrive-id-display" class="font-mono text-asu-gold text-xs font-semibold break-all">None Loaded</span>
-                            </p>
-                        </div>
-                        <span id="sync-gdrive-indicator" class="w-3.5 h-3.5 bg-red-500 rounded-full shadow-sm border border-white"></span>
-                    </div>
-                    <div class="space-y-2">
-                        <div class="flex space-x-2">
-                            <input type="text" id="input-gdrive-id" placeholder="Paste Folder ID here" class="w-full bg-white border border-slate-300 focus:ring-2 focus:ring-asu-emerald rounded-lg px-3 py-2 text-xs outline-none shadow-sm font-sans">
-                            <button onclick="saveGDriveFolderId()" class="bg-asu-gold hover:bg-yellow-500 text-slate-950 font-bold px-4 py-2 rounded-lg text-xs transition shadow-sm">Save</button>
-                        </div>
-                        <p class="text-[10px] text-slate-400 italic leading-tight">
-                            *Note: Ensure your Drive folder is shared as "Anyone with link can view" to allow the browser to parse assets securely.
-                        </p>
-                    </div>
-                    <div class="flex space-x-3 text-xs font-semibold text-slate-500 pt-1">
-                        <span id="sync-gdrive-ver" class="bg-slate-200 px-2 py-0.5 rounded">Unverified</span>
-                        <span id="sync-gdrive-status" class="text-red-500 font-bold">Offline</span>
-                    </div>
-                </div>
-
-                <!-- Mendeley Live Drag & Drop Parser Card -->
-                <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col justify-between space-y-4">
-                    <div class="flex justify-between items-start">
-                        <div class="space-y-1">
-                            <h4 class="text-sm font-bold text-slate-800">Mendeley BibTeX Ingestion</h4>
-                            <p class="text-xs text-slate-500">Mendeley Group: <code class="font-mono text-asu-gold text-xs">UMP_Bubble_Dynamics_Egypt</code></p>
-                        </div>
-                        <span id="sync-mendeley-indicator" class="w-3.5 h-3.5 bg-red-500 rounded-full shadow-sm border border-white"></span>
-                    </div>
-                    
-                    <div id="mendeley-dropzone" class="border-2 border-dashed border-slate-300 hover:border-asu-emerald bg-white rounded-xl p-4 text-center cursor-pointer transition flex flex-col items-center justify-center space-y-2">
-                        <i class="fa-solid fa-file-arrow-up text-2xl text-slate-400"></i>
-                        <span class="text-xs text-slate-500 font-medium">Drag & Drop <strong class="text-asu-emerald">.bib</strong> file here</span>
-                        <input type="file" id="mendeley-file-input" accept=".bib" class="hidden">
-                    </div>
-
-                    <div class="flex space-x-3 text-xs font-semibold text-slate-500 pt-1">
-                        <span id="mendeley-ver-count" class="bg-slate-200 px-2 py-0.5 rounded">0 Refs Loaded</span>
-                        <span id="sync-mendeley-status" class="text-red-500 font-bold">Unsynced</span>
-                    </div>
-                </div>
-
-                <!-- Notion Live API Simulator Card -->
-                <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col justify-between space-y-4">
-                    <div class="flex justify-between items-start">
-                        <div class="space-y-1">
-                            <h4 class="text-sm font-bold text-slate-800">Notion Workspace Sync</h4>
-                            <p class="text-xs text-slate-500">Auto-rollup your progress coordinates right to your active journal workspace.</p>
-                        </div>
-                        <span id="sync-notion-indicator" class="w-3.5 h-3.5 bg-red-500 rounded-full shadow-sm border border-white"></span>
-                    </div>
-                    
-                    <div class="space-y-2">
-                        <div class="flex space-x-2">
-                            <input type="text" id="input-notion-id" placeholder="Paste Notion Database ID" class="w-full bg-white border border-slate-300 focus:ring-2 focus:ring-asu-emerald rounded-lg px-3 py-2 text-xs outline-none shadow-sm font-sans">
-                            <button onclick="saveNotionSettings()" class="bg-asu-gold hover:bg-yellow-500 text-slate-950 font-bold px-4 py-2 rounded-lg text-xs transition shadow-sm">Sync</button>
-                        </div>
-                        <p class="text-[10px] text-slate-400 leading-normal">
-                            Notion Page ID: <code id="notion-ver-id" class="font-mono text-asu-gold text-[10px]">None Loaded</code>
-                        </p>
-                    </div>
-
-                    <div class="flex space-x-3 text-xs font-semibold text-slate-500 pt-1">
-                        <span id="sync-notion-ver" class="bg-slate-200 px-2 py-0.5 rounded">Disconnected</span>
-                        <span id="sync-notion-status" class="text-red-500 font-bold">Offline</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 4: Live Data & Variables Ingestion Tracker (Premium Notion-Style Card Grid) -->
-        <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl shadow-sm space-y-6">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-4">
-                <div>
-                    <h3 class="text-lg font-serif font-extrabold text-slate-900 flex items-center">
-                        <i class="fa-solid fa-database mr-2.5 text-asu-gold animate-pulse"></i> Data Collection Status — Data & Variables Tracker
-                    </h3>
-                    <p class="text-xs text-slate-500 mt-1">Directly mirrors the structural, country-specific parameters from your personal Notion workspace.</p>
-                </div>
-                <div class="bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 flex items-center space-x-3 shadow-inner">
-                    <span class="text-xs font-bold text-slate-500 uppercase">Ready Rate:</span>
-                    <span id="data-readiness-percent" class="font-mono text-sm font-bold text-asu-emerald">0%</span>
-                </div>
-            </div>
-
-            <!-- Ingestion Progress Bar -->
-            <div class="w-full bg-slate-100 rounded-full h-2">
-                <div id="data-readiness-bar" class="bg-asu-gold h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
-            </div>
-
-            <!-- Beautiful Card Grid covering all 17 variables in the premium style from image_580f99.jpg -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="variables-tracker-grid">
-                <!-- Dynamic cards injected via JS. Fallback text below if JS fails. -->
-                <div class="p-5 text-center text-slate-400 text-xs italic col-span-full">Initializing Variables Database...</div>
-            </div>
-        </section>
-
-        <!-- SECTION 5: Quarter 1 Interactive Daily Task Matrix -->
-        <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl space-y-6 shadow-sm">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-4">
-                <div>
-                    <h3 class="text-lg font-serif font-extrabold text-slate-900 flex items-center">
-                        <i class="fa-solid fa-calendar-check mr-2.5 text-asu-gold animate-bounce"></i> Q1 Daily Task Matrix (92-Day Roadmap)
-                    </h3>
-                    <p class="text-xs text-slate-500 mt-1">Manage and check off detailed deliverable checklists for every single day of Quarter 1.</p>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <!-- Navigation dropdowns -->
-                    <select id="matrix-month-selector" onchange="onMatrixMonthChange()" class="bg-slate-50 border border-slate-300 focus:border-asu-emerald focus:ring-1 focus:ring-asu-emerald rounded-lg px-3 py-1.5 text-xs text-slate-700 outline-none transition shadow-sm font-semibold font-sans">
-                        <option value="july">July 2026 (Days 1-31)</option>
-                        <option value="august">August 2026 (Days 32-62)</option>
-                        <option value="september">September 2026 (Days 63-92)</option>
-                    </select>
-                    <select id="matrix-day-selector" onchange="onMatrixDayChange()" class="bg-slate-50 border border-slate-300 focus:border-asu-emerald focus:ring-1 focus:ring-asu-emerald rounded-lg px-3 py-1.5 text-xs text-slate-700 outline-none transition shadow-sm font-semibold font-sans">
-                        <!-- Injected by script -->
-                    </select>
-                </div>
-            </div>
-
-            <!-- Q1 Checklist Progress Indicator -->
-            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-3 shadow-inner">
-                <div class="flex justify-between text-xs text-slate-600 uppercase tracking-wider">
-                    <span>Checklist Completion: <strong id="checklist-count-display" class="text-asu-emerald font-mono">0 / 276 tasks</strong></span>
-                    <span id="checklist-pct-display" class="font-mono text-asu-emerald">0%</span>
-                </div>
-                <div class="w-full bg-slate-200 rounded-full h-2">
-                    <div id="checklist-progress-bar" class="bg-asu-gold h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
-                </div>
-            </div>
-
-            <!-- Three Block Daily Task Container -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="daily-checklist-blocks">
-                <!-- Dynamic Blocks injected by JS. Fallback text below if JS fails. -->
-                <div class="p-5 text-center text-slate-400 text-xs italic col-span-full">Generating Daily Checklist...</div>
-            </div>
-
-            <!-- Synchronizer and Reset Panel -->
-            <div class="pt-4 flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-slate-100">
-                <span class="text-xs text-slate-500 font-medium italic">
-                    *Tip: Synchronizing updates the logger fields with your checked tasks automatically.
-                </span>
-                <button onclick="syncChecklistToSandbox()" class="w-full sm:w-auto px-5 py-2.5 bg-asu-emerald hover:bg-asu-accent text-white font-bold text-xs rounded-lg transition shadow-md shadow-asu-emerald/10 flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-arrows-rotate mr-1"></i>
-                    <span>Sync Checklist to Sandbox Metrics</span>
-                </button>
-            </div>
-        </section>
-
-        <!-- SECTION 6: Actual Progress Diagnostic Logger (Sandbox Inputs) -->
-        <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl shadow-sm space-y-6">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-4">
-                <h3 class="text-lg font-serif font-extrabold text-slate-900 flex items-center">
-                    <i class="fa-solid fa-sliders mr-2.5 text-asu-gold"></i> Actual Progress Diagnostic Logger
+        <!-- ===== INTEGRATIONS ===== -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <!-- Google Drive -->
+            <div class="card p-5">
+                <h3 class="text-sm font-semibold text-slate-600 flex items-center gap-2 mb-3">
+                    <i class="fab fa-google-drive text-emerald"></i> Google Drive Folder
                 </h3>
-                <button onclick="resetToZero()" class="text-xs bg-red-100 hover:bg-red-200 text-red-700 font-bold border border-red-300/40 px-3 py-1.5 rounded-lg transition shadow-sm">
-                    <i class="fa-solid fa-rotate-left mr-1"></i> Reset Sandbox
-                </button>
+                <div class="flex gap-2">
+                    <input type="text" id="driveFolderId" placeholder="Folder ID" class="flex-1 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald/30" />
+                    <button id="loadDriveBtn" class="bg-emerald text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-emerald/90 transition">Load</button>
+                </div>
+                <div class="mt-3 rounded-xl overflow-hidden border border-slate-200" style="height:180px;">
+                    <iframe id="driveIframe" src="about:blank" class="w-full h-full" frameborder="0"></iframe>
+                </div>
+                <p class="text-[0.6rem] text-slate-400 mt-1"><i class="far fa-info-circle"></i> Enter folder ID and click Load.</p>
             </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-xs md:text-sm">
-                <div class="space-y-1.5">
-                    <label class="block text-slate-500 font-bold uppercase tracking-wider text-xs">1. Current Word Count</label>
-                    <input type="number" id="input-word-count" min="0" max="60000" placeholder="0" oninput="calculateEwsScore()" class="w-full bg-slate-50 border border-slate-300 focus:ring-2 focus:ring-asu-emerald focus:border-asu-emerald rounded-lg px-4 py-2 text-slate-800 outline-none transition font-mono">
+
+            <!-- Mendeley .bib drag & drop -->
+            <div class="card p-5">
+                <h3 class="text-sm font-semibold text-slate-600 flex items-center gap-2 mb-3">
+                    <i class="fas fa-book-open text-gold"></i> Mendeley .bib Importer
+                </h3>
+                <div id="dropZone" class="drop-zone">
+                    <i class="fas fa-cloud-upload-alt text-3xl text-slate-300 mb-2 block"></i>
+                    <p class="text-sm text-slate-500">Drag &amp; drop your <strong>.bib</strong> file here</p>
+                    <p class="text-xs text-slate-400 mt-1">or click to browse</p>
+                    <input type="file" id="bibFileInput" accept=".bib" class="hidden" />
                 </div>
-                <div class="space-y-1.5">
-                    <label class="block text-slate-500 font-bold uppercase tracking-wider text-xs">2. Mendeley Citations</label>
-                    <input type="number" id="input-citations" min="0" max="200" placeholder="0" oninput="calculateEwsScore()" class="w-full bg-slate-50 border border-slate-300 focus:ring-2 focus:ring-asu-emerald focus:border-asu-emerald rounded-lg px-4 py-2 text-slate-800 outline-none transition font-mono">
+                <div class="mt-3 flex items-center gap-3 text-sm">
+                    <span class="text-slate-500">Entries found:</span>
+                    <span id="bibEntryCount" class="font-bold text-emerald">0</span>
+                    <button id="bibApplyBtn" class="ml-auto text-xs bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-full transition">Apply to Citations</button>
                 </div>
-                <div class="space-y-1.5">
-                    <label class="block text-slate-500 font-bold uppercase tracking-wider text-xs">3. Syllabus Adherence (%)</label>
-                    <input type="number" id="input-syllabus" min="0" max="100" placeholder="100" oninput="calculateEwsScore()" class="w-full bg-slate-50 border border-slate-300 focus:ring-2 focus:ring-asu-emerald focus:border-asu-emerald rounded-lg px-4 py-2 text-slate-800 outline-none transition font-mono">
+            </div>
+        </section>
+
+        <!-- ===== VARIABLES TRACKER (17 cards) ===== -->
+        <section class="mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold text-slate-700 flex items-center gap-2">
+                    <i class="fas fa-chart-line text-emerald"></i> Variables Tracker
+                    <span class="text-sm font-normal text-slate-400">(17)</span>
+                </h2>
+                <div class="flex items-center gap-3 text-xs">
+                    <span class="text-slate-500">Data Readiness:</span>
+                    <div class="w-32 h-2 bg-slate-200 rounded-full overflow-hidden">
+                        <div id="dataReadinessBar" class="h-full bg-emerald progress-fill" style="width:0%;"></div>
+                    </div>
+                    <span id="dataReadinessLabel" class="font-mono text-emerald font-semibold">0%</span>
                 </div>
-                <div class="space-y-1.5">
-                    <label class="block text-slate-500 font-bold uppercase tracking-wider text-xs">4. Code Milestones Done</label>
-                    <select id="input-code-milestones" onchange="calculateEwsScore()" class="w-full bg-slate-50 border border-slate-300 focus:ring-2 focus:ring-asu-emerald focus:border-asu-emerald rounded-lg px-4 py-2 text-slate-700 font-semibold outline-none transition cursor-pointer font-sans">
-                        <option value="0">0: Zero Foundation</option>
-                        <option value="1">1: Clean Datasets & Repos</option>
-                        <option value="2">2: Simple RBC Solved</option>
-                        <option value="3">3: NK Model in Dynare</option>
-                        <option value="4">4: Crisis Simulations Run</option>
-                        <option value="5">5: Panel VAR Estimated</option>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3" id="variablesGrid">
+                <!-- Cards injected by JS -->
+            </div>
+        </section>
+
+        <!-- ===== 92-DAY Q1 TASK MATRIX ===== -->
+        <section class="mb-8">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                <h2 class="text-lg font-semibold text-slate-700 flex items-center gap-2">
+                    <i class="fas fa-tasks text-gold"></i> 92-Day Q1 Task Matrix
+                    <span class="text-sm font-normal text-slate-400">(Jul–Sep)</span>
+                </h2>
+                <div class="flex flex-wrap items-center gap-2">
+                    <label class="text-xs text-slate-500">Filter:</label>
+                    <select id="matrixFilter" class="border border-slate-200 rounded-lg px-2 py-1 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-emerald/30">
+                        <option value="all">All Days</option>
+                        <option value="July">July</option>
+                        <option value="August">August</option>
+                        <option value="September">September</option>
                     </select>
+                    <button id="syncMatrixBtn" class="bg-emerald text-white px-4 py-1.5 rounded-lg text-xs font-medium hover:bg-emerald/90 transition flex items-center gap-1">
+                        <i class="fas fa-sync-alt"></i> Sync
+                    </button>
+                    <span id="matrixSummary" class="text-xs text-slate-500 ml-1"></span>
+                </div>
+            </div>
+            <div class="card p-4">
+                <div class="matrix-scroll" id="matrixContainer">
+                    <!-- Injected by JS -->
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 7: Diagnostic Reporting & Live Iframe Previews -->
-        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            
-            <!-- Left Side: Supervisor Diagnostic Reporter -->
-            <div class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl space-y-4 shadow-sm h-full flex flex-col justify-between">
-                <div class="border-b border-slate-100 pb-4">
-                    <h3 class="text-lg font-serif font-extrabold text-slate-900 flex items-center">
-                        <i class="fa-solid fa-share-nodes mr-2.5 text-asu-gold"></i> Supervisor Diagnostic Center
-                    </h3>
-                    <p class="text-xs text-slate-500 mt-1">Generate a copyable summary of your progress and code updates to share with your committee.</p>
-                </div>
-
-                <!-- Live Generated Diagnostic Report (Copyable Text Block) -->
-                <div class="space-y-3 flex-1 flex flex-col justify-between">
-                    <div class="flex justify-between items-center pt-2">
-                        <span class="text-xs font-bold tracking-wider text-slate-400 uppercase">Live Diagnostic Report Output</span>
-                        <button onclick="copyDiagnosticReport()" class="text-xs bg-slate-100 hover:bg-slate-200 text-asu-gold font-bold px-3 py-1.5 rounded-lg border border-slate-200 shadow-sm transition">
-                            <i class="fa-solid fa-copy mr-1"></i> Copy Report Text
-                        </button>
-                    </div>
-                    <textarea id="diagnostic-report-box" readonly class="w-full h-64 bg-slate-50 border border-slate-200 rounded-xl p-4 font-mono text-xs leading-relaxed text-slate-700 resize-none outline-none custom-scrollbar shadow-inner mt-2">
-Loading analysis metrics...
-                    </textarea>
-                </div>
-            </div>
-
-            <!-- Right Side: Interactive Shared Workspace Previews -->
-            <div class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl space-y-4 shadow-sm h-full flex flex-col">
-                <div class="border-b border-slate-100 pb-4">
-                    <h3 class="text-lg font-serif font-extrabold text-slate-900 flex items-center">
-                        <i class="fa-solid fa-folder-tree mr-2.5 text-asu-gold"></i> Live Shared Workspace
-                    </h3>
-                    <p class="text-xs text-slate-500 mt-1">Real-time embedded workspace showing synced research folders directly from Google Drive.</p>
-                </div>
-
-                <!-- Live Embedded Google Drive Folder (Live View Window) -->
-                <div class="space-y-2 flex-1 flex flex-col justify-center">
-                    <div id="gdrive-iframe-container" class="w-full h-72 bg-slate-50 border border-slate-200 rounded-xl overflow-hidden flex items-center justify-center text-center p-6 shadow-inner">
-                        <div class="text-slate-400 text-xs">
-                            <i class="fa-brands fa-google-drive text-4xl mb-3 block text-blue-500/40"></i>
-                            Please input your Google Drive Folder ID on the left panel to load your live files.
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 8: Quarter 1 Master Curriculum & Notion Synchronizer -->
-        <section class="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl shadow-sm space-y-6">
-            
-            <!-- Notion Link Banner -->
-            <div class="bg-[#F3F1EC] border border-slate-200 rounded-2xl p-5 flex flex-col md:flex-row justify-between items-center gap-4 shadow-inner">
-                <div class="flex items-center space-x-4">
-                    <div class="p-3 bg-black text-white text-3xl rounded-xl shadow">
-                        <i class="fa-solid fa-journal-whills"></i>
+        <!-- ===== DIAGNOSTIC LOGGER ===== -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="card p-5">
+                <h3 class="text-sm font-semibold text-slate-600 flex items-center gap-2 mb-4">
+                    <i class="fas fa-sliders-h text-emerald"></i> Diagnostic Logger
+                </h3>
+                <div class="space-y-3">
+                    <div>
+                        <label class="text-xs text-slate-500 block mb-0.5">Words (max 60,000)</label>
+                        <input type="number" id="diagWords" min="0" max="60000" value="0" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald/30" />
                     </div>
                     <div>
-                        <h3 class="text-base font-bold text-slate-800">Your Live Notion PhD Journey Dashboard</h3>
-                        <p class="text-xs text-slate-500">Track tasks, logs, references, and variables in your official workspace
+                        <label class="text-xs text-slate-500 block mb-0.5">Citations (max 200)</label>
+                        <input type="number" id="diagCitations" min="0" max="200" value="0" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald/30" />
+                    </div>
+                    <div>
+                        <label class="text-xs text-slate-500 block mb-0.5">Syllabus Adherence (%)</label>
+                        <input type="number" id="diagSyllabus" min="0" max="100" value="0" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald/30" />
+                    </div>
+                    <div>
+                        <label class="text-xs text-slate-500 block mb-0.5">Code Milestones (0–5)</label>
+                        <select id="diagCode" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald/30">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SUPERVISOR REPORT ===== -->
+            <div class="card p-5 flex flex-col">
+                <h3 class="text-sm font-semibold text-slate-600 flex items-center gap-2 mb-3">
+                    <i class="fas fa-file-alt text-gold"></i> Supervisor Report
+                </h3>
+                <textarea id="reportBox" class="report-box flex-1" readonly placeholder="Report will auto-generate…"></textarea>
+                <button id="copyReportBtn" class="mt-3 self-end text-xs bg-slate-100 hover:bg-slate-200 px-4 py-1.5 rounded-full transition flex items-center gap-1">
+                    <i class="far fa-copy"></i> Copy
+                </button>
+            </div>
+        </section>
+
+        <!-- ===== FOOTER ===== -->
+        <footer class="text-center text-xs text-slate-400 pt-4 border-t border-slate-200/60">
+            <i class="fas fa-database text-emerald mr-1"></i> State auto-saved in localStorage
+            <span class="mx-2">·</span>
+            <span id="lastSaved"></span>
+        </footer>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- JAVASCRIPT -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // ---------- CONSTANTS ----------
+            const GAUGE_CIRCUMFERENCE = 326.726;
+            const VARIABLE_NAMES = [
+                'Price of Capital', 'Wages', 'Inflation', 'Output Gap',
+                'Quantitative Easing', 'Interest Rates', 'Exchange Rates',
+                'GDP Growth', 'Unemployment Rate', 'Consumer Confidence',
+                'Business Investment', 'Government Spending', 'Net Exports',
+                'Money Supply', 'Credit Availability', 'Stock Market Index',
+                'Commodity Prices'
+            ];
+            const COUNTRIES = ['Egypt', 'US', 'UK', 'EU', 'China', 'Global'];
+            const SOURCES = ['IMF', 'World Bank', 'Bloomberg', 'Reuters', 'National Statistics', 'OECD'];
+            const STATUSES = ['Not Started', 'Sourced', 'Wrangled', 'Integrated'];
+
+            // Generate random tags for each variable (deterministic seed based on index)
+            function getTags(index) {
+                const c = COUNTRIES[index % COUNTRIES.length];
+                const s = SOURCES[(index * 3 + 1) % SOURCES.length];
+                const c2 = COUNTRIES[(index * 2 + 5) % COUNTRIES.length];
+                const s2 = SOURCES[(index * 7 + 3) % SOURCES.length];
+                const unique = [...new Set([c, c2])].slice(0, 2);
+                const uniqueSrc = [...new Set([s, s2])].slice(0, 2);
+                return { countries: unique, sources: uniqueSrc };
+            }
+
+            // ---------- STATE ----------
+            let state = {
+                variables: VARIABLE_NAMES.map((name, i) => ({
+                    id: i,
+                    name: name,
+                    status: 'Not Started',
+                    countries: getTags(i).countries,
+                    sources: getTags(i).sources,
+                })),
+                tasks: [], // [{dayIdx, dateStr, math:bool, coding:bool, writing:bool}]
+                diag: { words: 0, citations: 0, syllabus: 0, code: 0 },
+                driveFolderId: '',
+                bibCount: 0,
+            };
+
+            // ---------- DOM REFS ----------
+            const $ = (s) => document.querySelector(s);
+            const $$ = (s) => document.querySelectorAll(s);
+
+            const gaugeRing = $('#gaugeRing');
+            const gaugeScore = $('#gaugeScore');
+            const statWords = $('#statWords');
+            const statCitations = $('#statCitations');
+            const statSyllabus = $('#statSyllabus');
+            const statCode = $('#statCode');
+            const statData = $('#statData');
+            const statDaysDone = $('#statDaysDone');
+            const variablesGrid = $('#variablesGrid');
+            const dataReadinessBar = $('#dataReadinessBar');
+            const dataReadinessLabel = $('#dataReadinessLabel');
+            const matrixContainer = $('#matrixContainer');
+            const matrixFilter = $('#matrixFilter');
+            const syncMatrixBtn = $('#syncMatrixBtn');
+            const matrixSummary = $('#matrixSummary');
+            const diagWords = $('#diagWords');
+            const diagCitations = $('#diagCitations');
+            const diagSyllabus = $('#diagSyllabus');
+            const diagCode = $('#diagCode');
+            const reportBox = $('#reportBox');
+            const copyReportBtn = $('#copyReportBtn');
+            const driveFolderId = $('#driveFolderId');
+            const loadDriveBtn = $('#loadDriveBtn');
+            const driveIframe = $('#driveIframe');
+            const dropZone = $('#dropZone');
+            const bibFileInput = $('#bibFileInput');
+            const bibEntryCount = $('#bibEntryCount');
+            const bibApplyBtn = $('#bibApplyBtn');
+            const lastSaved = $('#lastSaved');
+            const currentDate = $('#currentDate');
+
+            // ---------- HELPERS ----------
+            function getTodayStr() {
+                const d = new Date();
+                return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+            }
+            currentDate.textContent = getTodayStr();
+
+            // Build date range: July 1 – Sep 30 (92 days)
+            function buildDateRange() {
+                const dates = [];
+                const start = new Date(2026, 6, 1); // July 1
+                const end = new Date(2026, 8, 30); // Sep 30
+                let d = new Date(start);
+                let idx = 0;
+                while (d <= end) {
+                    const month = d.toLocaleString('en-US', { month: 'long' });
+                    const day = d.getDate();
+                    const label = `${month} ${day}`;
+                    dates.push({ idx, dateObj: new Date(d), label, month });
+                    d.setDate(d.getDate() + 1);
+                    idx++;
+                }
+                return dates;
+            }
+            const dateRange = buildDateRange(); // 92 entries
+
+            // Initialize tasks if not present
+            function initTasks() {
+                if (state.tasks.length === 0) {
+                    state.tasks = dateRange.map((d) => ({
+                        dayIdx: d.idx,
+                        dateStr: d.label,
+                        month: d.month,
+                        math: false,
+                        coding: false,
+                        writing: false,
+                    }));
+                } else {
+                    // ensure all days exist
+                    const existing = new Set(state.tasks.map(t => t.dayIdx));
+                    for (const d of dateRange) {
+                        if (!existing.has(d.idx)) {
+                            state.tasks.push({
+                                dayIdx: d.idx,
+                                dateStr: d.label,
+                                month: d.month,
+                                math: false,
+                                coding: false,
+                                writing: false,
+                            });
+                        }
+                    }
+                    // sort by dayIdx
+                    state.tasks.sort((a, b) => a.dayIdx - b.dayIdx);
+                }
+            }
+            initTasks();
+
+            // ---------- PERSISTENCE ----------
+            function saveState() {
+                try {
+                    const payload = {
+                        variables: state.variables,
+                        tasks: state.tasks,
+                        diag: state.diag,
+                        driveFolderId: state.driveFolderId,
+                        bibCount: state.bibCount,
+                    };
+                    localStorage.setItem('phdDashboardState', JSON.stringify(payload));
+                    lastSaved.textContent = 'Saved ' + new Date().toLocaleTimeString();
+                } catch (e) {
+                    // silent fail
+                }
+            }
+
+            function loadState() {
+                try {
+                    const raw = localStorage.getItem('phdDashboardState');
+                    if (!raw) return false;
+                    const parsed = JSON.parse(raw);
+                    if (parsed.variables) state.variables = parsed.variables;
+                    if (parsed.tasks) state.tasks = parsed.tasks;
+                    if (parsed.diag) state.diag = parsed.diag;
+                    if (parsed.driveFolderId) state.driveFolderId = parsed.driveFolderId;
+                    if (parsed.bibCount !== undefined) state.bibCount = parsed.bibCount;
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            }
+
+            // ---------- COMPUTE SCORES ----------
+            function computeScores() {
+                // Data Readiness: % of variables with status 'Integrated'
+                const totalVars = state.variables.length;
+                const integrated = state.variables.filter(v => v.status === 'Integrated').length;
+                const dataReadiness = totalVars === 0 ? 0 : Math.round((integrated / totalVars) * 100);
+
+                // Words
+                const words = Math.min(Number(state.diag.words) || 0, 60000);
+                const wordsPct = Math.round((words / 60000) * 100);
+
+                // Citations
+                const citations = Math.min(Number(state.diag.citations) || 0, 200);
+                const citationsPct = Math.round((citations / 200) * 100);
+
+                // Syllabus
+                const syllabus = Math.min(Number(state.diag.syllabus) || 0, 100);
+
+                // Code
+                const code = Math.min(Number(state.diag.code) || 0, 5);
+                const codePct = Math.round((code / 5) * 100);
+
+                // Weighted overall
+                const overall = Math.round(
+                    (dataReadiness * 0.20) +
+                    (wordsPct * 0.30) +
+                    (citationsPct * 0.20) +
+                    (syllabus * 0.15) +
+                    (codePct * 0.15)
+                );
+
+                // Days fully checked
+                const fullyChecked = state.tasks.filter(t => t.math && t.coding && t.writing).length;
+
+                return {
+                    dataReadiness,
+                    wordsPct,
+                    citationsPct,
+                    syllabus,
+                    codePct,
+                    overall,
+                    fullyChecked,
+                    words,
+                    citations,
+                    code,
+                };
+            }
+
+            // ---------- UPDATE GAUGE & STATS ----------
+            function updateDashboard() {
+                const scores = computeScores();
+                const { dataReadiness, wordsPct, citationsPct, syllabus, codePct, overall, fullyChecked, words, citations,
+                    code } = scores;
+
+                // Gauge
+                const clamped = Math.min(Math.max(overall, 0), 100);
+                const offset = GAUGE_CIRCUMFERENCE - (clamped / 100) * GAUGE_CIRCUMFERENCE;
+                gaugeRing.setAttribute('stroke-dashoffset', offset);
+                gaugeScore.textContent = clamped + '%';
+
+                // Color
+                let color = '#0F5132';
+                if (clamped < 30) color = '#ef4444';
+                else if (clamped < 80) color = '#C5A059';
+                gaugeRing.setAttribute('stroke', color);
+
+                // Stats
+                statWords.textContent = words;
+                statCitations.textContent = citations;
+                statSyllabus.textContent = syllabus + '%';
+                statCode.textContent = code;
+                statData.textContent = dataReadiness + '%';
+                statDaysDone.textContent = fullyChecked;
+
+                // Data readiness bar
+                dataReadinessBar.style.width = dataReadiness + '%';
+                dataReadinessLabel.textContent = dataReadiness + '%';
+
+                // Update variable cards
+                renderVariables();
+
+                // Update matrix
+                renderMatrix();
+
+                // Update report
+                generateReport();
+
+                // Save state
+                saveState();
+            }
+
+            // ---------- RENDER VARIABLES ----------
+            function renderVariables() {
+                let html = '';
+                for (const v of state.variables) {
+                    const countryTags = v.countries.map(c =>
+                        `<span class="tag tag-country">${c}</span>`
+                    ).join(' ');
+                    const sourceTags = v.sources.map(s =>
+                        `<span class="tag tag-source">${s}</span>`
+                    ).join(' ');
+                    const opts = STATUSES.map(s =>
+                        `<option value="${s}" ${s === v.status ? 'selected' : ''}>${s}</option>`
+                    ).join('');
+                    html += `
+                        <div class="card p-3 flex flex-col gap-1.5" data-varid="${v.id}">
+                            <div class="font-medium text-sm text-slate-700 truncate" title="${v.name}">${v.name}</div>
+                            <div class="flex flex-wrap gap-1">${countryTags} ${sourceTags}</div>
+                            <select class="status-select w-full mt-1" data-varid="${v.id}">
+                                ${opts}
+                            </select>
+                        </div>
+                    `;
+                }
+                variablesGrid.innerHTML = html;
+
+                // Attach change events
+                variablesGrid.querySelectorAll('select.status-select').forEach(sel => {
+                    sel.addEventListener('change', function() {
+                        const id = parseInt(this.dataset.varid);
+                        const v = state.variables.find(x => x.id === id);
+                        if (v) {
+                            v.status = this.value;
+                            updateDashboard();
+                        }
+                    });
+                });
+            }
+
+            // ---------- RENDER MATRIX ----------
+            function renderMatrix() {
+                const filter = matrixFilter.value;
+                let filtered = state.tasks;
+                if (filter !== 'all') {
+                    filtered = state.tasks.filter(t => t.month === filter);
+                }
+                // group by month for headers
+                let html = '';
+                let currentMonth = '';
+                for (const t of filtered) {
+                    if (t.month !== currentMonth) {
+                        currentMonth = t.month;
+                        html += `<div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mt-3 mb-1.5">${currentMonth}</div>`;
+                    }
+                    const checkedMath = t.math ? 'checked' : '';
+                    const checkedCoding = t.coding ? 'checked' : '';
+                    const checkedWriting = t.writing ? 'checked' : '';
+                    const allDone = t.math && t.coding && t.writing;
+                    html += `
+                        <div class="flex items-center gap-2 py-1.5 border-b border-slate-100/70 ${allDone ? 'bg-emerald/5 rounded' : ''}" data-dayidx="${t.dayIdx}">
+                            <span class="text-xs font-mono text-slate-400 w-16 flex-shrink-0">${t.dateStr}</span>
+                            <label class="flex items-center gap-1 text-xs"><input type="checkbox" class="task-check task-math" data-dayidx="${t.dayIdx}" ${checkedMath} /> <span class="task-label">Math</span></label>
+                            <label class="flex items-center gap-1 text-xs"><input type="checkbox" class="task-check task-coding" data-dayidx="${t.dayIdx}" ${checkedCoding} /> <span class="task-label">Coding</span></label>
+                            <label class="flex items-center gap-1 text-xs"><input type="checkbox" class="task-check task-writing" data-dayidx="${t.dayIdx}" ${checkedWriting} /> <span class="task-label">Writing</span></label>
+                            ${allDone ? '<span class="ml-auto text-[0.55rem] text-emerald font-medium"><i class="fas fa-check-circle"></i> Done</span>' : ''}
+                        </div>
+                    `;
+                }
+                if (!html) html = '<p class="text-sm text-slate-400 py-4">No tasks match this filter.</p>';
+                matrixContainer.innerHTML = html;
+
+                // Attach checkbox events
+                matrixContainer.querySelectorAll('.task-check').forEach(cb => {
+                    cb.addEventListener('change', function() {
+                        const idx = parseInt(this.dataset.dayidx);
+                        const task = state.tasks.find(t => t.dayIdx === idx);
+                        if (!task) return;
+                        if (this.classList.contains('task-math')) task.math = this.checked;
+                        else if (this.classList.contains('task-coding')) task.coding = this.checked;
+                        else if (this.classList.contains('task-writing')) task.writing = this.checked;
+                        updateDashboard();
+                    });
+                });
+
+                // Update summary
+                const total = state.tasks.length;
+                const done = state.tasks.filter(t => t.math && t.coding && t.writing).length;
+                matrixSummary.textContent = `${done} / ${total} days complete`;
+            }
+
+            // ---------- GENERATE REPORT ----------
+            function generateReport() {
+                const s = computeScores();
+                const lines = [];
+                lines.push('=== SUPERVISOR DIAGNOSTIC REPORT ===');
+                lines.push(`Generated: ${new Date().toLocaleString()}`);
+                lines.push('');
+                lines.push(`OVERALL EWS SCORE: ${s.overall}%`);
+                lines.push(`─ Data Readiness:   ${s.dataReadiness}%  (weight: 20%)`);
+                lines.push(`─ Words:            ${s.wordsPct}%  (${s.words}/60,000, weight: 30%)`);
+                lines.push(`─ Citations:        ${s.citationsPct}%  (${s.citations}/200, weight: 20%)`);
+                lines.push(`─ Syllabus Adh.:    ${s.syllabus}%  (weight: 15%)`);
+                lines.push(`─ Code Milestones:  ${s.codePct}%  (${s.code}/5, weight: 15%)`);
+                lines.push('');
+                lines.push(`TASK MATRIX: ${s.fullyChecked} / 92 days fully completed.`);
+                lines.push(`VARIABLES: ${state.variables.filter(v => v.status === 'Integrated').length}/17 integrated.`);
+                lines.push('');
+                // Diagnostic comment
+                let comment = '';
+                if (s.overall >= 80) comment = 'Excellent progress. Ready for committee review.';
+                else if (s.overall >= 60) comment = 'Good progress. Focus on remaining weak areas.';
+                else if (s.overall >= 40) comment = 'Moderate progress. Significant effort needed in low-scoring categories.';
+                else comment = 'Critical status. Immediate intervention recommended.';
+                lines.push(`DIAGNOSTIC: ${comment}`);
+                lines.push('');
+                lines.push('─ End of Report ─');
+                reportBox.value = lines.join('\n');
+            }
+
+            // ---------- SYNC MATRIX (recalc days done and update EWS) ----------
+            function syncMatrix() {
+                // Just re-render and update — the checkboxes already drive state
+                // But we also re-count fully checked days
+                const done = state.tasks.filter(t => t.math && t.coding && t.writing).length;
+                // Update the diag fields from the matrix? No, matrix is separate.
+                // We just refresh the dashboard.
+                updateDashboard();
+                // Show a small feedback
+                syncMatrixBtn.innerHTML = '<i class="fas fa-check"></i> Synced';
+                setTimeout(() => {
+                    syncMatrixBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Sync';
+                }, 1500);
+            }
+
+            // ---------- BIB PARSING ----------
+            function parseBibFile(text) {
+                // Count entries: @article, @book, @inproceedings, etc.
+                const matches = text.match(/@\w+\s*\{/g);
+                return matches ? matches.length : 0;
+            }
+
+            // ---------- EVENT BINDINGS ----------
+
+            // Drive folder
+            loadDriveBtn.addEventListener('click', function() {
+                const id = driveFolderId.value.trim();
+                if (!id) {
+                    alert('Please enter a Google Drive Folder ID.');
+                    return;
+                }
+                state.driveFolderId = id;
+                driveIframe.src = `https://drive.google.com/embeddedfolderview?id=${id}#grid`;
+                saveState();
+            });
+
+            // Restore drive folder
+            if (state.driveFolderId) {
+                driveFolderId.value = state.driveFolderId;
+                driveIframe.src = `https://drive.google.com/embeddedfolderview?id=${state.driveFolderId}#grid`;
+            }
+
+            // Bib drag & drop
+            dropZone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('dragover');
+            });
+            dropZone.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+            });
+            dropZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleBibFile(files[0]);
+                }
+            });
+            dropZone.addEventListener('click', function() {
+                bibFileInput.click();
+            });
+            bibFileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    handleBibFile(this.files[0]);
+                }
+                this.value = '';
+            });
+
+            function handleBibFile(file) {
+                if (!file.name.endsWith('.bib')) {
+                    alert('Please drop a .bib file.');
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const text = e.target.result;
+                    const count = parseBibFile(text);
+                    state.bibCount = count;
+                    bibEntryCount.textContent = count;
+                    saveState();
+                    // Optionally apply to citations
+                };
+                reader.onerror = function() {
+                    alert('Error reading file.');
+                };
+                reader.readAsText(file);
+            }
+
+            // Apply bib count to citations
+            bibApplyBtn.addEventListener('click', function() {
+                if (state.bibCount > 0) {
+                    diagCitations.value = Math.min(state.bibCount, 200);
+                    state.diag.citations = parseInt(diagCitations.value) || 0;
+                    updateDashboard();
+                } else {
+                    alert('No .bib entries loaded. Drop a file first.');
+                }
+            });
+
+            // Restore bib count
+            if (state.bibCount > 0) {
+                bibEntryCount.textContent = state.bibCount;
+            }
+
+            // Diagnostic inputs
+            diagWords.addEventListener('input', function() {
+                state.diag.words = parseInt(this.value) || 0;
+                updateDashboard();
+            });
+            diagCitations.addEventListener('input', function() {
+                state.diag.citations = parseInt(this.value) || 0;
+                updateDashboard();
+            });
+            diagSyllabus.addEventListener('input', function() {
+                state.diag.syllabus = parseInt(this.value) || 0;
+                updateDashboard();
+            });
+            diagCode.addEventListener('change', function() {
+                state.diag.code = parseInt(this.value) || 0;
+                updateDashboard();
+            });
+
+            // Restore diag values
+            diagWords.value = state.diag.words || 0;
+            diagCitations.value = state.diag.citations || 0;
+            diagSyllabus.value = state.diag.syllabus || 0;
+            diagCode.value = state.diag.code || 0;
+
+            // Matrix filter
+            matrixFilter.addEventListener('change', renderMatrix);
+
+            // Sync button
+            syncMatrixBtn.addEventListener('click', syncMatrix);
+
+            // Copy report
+            copyReportBtn.addEventListener('click', function() {
+                reportBox.select();
+                try {
+                    navigator.clipboard.writeText(reportBox.value).then(() => {
+                        const orig = this.innerHTML;
+                        this.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                        setTimeout(() => { this.innerHTML = orig; }, 1500);
+                    }).catch(() => {
+                        document.execCommand('copy');
+                        alert('Report copied!');
+                    });
+                } catch (e) {
+                    document.execCommand('copy');
+                    alert('Report copied!');
+                }
+            });
+
+            // ---------- INIT ----------
+            // Try loading state
+            const loaded = loadState();
+            // Ensure tasks cover all days
+            initTasks();
+            // If loaded, restore diag inputs
+            if (loaded) {
+                diagWords.value = state.diag.words || 0;
+                diagCitations.value = state.diag.citations || 0;
+                diagSyllabus.value = state.diag.syllabus || 0;
+                diagCode.value = state.diag.code || 0;
+                if (state.driveFolderId) {
+                    driveFolderId.value = state.driveFolderId;
+                    driveIframe.src = `https://drive.google.com/embeddedfolderview?id=${state.driveFolderId}#grid`;
+                }
+                if (state.bibCount > 0) {
+                    bibEntryCount.textContent = state.bibCount;
+                }
+            }
+
+            // First render
+            renderVariables();
+            renderMatrix();
+            updateDashboard();
+
+            // Auto-save every 30s
+            setInterval(saveState, 30000);
+
+            // Also save on page unload
+            window.addEventListener('beforeunload', saveState);
+
+        });
+    </script>
+
+</body>
+</html>
