@@ -3,317 +3,498 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PhD Performance Dashboard & Supervisor Portal</title>
+    <title>PhD Performance Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root {
-            --bg-color: #f4f5f7;
-            --card-bg: #ffffff;
-            --text-main: #333333;
-            --text-muted: #666666;
-            --primary-green: #00b140;
-            --border-color: #e0e0e0;
-            --ain-shams-green: #0b5e32;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
-
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 800px; /* Portrait constraint */
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            border: 1px solid var(--border-color);
-        }
-
-        /* Header Section */
-        .header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            border-top: 8px solid var(--ain-shams-green);
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
         }
         
-        .header-text h1 {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            font-weight: 600;
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
+
+        .dial-container {
+            position: relative;
+            width: 140px;
+            height: 140px;
         }
         
-        .header-text h2 {
-            font-size: 1.5rem;
-            color: var(--text-main);
+        .dial-bg {
+            fill: none;
+            stroke: #e6e6e6;
+            stroke-width: 12;
+        }
+        
+        .dial-progress {
+            fill: none;
+            stroke: #00e676;
+            stroke-width: 12;
+            stroke-dasharray: 400;
+            stroke-dashoffset: 40; /* 90% progress */
+            stroke-linecap: round;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+            transition: stroke-dashoffset 1s ease-in-out;
         }
 
-        /* EWS Monitor */
-        .ews-monitor {
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            padding: 30px 0;
-        }
-
-        .progress-circle {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: conic-gradient(var(--primary-green) 90%, #e0e0e0 0);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .progress-circle::before {
-            content: "";
-            position: absolute;
-            width: 120px;
-            height: 120px;
-            background-color: white;
-            border-radius: 50%;
-        }
-
-        .progress-circle span {
-            position: relative;
-            font-size: 2.5rem;
-            font-weight: bold;
-        }
-
-        .status-text h3 {
-            color: var(--primary-green);
-            font-size: 1.4rem;
-        }
-
-        /* Metrics Grid */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-        }
-
-        .metric-box {
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 15px;
-            text-align: left;
-        }
-
-        .metric-box h4 {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-        }
-
-        .metric-box .value {
-            font-size: 1.8rem;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .progress-bar-container {
-            width: 100%;
-            height: 6px;
-            background-color: #e0e0e0;
-            border-radius: 3px;
-            margin-top: 8px;
-        }
-
-        .progress-bar {
-            height: 100%;
-            border-radius: 3px;
-        }
-
-        /* Data Readiness */
-        .data-readiness h3 {
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .bar-bg {
-            background-color: #e0e0e0;
-            height: 10px;
-            border-radius: 5px;
-            width: 100%;
-        }
-
-        .bar-fill {
-            background-color: var(--ain-shams-green);
-            height: 100%;
-            border-radius: 5px;
-            width: 92%;
-        }
-
-        /* Interactive Embeds */
-        .embed-section {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .embed-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .status-indicator {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-
-        .dot {
-            height: 10px;
-            width: 10px;
-            background-color: var(--primary-green);
-            border-radius: 50%;
-            display: inline-block;
-        }
-
-        iframe {
-            width: 100%;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background-color: #fafafa;
-        }
-
-        .notion-iframe {
-            height: 500px;
-        }
-
-        .drive-iframe {
-            height: 400px;
-        }
-
-        @media (max-width: 600px) {
-            .ews-monitor {
-                flex-direction: column;
-                gap: 20px;
-            }
+        .dial-inner {
+            fill: none;
+            stroke: #00b140;
+            stroke-width: 4;
+            stroke-dasharray: 300;
+            stroke-dashoffset: 30;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
         }
     </style>
 </head>
-<body>
+<body class="p-4 md:p-8 text-gray-800 flex justify-center">
 
-    <div class="container">
+    <div class="max-w-3xl w-full flex flex-col gap-6">
         
-        <!-- Header Section -->
-        <div class="card header">
-            <div class="header-text">
-                <h1>Ain Shams University</h1>
-                <h2>PhD Performance Dashboard & Supervisor Portal</h2>
-            </div>
-        </div>
-
-        <!-- EWS Monitor -->
-        <div class="card">
-            <h3>EWS Monitor</h3>
-            <p style="color: var(--text-muted); font-size: 0.9rem;">Dynamic circular dial</p>
-            <div class="ews-monitor">
-                <div class="progress-circle">
-                    <span>90%</span>
+        <!-- Header -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="h-3 w-full bg-[#0b5e32]"></div>
+            <div class="p-6 flex items-center gap-4">
+                <div class="w-16 h-16 bg-gray-100 rounded flex items-center justify-center text-[#0b5e32] border border-gray-200">
+                    <i class="fa-solid fa-university text-3xl"></i>
                 </div>
-                <div class="status-text">
-                    <h3>GREEN: ON TRACK</h3>
+                <div>
+                    <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Ain Shams University</h2>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-900 mt-1">PhD Performance Dashboard & Supervisor Portal</h1>
                 </div>
             </div>
         </div>
 
-        <!-- Quantitative Metrics Grid -->
-        <div class="card">
-            <h3 style="margin-bottom: 15px;">Quantitative Metrics Grid</h3>
-            <div class="metrics-grid">
-                <div class="metric-box">
-                    <h4>Drafted Words</h4>
-                    <div class="value">60,000</div>
-                    <div style="font-size: 0.8rem; color: var(--text-muted); text-align: right;">60,000 target</div>
-                    <div class="progress-bar-container"><div class="progress-bar" style="width: 100%; background-color: var(--ain-shams-green);"></div></div>
-                </div>
-                <div class="metric-box">
-                    <h4>Papers Citations</h4>
-                    <div class="value">111</div>
-                    <div style="font-size: 0.8rem; color: var(--text-muted); text-align: right;">111 target</div>
-                    <div class="progress-bar-container"><div class="progress-bar" style="width: 100%; background-color: #8b6d20;"></div></div>
-                </div>
-                <div class="metric-box">
-                    <h4>Code Milestones</h4>
-                    <div class="value">5</div>
-                    <div style="font-size: 0.8rem; color: var(--text-muted); text-align: right;">5 targets</div>
-                    <div class="progress-bar-container"><div class="progress-bar" style="width: 100%; background-color: #8b6d20;"></div></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Data Readiness -->
-        <div class="card data-readiness">
-            <h3><span>Data Readiness Bar</span> <span>92%</span></h3>
-            <div class="bar-bg">
-                <div class="bar-fill"></div>
-            </div>
-        </div>
-
-        <!-- Live Notion Sync Section -->
-        <div class="card embed-section">
-            <div class="embed-header">
-                <h3>92-Day Task Table (Weekly & Daily Detail)</h3>
-                <div class="status-indicator">
-                    Sync with Notion Active <span class="dot"></span>
-                </div>
-            </div>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 10px;">Live View & Checklists linked directly to your workspace.</p>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h3 class="font-bold text-lg text-gray-800">EWS Monitor</h3>
+            <p class="text-sm text-gray-500 mb-6">Dynamic circular dial</p>
             
-            <!-- Embedded Notion Page -->
-            <!-- Note: Notion pages must be set to "Share to web" for iframes to render them correctly without third-party tools -->
-            <iframe 
-                class="notion-iframe" 
-                src="https://v1.embednotion.com/embed/f25edb9e927e4f1991fe5b1733e12965" 
-                title="Notion Dashboard Embed"
-                allowfullscreen>
-            </iframe>
-        </div>
-
-        <!-- Embedded Google Drive Section -->
-        <div class="card embed-section">
-            <div class="embed-header">
-                <h3>Research Archive (Google Drive)</h3>
-                <div class="status-indicator">
-                    Live Folder Sync <span class="dot"></span>
+            <div class="flex flex-col md:flex-row items-center justify-center md:justify-start gap-12 md:pl-8">
+                <div class="dial-container flex items-center justify-center relative">
+                    <svg class="w-full h-full absolute top-0 left-0" viewBox="0 0 150 150">
+                        <circle class="dial-bg" cx="75" cy="75" r="60"></circle>
+                        <circle class="dial-inner" cx="75" cy="75" r="50"></circle>
+                        <circle class="dial-progress" cx="75" cy="75" r="60"></circle>
+                    </svg>
+                    <span class="text-3xl font-bold text-gray-900 relative z-10">90%</span>
+                </div>
+                <div class="text-center md:text-left">
+                    <h2 class="text-2xl font-bold text-[#00b140] tracking-wide">GREEN: ON TRACK</h2>
+                    <h2 class="text-xl font-bold text-gray-900 mt-2 tracking-wide">GREEN: ON TRACK</h2>
                 </div>
             </div>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 10px;">Embedded access to econometric datasets and working papers.</p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h3 class="font-bold text-lg text-gray-800 mb-1">Quantitative Metrics Grid</h3>
+            <p class="text-sm text-gray-500 mb-4">Visualizer progress dials are shared</p>
             
-            <!-- Embedded Google Drive Folder -->
-            <!-- The ID 1L0hR40kKxyhhvapEq0ZWR67XcQP568TO is extracted from your sharing link -->
-            <iframe 
-                class="drive-iframe" 
-                src="https://drive.google.com/embeddedfolderview?id=1L0hR40kKxyhhvapEq0ZWR67XcQP568TO#grid" 
-                title="Google Drive Research Folder"
-                allowfullscreen>
-            </iframe>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Metric 1 -->
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col justify-between">
+                    <div>
+                        <h4 class="text-sm font-semibold text-gray-700">Drafted Words</h4>
+                        <div class="text-3xl font-bold text-gray-900 my-2">60,000</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-right text-gray-500 mb-1">60,000 target</div>
+                        <div class="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
+                            <div class="h-full bg-[#0b5e32] w-full"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Metric 2 -->
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col justify-between">
+                    <div>
+                        <h4 class="text-sm font-semibold text-gray-700">Papers Citations</h4>
+                        <div class="text-3xl font-bold text-gray-900 my-2">111</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-right text-gray-500 mb-1">111 target</div>
+                        <div class="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
+                            <div class="h-full bg-[#b89535] w-full"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Metric 3 -->
+                <div class="border border-gray-200 rounded-lg p-4 flex flex-col justify-between">
+                    <div>
+                        <h4 class="text-sm font-semibold text-gray-700">Code Milestones</h4>
+                        <div class="text-3xl font-bold text-gray-900 my-2">5</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-right text-gray-500 mb-1">5 targets</div>
+                        <div class="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
+                            <div class="h-full bg-[#b89535] w-full"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col justify-center">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="font-bold text-gray-800">Data Readiness Bar</h3>
+                <span class="font-bold text-gray-900">92%</span>
+            </div>
+            <div class="h-2.5 w-full bg-gray-200 rounded-full overflow-hidden relative flex items-center">
+                <div class="absolute w-3 h-3 bg-gray-300 rounded-full left-0 -ml-1"></div>
+                <div class="h-full bg-[#0b5e32] w-[92%] rounded-full"></div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h3 class="font-bold text-lg text-gray-800 mb-1">Live Data & Variables Ingestion Tracker</h3>
+            <p class="text-sm text-gray-500 mb-6">Several unique layouts, standardized</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Card Generator Script - Generating 6 Cards to match layout -->
+                <script>
+                    const cardData = [
+                        { title: "Price of Capital (Qt)", status: "Integrated", type: "Qt" },
+                        { title: "Price of Capital (Qt)", status: "Integrated", type: "Qt" },
+                        { title: "Price of Capital (Qt)", status: "Integrated", type: "Qt" },
+                        { title: "Price of Capital (Q1)", status: "Integrated", type: "Q1" },
+                        { title: "Price of Capital (Q1)", status: "Wrangled", type: "Q1" },
+                        { title: "Price of Capital (Q1)", status: "Not Started", type: "Q1" }
+                    ];
+
+                    cardData.forEach(card => {
+                        document.write(`
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <h4 class="font-bold text-gray-900">${card.title}</h4>
+                            <p class="text-xs text-gray-500 mb-3">Target Sector</p>
+                            
+                            <div class="mb-3">
+                                <p class="text-xs font-semibold text-gray-700 mb-1">Countries</p>
+                                <div class="flex flex-wrap gap-1">
+                                    <span class="px-2 py-0.5 text-[10px] font-bold text-white bg-[#0b5e32] rounded-full">Egypt</span>
+                                    <span class="px-2 py-0.5 text-[10px] font-bold text-white bg-[#1a5b82] rounded-full">US</span>
+                                    <span class="px-2 py-0.5 text-[10px] font-bold text-white bg-[#702082] rounded-full">Eurozone</span>
+                                    <span class="px-2 py-0.5 text-[10px] font-bold text-white bg-[#201060] rounded-full">ETS</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <p class="text-xs font-semibold text-gray-700 mb-1">Sources</p>
+                                <div class="flex flex-wrap gap-1">
+                                    <span class="px-2 py-0.5 text-[10px] font-bold text-white bg-[#d98b26] rounded-full">Bloomberg</span>
+                                    <span class="px-2 py-0.5 text-[10px] font-bold text-white bg-[#201060] rounded-full">BIS</span>
+                                    <span class="px-2 py-0.5 text-[10px] font-bold text-white bg-[#a83232] rounded-full">CSE</span>
+                                    <span class="px-2 py-0.5 text-[10px] font-bold text-white bg-[#c46868] rounded-full">Roses</span>
+                                </div>
+                            </div>
+
+                            <select class="w-full text-sm border border-gray-300 rounded p-1.5 text-gray-700 focus:outline-none focus:border-gray-500">
+                                <option ${card.status === 'Integrated' ? 'selected' : ''}>Integrated</option>
+                                <option ${card.status === 'Wrangled' ? 'selected' : ''}>Wrangled</option>
+                                <option ${card.status === 'Not Started' ? 'selected' : ''}>Not Started</option>
+                            </select>
+                        </div>
+                        `);
+                    });
+                </script>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
+                <div>
+                    <h3 class="font-bold text-lg text-gray-800">92-Day Task Table (Weekly & Daily Detail)</h3>
+                    <p class="text-sm text-gray-500">Phase 1: Foundation & Prototyping (Start Date: July 1, 2026)</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="text-sm font-semibold text-gray-700">Select View:</label>
+                    <select class="border border-gray-300 rounded p-1.5 text-sm focus:outline-none bg-gray-50">
+                        <option>All Days</option>
+                        <option>Week 1</option>
+                        <option>Week 2</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="w-full overflow-x-auto border border-gray-200 rounded-lg">
+                <table class="w-full text-sm text-left border-collapse min-w-[800px]">
+                    <thead class="bg-gray-100 text-gray-700 font-semibold text-xs uppercase tracking-wide">
+                        <tr>
+                            <th class="p-3 border-b border-gray-200 w-24">Week</th>
+                            <th class="p-3 border-b border-gray-200 w-24">Day / Date</th>
+                            <th class="p-3 border-b border-gray-200">Mathematics Tasks</th>
+                            <th class="p-3 border-b border-gray-200">Technical Tasks</th>
+                            <th class="p-3 border-b border-gray-200">Writing Tasks</th>
+                            <th class="p-3 border-b border-gray-200 w-32">Daily Completion</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-700 align-top">
+                        <!-- Week 1, Day 1 -->
+                        <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td class="p-3 border-r border-gray-200 bg-gray-50 text-center font-bold text-gray-800" rowspan="3">
+                                Week 1<br><span class="text-xs font-normal text-gray-500">(July 1-7)</span>
+                            </td>
+                            <td class="p-3 border-r border-gray-200 font-semibold text-gray-800">
+                                Day 1<br><span class="text-xs font-normal text-gray-500">July 1</span>
+                            </td>
+                            <td class="p-3 border-r border-gray-200">
+                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
+                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]"> Review Linear Algebra
+                                </label>
+                            </td>
+                            <td class="p-3 border-r border-gray-200">
+                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
+                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]" checked> Git/GitHub Primer
+                                </label>
+                            </td>
+                            <td class="p-3 border-r border-gray-200">
+                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
+                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]"> Draft Ch 1: Intro Outline
+                                </label>
+                            </td>
+                            <td class="p-3">
+                                <div class="flex items-center justify-between text-xs font-bold text-gray-700 mb-1">
+                                    <span>33%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-[#0b5e32] h-2 rounded-full transition-all" style="width: 33%"></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- Week 1, Day 2 -->
+                        <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td class="p-3 border-r border-gray-200 font-semibold text-gray-800">
+                                Day 2<br><span class="text-xs font-normal text-gray-500">July 2</span>
+                            </td>
+                            <td class="p-3 border-r border-gray-200">
+                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
+                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]" checked> Calculus Basics
+                                </label>
+                            </td>
+                            <td class="p-3 border-r border-gray-200">
+                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
+                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]" checked> Python Crash Course
+                                </label>
+                            </td>
+                            <td class="p-3 border-r border-gray-200">
+                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
+                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]" checked> Draft Ch 1: Background
+                                </label>
+                            </td>
+                            <td class="p-3">
+                                <div class="flex items-center justify-between text-xs font-bold text-[#00b140] mb-1">
+                                    <span>100%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-[#00b140] h-2 rounded-full transition-all" style="width: 100%"></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- Week 1, Day 3 -->
+                        <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td class="p-3 border-r border-gray-200 font-semibold text-gray-800">
+                                Day 3<br><span class="text-xs font-normal text-gray-500">July 3</span>
+                            </td>
+                            <td class="p-3 border-r border-gray-200">
+                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
+                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]"> ODE Course Start
+                                </label>
+                            </td>
+                            <td class="p-3 border-r border-gray-200">
+                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
+                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]" checked> Pandas Data Cleaning
+                                </label>
+                            </td>
+                            <td class="p-3 border-r border-gray-200">
+                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
+                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]" checked> Outline Ch 2: Lit Review
+                                </label>
+                            </td>
+                            <td class="p-3">
+                                <div class="flex items-center justify-between text-xs font-bold text-gray-700 mb-1">
+                                    <span>66%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-[#0b5e32] h-2 rounded-full transition-all" style="width: 66%"></div>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        <!-- Week 2, Day 4 -->
+                        <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                            <td class="p-3 border-r border-gray-200 bg-gray-50 text-center font-bold text-gray-800" rowspan="2">
+                                Week 2<br><span class="text-xs font-normal text-gray-500">(July 8-14)</span>
+                            </td>
+                            <td class="p-3 border-r border-gray-200 font-semibold text-gray-800">
+                                Day 4<br><span class="text-xs font-normal text-gray-500">July 8</span>
+                            </td>
+                            <td class="p-3 border-r border-gray-200">
+                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
+                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]"> Variables & Functions
+                                </label>
+                            </td>
+                            <td class="p-3 border-r border-gray-200">
+                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
+                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]" checked> Intro to R / Import Data
+                                </label>
+                            </td>
+                            <td class="p-3 border-r border-gray-200">
+                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
+                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]"> Synthesize Lit Review
+                                </label>
+                            </td>
+                            <td class="p-3">
+                                <div class="flex items-center justify-between text-xs font-bold text-gray-700 mb-1">
+                                    <span>33%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-[#0b5e32] h-2 rounded-full transition-all" style="width: 33%"></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- Week 2, Day 5 -->
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="p-3 border-r border-gray-200 font-semibold text-gray-800">
+                                Day 5<br><span class="text-xs font-normal text-gray-500">July 9</span>
+                            </td>
+                            <td class="p-3 border-r border-gray-200">
+                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
+                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]" checked> Conditionals & Loops
+                                </label>
+                            </td>
+                            <td class="p-3 border-r border-gray-200">
+                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
+                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]" checked> Titanic Dataset (Kaggle)
+                                </label>
+                            </td>
+                            <td class="p-3 border-r border-gray-200">
+                                <label class="flex items-start gap-2 cursor-pointer hover:text-[#0b5e32]">
+                                    <input type="checkbox" class="mt-0.5 w-4 h-4 accent-[#0b5e32]"> Draft Ch 2 context
+                                </label>
+                            </td>
+                            <td class="p-3">
+                                <div class="flex items-center justify-between text-xs font-bold text-gray-700 mb-1">
+                                    <span>66%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-[#0b5e32] h-2 rounded-full transition-all" style="width: 66%"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- Left Sub-column -->
+            <div class="flex flex-col gap-6">
+                <!-- Diagnostic Logger -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-gray-800 flex items-center gap-2"><i class="fa-solid fa-sliders text-gray-500"></i> Diagnostic Logger</h3>
+                        <i class="fa-solid fa-gear text-gray-400 cursor-pointer hover:text-gray-600"></i>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1">Words (max 60,000)</label>
+                            <input type="number" value="0" class="w-full border border-gray-300 rounded-lg p-2 text-gray-800 focus:outline-none focus:border-[#0b5e32]">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1">Citations (max 200)</label>
+                            <input type="number" value="0" class="w-full border border-gray-300 rounded-lg p-2 text-gray-800 focus:outline-none focus:border-[#0b5e32]">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1">Syllabus Adherence (%)</label>
+                            <input type="number" value="0" class="w-full border border-gray-300 rounded-lg p-2 text-gray-800 focus:outline-none focus:border-[#0b5e32]">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1">Code Milestones (0-5)</label>
+                            <select class="w-full border border-gray-300 rounded-lg p-2 text-gray-800 focus:outline-none focus:border-[#0b5e32] appearance-none">
+                                <option>0</option> <option>1</option> <option>2</option> <option>3</option> <option>4</option> <option>5</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mendeley Library -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <h3 class="font-bold text-gray-800 flex items-center gap-2 mb-4 text-red-700">
+                        <i class="fa-solid fa-book-journal-whills"></i> MENDELEY Library
+                    </h3>
+                    <div class="relative mb-4">
+                        <input type="text" placeholder="Search..." class="w-full border border-gray-300 rounded-lg p-2 pl-3 bg-gray-50 text-sm focus:outline-none">
+                        <i class="fa-solid fa-magnifying-glass absolute right-3 top-2.5 text-gray-400"></i>
+                    </div>
+                    
+                    <table class="w-full text-sm text-left text-gray-700">
+                        <thead class="text-xs text-gray-500 border-b border-gray-200">
+                            <tr>
+                                <th class="pb-2 font-medium">Title</th>
+                                <th class="pb-2 font-medium">Year</th>
+                                <th class="pb-2"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-100">
+                                <td class="py-2">Mendeley ref. Smets (2007)</td>
+                                <td>Author Year</td>
+                                <td class="text-right"><input type="checkbox" class="accent-[#0b5e32]"></td>
+                            </tr>
+                            <tr class="border-b border-gray-100">
+                                <td class="py-2">Mendeley ref. Smets (2007)</td>
+                                <td>Author Year</td>
+                                <td class="text-right"><input type="checkbox" class="accent-[#0b5e32]"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Right Sub-column -->
+            <div class="flex flex-col gap-6">
+                <!-- Supervisor Report -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 h-full flex flex-col">
+                    <h3 class="font-bold text-gray-800 flex items-center gap-2 mb-4"><i class="fa-regular fa-file-lines text-[#b89535]"></i> Supervisor Report</h3>
+                    <textarea class="w-full flex-grow border-none bg-gray-50 rounded-lg p-3 text-sm text-gray-600 focus:outline-none resize-none min-h-[150px]" placeholder="Report auto-generates..."></textarea>
+                    <div class="flex justify-end mt-4">
+                        <button class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm" onclick="alert('Report copied to clipboard!')">
+                            <i class="fa-regular fa-copy"></i> Copy
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-10">
+            <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
+                <div>
+                    <h3 class="font-bold text-lg text-gray-800 flex items-center gap-2">
+                        <svg viewBox="0 0 40 40" class="w-6 h-6"><path fill="#FFC107" d="M14.5 14l-7.25 12.5h25.5L25.5 14z"/><path fill="#1976D2" d="M25.5 14L18.25 1.5 5.5 24h14.5z"/><path fill="#4CAF50" d="M20 26.5h14.5L27.25 14z"/></svg>
+                        Google Drive Integration
+                    </h3>
+                    <p class="text-sm text-gray-500">Embedded access to econometric datasets.</p>
+                </div>
+                <div class="flex items-center gap-2 text-sm text-gray-500">
+                    Live Folder Sync <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                </div>
+            </div>
+
+            <div class="w-full bg-white rounded-lg border border-gray-200 overflow-hidden" style="height: 400px;">
+                <iframe 
+                    src="https://drive.google.com/embeddedfolderview?id=1L0hR40kKxyhhvapEq0ZWR67XcQP568TO#grid" 
+                    title="Google Drive Research Folder"
+                    class="w-full h-full border-none"
+                    allowfullscreen>
+                </iframe>
+            </div>
         </div>
 
     </div>
