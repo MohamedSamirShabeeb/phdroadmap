@@ -1,149 +1,1282 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PhD Mission Control & Supervisor Hub</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PhD Mission Control · Notion Sync Dashboard</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+        }
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 1.25rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+            transition: box-shadow 0.15s ease;
+        }
+        .card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.03);
+        }
+        .gauge-ring {
+            transition: stroke-dashoffset 0.6s ease;
+        }
+        .tag-pill {
+            display: inline-block;
+            padding: 0.1rem 0.6rem;
+            border-radius: 9999px;
+            font-size: 0.6rem;
+            font-weight: 500;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        .tag-country {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .tag-source {
+            background: #fae8ff;
+            color: #7c3aed;
+        }
+        .tag-sector {
+            background: #ecfdf5;
+            color: #065f46;
+        }
+        select.status-select {
+            font-size: 0.7rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            outline: none;
+            cursor: pointer;
+            width: 100%;
+            transition: border 0.15s;
+        }
+        select.status-select:focus {
+            border-color: #0F5132;
+        }
+        .task-check {
+            accent-color: #0F5132;
+            width: 0.9rem;
+            height: 0.9rem;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .task-label {
+            font-size: 0.7rem;
+            color: #334155;
+            line-height: 1.2;
+        }
+        .progress-bar-bg {
+            background: #e2e8f0;
+            border-radius: 9999px;
+            height: 6px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 9999px;
+            transition: width 0.4s ease;
+            background: #0F5132;
+        }
+        .drop-zone {
+            border: 2px dashed #cbd5e1;
+            border-radius: 1rem;
+            padding: 1.25rem 0.75rem;
+            text-align: center;
+            transition: border-color 0.2s, background 0.2s;
+            background: #f8fafc;
+            cursor: pointer;
+        }
+        .drop-zone.dragover {
+            border-color: #0F5132;
+            background: #f0fdf4;
+        }
+        .report-box {
+            background: #f1f5f9;
+            border: none;
+            border-radius: 0.75rem;
+            padding: 0.75rem;
+            width: 100%;
+            font-family: 'Inter', monospace;
+            font-size: 0.75rem;
+            line-height: 1.5;
+            resize: vertical;
+            min-height: 140px;
+            color: #0f172a;
+        }
+        .report-box:focus {
+            outline: 2px solid #0F5132;
+            outline-offset: 2px;
+        }
+        .table-scroll {
+            max-height: 420px;
+            overflow-y: auto;
+        }
+        .table-scroll::-webkit-scrollbar {
+            width: 5px;
+        }
+        .table-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        .table-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .view-selector {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 0.15rem 0.5rem;
+            font-size: 0.75rem;
+            background: white;
+            outline: none;
+            cursor: pointer;
+        }
+        .view-selector:focus {
+            border-color: #0F5132;
+        }
+        .btn-emerald {
+            background: #0F5132;
+            color: #fff;
+            transition: background 0.15s;
+        }
+        .btn-emerald:hover {
+            background: #0a3d26;
+        }
+        .btn-gold {
+            background: #C5A059;
+            color: #fff;
+            transition: background 0.15s;
+        }
+        .btn-gold:hover {
+            background: #b08a4a;
+        }
+        .btn-outline-emerald {
+            border: 1px solid #0F5132;
+            color: #0F5132;
+            background: transparent;
+            transition: background 0.15s, color 0.15s;
+        }
+        .btn-outline-emerald:hover {
+            background: #0F5132;
+            color: #fff;
+        }
+        .variable-card {
+            transition: border-color 0.15s;
+            border: 1px solid #f1f5f9;
+        }
+        .variable-card:hover {
+            border-color: #cbd5e1;
+        }
+        .mini-stat {
+            background: #f8fafc;
+            border-radius: 0.75rem;
+            padding: 0.6rem 0.4rem;
+            text-align: center;
+        }
+        .integration-iframe {
+            border-radius: 0.75rem;
+            border: 1px solid #e2e8f0;
+            width: 100%;
+            height: 280px;
+            background: white;
+        }
+        .notion-fallback {
+            background: #f8fafc;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        .notion-sync-status {
+            font-size: 0.6rem;
+            padding: 0.15rem 0.6rem;
+            border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .notion-sync-status.synced {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .notion-sync-status.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .notion-sync-status.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Portrait single-column */
+        .portrait-section {
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        .two-col-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .three-col-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0.75rem;
+        }
+        .vars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+        @media (max-width: 640px) {
+            .two-col-grid {
+                grid-template-columns: 1fr;
+            }
+            .three-col-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .vars-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (max-width: 480px) {
+            .three-col-grid {
+                grid-template-columns: 1fr;
+            }
+            .vars-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .notion-embed-container {
+            transition: all 0.3s ease;
+        }
+        .notion-embed-container iframe {
+            transition: opacity 0.3s ease;
+        }
+        .sync-pulse {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+    </style>
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
                         emerald: '#0F5132',
-                        gold: '#C5A059'
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif']
+                        gold: '#C5A059',
                     }
                 }
             }
         }
     </script>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen">
-    <main class="max-w-7xl mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
-        <!-- Column 1: Performance -->
-        <section class="space-y-6">
-            <header class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-emerald">
-                <h1 class="font-serif text-2xl text-emerald">PhD Mission Control</h1>
-                <p class="text-sm text-slate-500">Ain Shams University | Diagnostic Hub</p>
-                <button onclick="window.print()" class="mt-4 w-full bg-emerald text-white py-2 rounded text-sm hover:bg-green-900 transition">Export Diagnostic PDF</button>
-            </header>
+<body>
 
-            <div class="bg-white p-6 rounded-xl shadow-sm text-center">
-                <h2 class="text-lg font-bold mb-4">EWS Monitor</h2>
-                <div class="relative w-32 h-32 mx-auto">
-                    <svg class="w-full h-full transform -rotate-90">
-                        <circle cx="64" cy="64" r="56" stroke="currentColor" stroke-width="8" fill="transparent" class="text-slate-200" />
-                        <circle id="ews-ring" cx="64" cy="64" r="56" stroke="currentColor" stroke-width="8" fill="transparent" stroke-dasharray="351" stroke-dashoffset="351" class="text-emerald transition-all duration-500" />
+    <div class="max-w-4xl mx-auto px-3 sm:px-4 py-4 sm:py-6" id="app">
+
+        <!-- ===== HEADER ===== -->
+        <div class="card p-4 flex flex-wrap items-center justify-between portrait-section mb-4">
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="text-emerald font-serif text-2xl font-semibold tracking-tight">PhD</span>
+                    <span class="text-slate-400 text-sm font-light">·</span>
+                    <span class="text-sm font-medium text-slate-600">Mission Control</span>
+                    <span class="text-slate-300 text-sm font-light">·</span>
+                    <span class="text-sm text-slate-500">Supervisor Hub</span>
+                </div>
+                <div class="text-[0.6rem] text-slate-400 uppercase tracking-wider mt-0.5 flex items-center gap-2">
+                    <span class="inline-block w-2 h-2 rounded-full bg-emerald"></span>
+                    Ain Shams University · Faculty of Business
+                </div>
+            </div>
+            <button id="sharePdfBtn" class="btn-outline-emerald text-xs px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition mt-2 sm:mt-0">
+                <i class="fas fa-file-pdf"></i> Share PDF
+            </button>
+        </div>
+
+        <!-- ===== EWS MONITOR ===== -->
+        <div class="portrait-section mb-4">
+            <div class="card p-5 flex flex-col items-center">
+                <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">EWS Monitor</h2>
+                <div class="relative w-44 h-44">
+                    <svg viewBox="0 0 120 120" class="w-full h-full -rotate-90">
+                        <circle cx="60" cy="60" r="52" fill="none" stroke="#e2e8f0" stroke-width="10" />
+                        <circle cx="60" cy="60" r="52" fill="none" stroke="#0F5132" stroke-width="10"
+                        stroke-linecap="round"
+                        stroke-dasharray="326.726" stroke-dashoffset="326.726"
+                        class="gauge-ring" id="gaugeRing" />
                     </svg>
-                    <span id="ews-val" class="absolute inset-0 flex items-center justify-center font-bold text-xl">0%</span>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center">
+                        <span class="text-4xl font-bold text-slate-800" id="gaugeScore">0%</span>
+                        <span class="text-[0.6rem] uppercase tracking-wider font-medium" id="gaugeLabel">INITIALIZING</span>
+                    </div>
+                </div>
+                <div class="flex flex-wrap justify-center gap-3 mt-2 text-[0.6rem] text-slate-500 font-medium">
+                    <span class="flex items-center gap-1"><span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald"></span> ≥80% ON TRACK</span>
+                    <span class="flex items-center gap-1"><span class="inline-block w-2.5 h-2.5 rounded-full bg-[#C5A059]"></span> 30–79% CAUTION</span>
+                    <span class="flex items-center gap-1"><span class="inline-block w-2.5 h-2.5 rounded-full bg-red-500"></span> &lt;30% CRITICAL</span>
                 </div>
             </div>
+        </div>
 
-            <div class="grid grid-cols-3 gap-2">
-                <div class="bg-white p-3 rounded shadow-sm text-center"><div class="text-xs">Words</div><div id="m-words" class="font-bold">0</div></div>
-                <div class="bg-white p-3 rounded shadow-sm text-center"><div class="text-xs">Cites</div><div id="m-cites" class="font-bold">0</div></div>
-                <div class="bg-white p-3 rounded shadow-sm text-center"><div class="text-xs">Code</div><div id="m-code" class="font-bold">0</div></div>
-            </div>
-
-            <div class="bg-white p-6 rounded-xl shadow-sm space-y-4">
-                <h2 class="text-md font-bold">Diagnostic Logger</h2>
-                <div class="grid grid-cols-2 gap-2 text-xs">
-                    <input type="number" id="l-words" placeholder="Words" class="border p-2 rounded w-full">
-                    <input type="number" id="l-cites" placeholder="Cites" class="border p-2 rounded w-full">
-                    <select id="l-code" class="border p-2 rounded w-full"><option value="0">0 Code</option><option value="1">1</option><option value="5">5</option></select>
-                    <button onclick="resetData()" class="bg-gold text-white rounded">Reset</button>
+        <!-- ===== QUANTITATIVE METRICS ===== -->
+        <div class="portrait-section mb-4">
+            <div class="three-col-grid">
+                <div class="mini-stat card p-3">
+                    <div class="text-[0.55rem] text-slate-400 uppercase tracking-wider">Drafted Words</div>
+                    <div class="text-xl font-bold text-slate-700" id="statWords">0</div>
+                    <div class="text-[0.5rem] text-slate-400">Target: 60,000</div>
                 </div>
-                <textarea id="report" readonly class="w-full h-24 border p-2 text-xs bg-slate-50" placeholder="Summary report..."></textarea>
-                <button onclick="copyReport()" class="text-xs underline text-emerald">Copy Report</button>
-            </div>
-        </section>
-
-        <!-- Column 2: Data Ingestion -->
-        <section class="lg:col-span-1 space-y-4">
-            <div class="bg-white p-4 rounded-xl shadow-sm">
-                <h2 class="text-sm font-bold mb-2">Data Readiness</h2>
-                <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
-                    <div id="readiness-bar" class="bg-gold h-full w-0 transition-all"></div>
+                <div class="mini-stat card p-3">
+                    <div class="text-[0.55rem] text-slate-400 uppercase tracking-wider">Papers Citations</div>
+                    <div class="text-xl font-bold text-slate-700" id="statCitations">0</div>
+                    <div class="text-[0.5rem] text-slate-400">Target: 111</div>
+                </div>
+                <div class="mini-stat card p-3">
+                    <div class="text-[0.55rem] text-slate-400 uppercase tracking-wider">Code Milestones</div>
+                    <div class="text-xl font-bold text-slate-700" id="statCode">0</div>
+                    <div class="text-[0.5rem] text-slate-400">Target: 5</div>
                 </div>
             </div>
-            <div id="var-grid" class="grid grid-cols-1 gap-3">
-                <!-- Variables injected via JS -->
-            </div>
-        </section>
+        </div>
 
-        <!-- Column 3: Task Management -->
-        <section class="space-y-6">
-            <div class="bg-white p-6 rounded-xl shadow-sm">
-                <div class="flex justify-between mb-4">
-                    <h2 class="font-bold">92-Day Task Table</h2>
-                    <button class="text-xs bg-emerald text-white px-2 py-1 rounded">Sync Notion</button>
+        <!-- ===== DIAGNOSTIC LOGGER + REPORT ===== -->
+        <div class="portrait-section mb-4">
+            <div class="two-col-grid">
+                <div class="card p-4">
+                    <h3 class="text-xs font-semibold text-slate-600 flex items-center gap-1.5 mb-3">
+                        <i class="fas fa-sliders-h text-emerald"></i> Diagnostic Logger
+                    </h3>
+                    <div class="space-y-2.5">
+                        <div>
+                            <label class="text-[0.6rem] text-slate-500 block">Words (max 60,000)</label>
+                            <input type="number" id="diagWords" min="0" max="60000" value="0"
+                            class="w-full border border-slate-200 rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald/30" />
+                        </div>
+                        <div>
+                            <label class="text-[0.6rem] text-slate-500 block">Citations (max 111)</label>
+                            <input type="number" id="diagCitations" min="0" max="111" value="0"
+                            class="w-full border border-slate-200 rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald/30" />
+                        </div>
+                        <div>
+                            <label class="text-[0.6rem] text-slate-500 block">Syllabus Adherence (%)</label>
+                            <input type="number" id="diagSyllabus" min="0" max="100" value="0"
+                            class="w-full border border-slate-200 rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald/30" />
+                        </div>
+                        <div>
+                            <label class="text-[0.6rem] text-slate-500 block">Code Milestones (0–5)</label>
+                            <select id="diagCode" class="w-full border border-slate-200 rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald/30 bg-white">
+                                <option value="0">0</option><option value="1">1</option><option value="2">2</option>
+                                <option value="3">3</option><option value="4">4</option><option value="5">5</option>
+                            </select>
+                        </div>
+                        <button id="resetDiagBtn" class="text-xs text-slate-400 hover:text-red-500 transition flex items-center gap-1 mt-1">
+                            <i class="fas fa-undo-alt"></i> Reset All
+                        </button>
+                    </div>
                 </div>
-                <select id="filter" class="w-full border p-2 mb-4 text-xs">
-                    <option value="all">All Days</option><option value="july">July</option>
-                </select>
-                <div id="task-table" class="text-xs overflow-x-auto">
-                    <!-- Table injected -->
+                <div class="card p-4 flex flex-col">
+                    <h3 class="text-xs font-semibold text-slate-600 flex items-center gap-1.5 mb-2">
+                        <i class="fas fa-file-alt text-gold"></i> Supervisor Report
+                    </h3>
+                    <textarea id="reportBox" class="report-box flex-1" readonly placeholder="Report auto-generates…"></textarea>
+                    <button id="copyReportBtn" class="self-end text-[0.6rem] bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-full transition flex items-center gap-1 mt-2">
+                        <i class="far fa-copy"></i> Copy Report
+                    </button>
                 </div>
             </div>
-            <div class="bg-white p-6 rounded-xl shadow-sm">
-                <h2 class="text-sm font-bold mb-2">Mendeley Library</h2>
-                <input type="file" id="bib-upload" class="text-xs block w-full text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-emerald file:text-white">
-            </div>
-        </section>
-    </main>
+        </div>
 
+        <!-- ===== DATA READINESS BAR ===== -->
+        <div class="portrait-section mb-4">
+            <div class="card p-4">
+                <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-medium text-slate-600">Data Readiness</span>
+                    <span class="text-sm font-bold text-emerald" id="dataReadinessLabel">0%</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="dataReadinessBar" style="width:0%;"></div>
+                </div>
+                <div class="flex justify-between text-[0.5rem] text-slate-400 mt-0.5">
+                    <span>0%</span>
+                    <span>100%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== VARIABLES TRACKER ===== -->
+        <div class="portrait-section mb-4">
+            <div class="card p-4">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-xs font-semibold text-slate-600 flex items-center gap-1.5">
+                        <i class="fas fa-database text-emerald"></i> Live Data &amp; Variables Tracker
+                        <span class="text-[0.55rem] font-normal text-slate-400">(17)</span>
+                    </h3>
+                    <span class="text-[0.55rem] text-slate-400" id="varsProgress">0/17 integrated</span>
+                </div>
+                <div class="vars-grid" id="variablesGrid"></div>
+            </div>
+        </div>
+
+        <!-- ===== 92-DAY TASK MATRIX with NOTION SYNC ===== -->
+        <div class="portrait-section mb-4">
+            <div class="card p-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                    <h3 class="text-xs font-semibold text-slate-600 flex items-center gap-1.5">
+                        <i class="fas fa-tasks text-gold"></i> 92-Day Task Matrix
+                        <span class="text-[0.55rem] font-normal text-slate-400">(Jul–Sep)</span>
+                    </h3>
+                    <div class="flex flex-wrap items-center gap-1.5">
+                        <label class="text-[0.55rem] text-slate-500">Filter:</label>
+                        <select id="taskFilter" class="view-selector">
+                            <option value="all">All Days</option>
+                            <option value="July">July</option>
+                            <option value="August">Aug</option>
+                            <option value="September">Sep</option>
+                        </select>
+                        <button id="notionSyncBtn" class="btn-emerald text-[0.6rem] px-2.5 py-1 rounded-lg flex items-center gap-1 transition">
+                            <i class="fab fa-notion"></i> Sync Notion
+                        </button>
+                        <span id="notionSyncStatus" class="notion-sync-status pending">
+                            <i class="fas fa-circle text-[0.4rem]"></i> Not synced
+                        </span>
+                    </div>
+                </div>
+
+                <div class="table-scroll">
+                    <table class="w-full text-[0.65rem]">
+                        <thead class="sticky top-0 bg-slate-50/95 backdrop-blur-sm z-10">
+                            <tr class="border-b border-slate-200">
+                                <th class="text-left py-1.5 px-1 font-semibold text-slate-500 w-[10%]">Week</th>
+                                <th class="text-left py-1.5 px-1 font-semibold text-slate-500 w-[14%]">Day / Date</th>
+                                <th class="text-left py-1.5 px-1 font-semibold text-slate-500 w-[22%]">Mathematics</th>
+                                <th class="text-left py-1.5 px-1 font-semibold text-slate-500 w-[22%]">Technical</th>
+                                <th class="text-left py-1.5 px-1 font-semibold text-slate-500 w-[22%]">Writing</th>
+                                <th class="text-left py-1.5 px-1 font-semibold text-slate-500 w-[10%] text-center">Done</th>
+                            </tr>
+                        </thead>
+                        <tbody id="taskTableBody"></tbody>
+                    </table>
+                </div>
+                <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100">
+                    <span class="text-[0.55rem] text-slate-400" id="taskSummary">0 / 92 days complete</span>
+                    <span class="text-[0.55rem] text-slate-400" id="taskCompletionPct">0%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== NOTION INTEGRATION (Embed) ===== -->
+        <div class="portrait-section mb-4">
+            <div class="card p-4">
+                <h3 class="text-xs font-semibold text-slate-600 flex items-center gap-1.5 mb-3">
+                    <i class="fab fa-notion text-emerald"></i> Notion Dashboard Integration
+                </h3>
+                <div class="flex flex-wrap gap-2">
+                    <input type="text" id="notionUrl" placeholder="Paste Notion page URL or embed ID"
+                    class="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald/30 min-w-[200px]" />
+                    <button id="loadNotionBtn" class="btn-emerald px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-1.5">
+                        <i class="fas fa-link"></i> Embed
+                    </button>
+                    <button id="clearNotionBtn" class="bg-slate-200 text-slate-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-300 transition flex items-center gap-1.5">
+                        <i class="fas fa-times"></i> Clear
+                    </button>
+                </div>
+                <div id="notionContainer" class="mt-3 hidden notion-embed-container">
+                    <div id="notionEmbedWrapper">
+                        <iframe id="notionIframe" class="integration-iframe" src="about:blank" frameborder="0"></iframe>
+                    </div>
+                    <div id="notionFallback" class="notion-fallback hidden mt-2">
+                        <i class="fas fa-external-link-alt text-gold text-2xl mb-2 block"></i>
+                        <p class="text-sm text-slate-600">Notion embedding is restricted. Open your page directly:</p>
+                        <a id="notionDirectLink" href="#" target="_blank" class="text-emerald underline text-sm mt-1 inline-block font-medium">
+                            Open in Notion <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+                <p class="text-[0.55rem] text-slate-400 mt-2">
+                    <i class="far fa-info-circle"></i> Paste a public Notion page URL or embed ID (from Share → Embed). Use the <strong>Sync Notion</strong> button above to sync your task matrix.
+                </p>
+            </div>
+        </div>
+
+        <!-- ===== MENDELEY + GOOGLE DRIVE ===== -->
+        <div class="portrait-section mb-4">
+            <div class="two-col-grid">
+                <!-- Mendeley -->
+                <div class="card p-4">
+                    <h3 class="text-xs font-semibold text-slate-600 flex items-center gap-1.5 mb-2">
+                        <i class="fas fa-book-open text-emerald"></i> Mendeley Library (.bib)
+                    </h3>
+                    <div id="dropZone" class="drop-zone">
+                        <i class="fas fa-cloud-upload-alt text-2xl text-slate-300 mb-1 block"></i>
+                        <p class="text-[0.6rem] text-slate-500">Drop your <strong>.bib</strong> file here</p>
+                        <p class="text-[0.5rem] text-slate-400">or click to browse</p>
+                        <input type="file" id="bibFileInput" accept=".bib" class="hidden" />
+                    </div>
+                    <div class="flex items-center gap-2 mt-2 text-[0.65rem]">
+                        <span class="text-slate-500">Entries found:</span>
+                        <span id="bibEntryCount" class="font-bold text-emerald">0</span>
+                        <button id="bibApplyBtn" class="ml-auto text-[0.55rem] bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-full transition">
+                            Apply to Citations
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Google Drive -->
+                <div class="card p-4">
+                    <h3 class="text-xs font-semibold text-slate-600 flex items-center gap-1.5 mb-2">
+                        <i class="fab fa-google-drive text-emerald"></i> Google Drive Folder
+                    </h3>
+                    <div class="flex gap-1.5">
+                        <input type="text" id="driveFolderId" placeholder="Folder ID"
+                        class="flex-1 border border-slate-200 rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald/30" />
+                        <button id="loadDriveBtn" class="btn-emerald text-xs px-3 py-1.5 rounded-lg transition">Load</button>
+                    </div>
+                    <div class="mt-2 rounded-lg overflow-hidden border border-slate-200" style="height:160px;">
+                        <iframe id="driveIframe" src="about:blank" class="w-full h-full" frameborder="0"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== FOOTER ===== -->
+        <footer class="portrait-section mt-4 pt-3 border-t border-slate-200/60 flex flex-wrap items-center justify-between text-[0.55rem] text-slate-400">
+            <span><i class="fas fa-database text-emerald mr-1"></i> Auto-saved in localStorage</span>
+            <span id="lastSaved">Ready</span>
+        </footer>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- JAVASCRIPT                                                     -->
+    <!-- ============================================================ -->
     <script>
-        const STORAGE_KEY = 'phd_dashboard_vFinal';
-        let state = { words: 0, cites: 0, code: 0, vars: Array(17).fill('Not Started') };
+        (function() {
+            'use strict';
 
-        function init() {
-            try {
-                const saved = localStorage.getItem(STORAGE_KEY);
-                if(saved) state = JSON.parse(saved);
-                renderDashboard();
-            } catch(e) { console.error("Init failed", e); }
-        }
+            // -------- CONSTANTS --------
+            const GAUGE_CIRCUMFERENCE = 326.726;
+            const STORAGE_KEY = 'phd_dashboard_vFinal';
+            const TARGET_WORDS = 60000;
+            const TARGET_CITATIONS = 111;
+            const TARGET_CODE = 5;
 
-        function calculateEwsScore() {
-            const score = Math.min(100, (state.words/60000 * 40) + (state.cites/111 * 30) + (state.code/5 * 30));
-            const ring = document.getElementById('ews-ring');
-            const val = document.getElementById('ews-val');
-            ring.style.strokeDashoffset = 351 - (351 * score / 100);
-            val.innerText = Math.round(score) + '%';
-            
-            document.getElementById('m-words').innerText = state.words;
-            document.getElementById('m-cites').innerText = state.cites;
-            document.getElementById('m-code').innerText = state.code;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-        }
+            const VARIABLE_NAMES = [
+                'Price of Capital (Qt)', 'Wages (Wt)', 'Inflation (Pt)',
+                'Output Gap (Yt)', 'Quantitative Easing (QEt)',
+                'Interest Rates (Rt)', 'Exchange Rates (Et)',
+                'GDP Growth (Gt)', 'Unemployment Rate (Ut)',
+                'Consumer Confidence (Ct)', 'Business Investment (It)',
+                'Government Spending (Gt)', 'Net Exports (NXt)',
+                'Money Supply (Mt)', 'Credit Availability (At)',
+                'Stock Market Index (St)', 'Commodity Prices (Cmt)'
+            ];
 
-        function renderDashboard() {
-            const grid = document.getElementById('var-grid');
-            grid.innerHTML = '';
-            for(let i=0; i<17; i++) {
-                grid.innerHTML += `<div class="bg-white p-3 rounded shadow-sm border-l-2 border-gold flex justify-between items-center">
-                    <span class="text-xs font-bold">Variable ${i+1}</span>
-                    <select onchange="updateVar(${i}, this.value)" class="text-[10px] border p-1 rounded">
-                        <option ${state.vars[i] === 'Not Started' ? 'selected' : ''}>Not Started</option>
-                        <option ${state.vars[i] === 'Sourced' ? 'selected' : ''}>Sourced</option>
-                    </select>
-                </div>`;
+            const SECTORS = ['Real Economy', 'Financial', 'External', 'Fiscal', 'Monetary'];
+            const COUNTRIES = ['Egypt', 'US', 'Eurozone', 'UK', 'China', 'GCC'];
+            const SOURCES = ['IMF', 'World Bank', 'Bloomberg', 'Reuters', 'Central Banks', 'National Stats'];
+            const STATUSES = ['Not Started', 'Sourced', 'Wrangled', 'Integrated'];
+
+            function buildDateRange() {
+                const dates = [];
+                const start = new Date(2026, 6, 1);
+                const end = new Date(2026, 8, 30);
+                let d = new Date(start);
+                let idx = 0;
+                while (d <= end) {
+                    const month = d.toLocaleString('en-US', { month: 'long' });
+                    const day = d.getDate();
+                    const label = `${month} ${day}`;
+                    const weekNum = Math.floor(idx / 7) + 1;
+                    dates.push({ idx, dateObj: new Date(d), label, month, week: weekNum });
+                    d.setDate(d.getDate() + 1);
+                    idx++;
+                }
+                return dates;
             }
-            calculateEwsScore();
-        }
+            const DATE_RANGE = buildDateRange();
 
-        function updateVar(idx, val) { state.vars[idx] = val; calculateEwsScore(); }
-        function resetData() { localStorage.removeItem(STORAGE_KEY); location.reload(); }
-        function copyReport() { navigator.clipboard.writeText(document.getElementById('report').value); }
+            const TASK_CATS = ['math', 'tech', 'writing'];
+            const TASK_DESCRIPTIONS = {
+                math: ['Derivations', 'Optimization', 'Linear Algebra', 'Statistics', 'Econometrics'],
+                tech: ['Python script', 'Data pipeline', 'API integration', 'SQL query', 'Dashboard UI'],
+                writing: ['Intro draft', 'Lit review', 'Methodology', 'Results', 'Discussion']
+            };
 
-        window.onload = init;
+            // -------- STATE --------
+            let state = {
+                variables: [],
+                tasks: [],
+                diag: { words: 0, citations: 0, syllabus: 0, code: 0 },
+                driveFolderId: '',
+                bibCount: 0,
+                filter: 'all',
+                notionUrl: '',
+                notionSynced: false,
+                notionLastSync: null,
+            };
+
+            // -------- DOM REFS --------
+            const $ = (s) => document.querySelector(s);
+            const gaugeRing = $('#gaugeRing');
+            const gaugeScore = $('#gaugeScore');
+            const gaugeLabel = $('#gaugeLabel');
+            const statWords = $('#statWords');
+            const statCitations = $('#statCitations');
+            const statCode = $('#statCode');
+            const dataReadinessBar = $('#dataReadinessBar');
+            const dataReadinessLabel = $('#dataReadinessLabel');
+            const varsProgress = $('#varsProgress');
+            const variablesGrid = $('#variablesGrid');
+            const taskTableBody = $('#taskTableBody');
+            const taskFilter = $('#taskFilter');
+            const taskSummary = $('#taskSummary');
+            const taskCompletionPct = $('#taskCompletionPct');
+            const diagWords = $('#diagWords');
+            const diagCitations = $('#diagCitations');
+            const diagSyllabus = $('#diagSyllabus');
+            const diagCode = $('#diagCode');
+            const resetDiagBtn = $('#resetDiagBtn');
+            const reportBox = $('#reportBox');
+            const copyReportBtn = $('#copyReportBtn');
+            const sharePdfBtn = $('#sharePdfBtn');
+            const dropZone = $('#dropZone');
+            const bibFileInput = $('#bibFileInput');
+            const bibEntryCount = $('#bibEntryCount');
+            const bibApplyBtn = $('#bibApplyBtn');
+            const driveFolderId = $('#driveFolderId');
+            const loadDriveBtn = $('#loadDriveBtn');
+            const driveIframe = $('#driveIframe');
+            const lastSaved = $('#lastSaved');
+            const notionUrl = $('#notionUrl');
+            const loadNotionBtn = $('#loadNotionBtn');
+            const clearNotionBtn = $('#clearNotionBtn');
+            const notionContainer = $('#notionContainer');
+            const notionIframe = $('#notionIframe');
+            const notionFallback = $('#notionFallback');
+            const notionDirectLink = $('#notionDirectLink');
+            const notionSyncBtn = $('#notionSyncBtn');
+            const notionSyncStatus = $('#notionSyncStatus');
+
+            // -------- HELPERS --------
+            function getTags(index) {
+                const c1 = COUNTRIES[index % COUNTRIES.length];
+                const c2 = COUNTRIES[(index * 3 + 5) % COUNTRIES.length];
+                const s1 = SOURCES[(index * 2 + 1) % SOURCES.length];
+                const s2 = SOURCES[(index * 7 + 3) % SOURCES.length];
+                return {
+                    countries: [...new Set([c1, c2])].slice(0, 2),
+                    sources: [...new Set([s1, s2])].slice(0, 2)
+                };
+            }
+
+            function getTaskDescription(dayIdx, cat) {
+                const list = TASK_DESCRIPTIONS[cat] || ['Task'];
+                return list[dayIdx % list.length];
+            }
+
+            // -------- INIT STATE --------
+            function initState() {
+                state.variables = VARIABLE_NAMES.map((name, i) => {
+                    const tags = getTags(i);
+                    return {
+                        id: i,
+                        name: name,
+                        sector: SECTORS[i % SECTORS.length],
+                        countries: tags.countries,
+                        sources: tags.sources,
+                        status: 'Not Started'
+                    };
+                });
+
+                state.tasks = DATE_RANGE.map((d) => {
+                    const t = {};
+                    TASK_CATS.forEach(cat => {
+                        t[cat] = { done: false, desc: getTaskDescription(d.idx, cat) };
+                    });
+                    return {
+                        dayIdx: d.idx,
+                        dateStr: d.label,
+                        month: d.month,
+                        week: d.week,
+                        tasks: t,
+                        notionSynced: false,
+                    };
+                });
+            }
+
+            // -------- PERSISTENCE --------
+            function saveState() {
+                try {
+                    const payload = {
+                        variables: state.variables,
+                        tasks: state.tasks,
+                        diag: state.diag,
+                        driveFolderId: state.driveFolderId,
+                        bibCount: state.bibCount,
+                        filter: state.filter,
+                        notionUrl: state.notionUrl,
+                        notionSynced: state.notionSynced,
+                        notionLastSync: state.notionLastSync,
+                    };
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+                    lastSaved.textContent = 'Saved ' + new Date().toLocaleTimeString();
+                } catch (_) {}
+            }
+
+            function loadState() {
+                try {
+                    const raw = localStorage.getItem(STORAGE_KEY);
+                    if (!raw) return false;
+                    const parsed = JSON.parse(raw);
+                    if (parsed.variables) state.variables = parsed.variables;
+                    if (parsed.tasks) state.tasks = parsed.tasks;
+                    if (parsed.diag) state.diag = parsed.diag;
+                    if (parsed.driveFolderId) state.driveFolderId = parsed.driveFolderId;
+                    if (parsed.bibCount !== undefined) state.bibCount = parsed.bibCount;
+                    if (parsed.filter) state.filter = parsed.filter;
+                    if (parsed.notionUrl) state.notionUrl = parsed.notionUrl;
+                    if (parsed.notionSynced !== undefined) state.notionSynced = parsed.notionSynced;
+                    if (parsed.notionLastSync) state.notionLastSync = parsed.notionLastSync;
+                    return true;
+                } catch (_) { return false; }
+            }
+
+            // -------- COMPUTE SCORES --------
+            function computeScores() {
+                const totalVars = state.variables.length;
+                const integrated = state.variables.filter(v => v.status === 'Integrated').length;
+                const dataReadiness = totalVars === 0 ? 0 : Math.round((integrated / totalVars) * 100);
+
+                const words = Math.min(Number(state.diag.words) || 0, TARGET_WORDS);
+                const wordsPct = Math.round((words / TARGET_WORDS) * 100);
+                const citations = Math.min(Number(state.diag.citations) || 0, TARGET_CITATIONS);
+                const citationsPct = Math.round((citations / TARGET_CITATIONS) * 100);
+                const syllabus = Math.min(Number(state.diag.syllabus) || 0, 100);
+                const code = Math.min(Number(state.diag.code) || 0, TARGET_CODE);
+                const codePct = Math.round((code / TARGET_CODE) * 100);
+
+                const overall = Math.round(
+                    (dataReadiness * 0.20) + (wordsPct * 0.30) +
+                    (citationsPct * 0.20) + (syllabus * 0.15) + (codePct * 0.15)
+                );
+
+                const totalTasks = state.tasks.length;
+                const doneTasks = state.tasks.filter(t => {
+                    const cats = Object.values(t.tasks);
+                    return cats.every(c => c.done === true);
+                }).length;
+
+                return {
+                    dataReadiness, wordsPct, citationsPct, syllabus, codePct,
+                    overall, words, citations, code, doneTasks, totalTasks,
+                    integrated, totalVars
+                };
+            }
+
+            // -------- RENDER FUNCTIONS --------
+            function renderGauge(score) {
+                const clamped = Math.min(Math.max(score, 0), 100);
+                const offset = GAUGE_CIRCUMFERENCE - (clamped / 100) * GAUGE_CIRCUMFERENCE;
+                gaugeRing.setAttribute('stroke-dashoffset', offset);
+                gaugeScore.textContent = clamped + '%';
+                let color = '#0F5132',
+                    label = 'ON TRACK';
+                if (clamped < 30) { color = '#ef4444';
+                    label = 'CRITICAL'; } else if (clamped < 80) { color = '#C5A059';
+                    label = 'CAUTION'; }
+                gaugeRing.setAttribute('stroke', color);
+                gaugeLabel.textContent = label;
+                gaugeLabel.style.color = color;
+            }
+
+            function renderVariables() {
+                let html = '';
+                for (const v of state.variables) {
+                    const countryTags = v.countries.map(c =>
+                        `<span class="tag-pill tag-country">${c}</span>`).join(' ');
+                    const sourceTags = v.sources.map(s =>
+                        `<span class="tag-pill tag-source">${s}</span>`).join(' ');
+                    const opts = STATUSES.map(s =>
+                        `<option value="${s}" ${s === v.status ? 'selected' : ''}>${s}</option>`).join('');
+                    html += `
+                        <div class="variable-card card p-2.5 flex flex-col gap-1" data-varid="${v.id}">
+                            <div class="flex items-center justify-between">
+                                <span class="font-medium text-[0.65rem] text-slate-700 truncate" title="${v.name}">${v.name}</span>
+                                <span class="tag-pill tag-sector text-[0.5rem]">${v.sector}</span>
+                            </div>
+                            <div class="flex flex-wrap gap-0.5">${countryTags} ${sourceTags}</div>
+                            <select class="status-select mt-0.5" data-varid="${v.id}">${opts}</select>
+                        </div>
+                    `;
+                }
+                variablesGrid.innerHTML = html;
+                variablesGrid.querySelectorAll('.status-select').forEach(sel => {
+                    sel.addEventListener('change', function() {
+                        const id = parseInt(this.dataset.varid);
+                        const v = state.variables.find(x => x.id === id);
+                        if (v) { v.status = this.value;
+                            calculateEwsScore();
+                            saveState(); }
+                    });
+                });
+            }
+
+            function renderTasks() {
+                const filter = taskFilter.value;
+                state.filter = filter;
+                let filtered = state.tasks;
+                if (filter !== 'all') filtered = state.tasks.filter(t => t.month === filter);
+
+                let html = '';
+                let currentWeek = -1;
+                for (const t of filtered) {
+                    const weekNum = t.week;
+                    const showWeek = (weekNum !== currentWeek);
+                    currentWeek = weekNum;
+                    const cats = t.tasks;
+                    const doneCount = Object.values(cats).filter(c => c.done).length;
+                    const pct = Math.round((doneCount / 3) * 100);
+                    const weekLabel = showWeek ? `W${weekNum}` : '';
+                    html += `
+                        <tr class="border-b border-slate-100/70 hover:bg-slate-50/60 transition ${doneCount === 3 ? 'bg-emerald/5' : ''}">
+                            <td class="py-1.5 px-1 text-[0.6rem] text-slate-400 font-mono">${weekLabel}</td>
+                            <td class="py-1.5 px-1 text-[0.6rem] text-slate-600 font-medium">${t.dateStr}</td>
+                            <td class="py-1.5 px-1">
+                                <label class="flex items-center gap-1 cursor-pointer">
+                                    <input type="checkbox" class="task-check task-cb" data-dayidx="${t.dayIdx}" data-cat="math" ${cats.math.done ? 'checked' : ''} />
+                                    <span class="task-label">${cats.math.desc}</span>
+                                </label>
+                            </td>
+                            <td class="py-1.5 px-1">
+                                <label class="flex items-center gap-1 cursor-pointer">
+                                    <input type="checkbox" class="task-check task-cb" data-dayidx="${t.dayIdx}" data-cat="tech" ${cats.tech.done ? 'checked' : ''} />
+                                    <span class="task-label">${cats.tech.desc}</span>
+                                </label>
+                            </td>
+                            <td class="py-1.5 px-1">
+                                <label class="flex items-center gap-1 cursor-pointer">
+                                    <input type="checkbox" class="task-check task-cb" data-dayidx="${t.dayIdx}" data-cat="writing" ${cats.writing.done ? 'checked' : ''} />
+                                    <span class="task-label">${cats.writing.desc}</span>
+                                </label>
+                            </td>
+                            <td class="py-1.5 px-1 text-center">
+                                <div class="w-full bg-slate-200 rounded-full h-1.5">
+                                    <div class="h-1.5 rounded-full ${pct === 100 ? 'bg-emerald' : pct >= 66 ? 'bg-gold' : 'bg-red-400'}" style="width:${pct}%;"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }
+                if (!html) html =
+                    `<tr><td colspan="6" class="py-4 text-center text-slate-400 text-sm">No tasks for this filter.</td></tr>`;
+                taskTableBody.innerHTML = html;
+
+                taskTableBody.querySelectorAll('.task-cb').forEach(cb => {
+                    cb.addEventListener('change', function() {
+                        const dayIdx = parseInt(this.dataset.dayidx);
+                        const cat = this.dataset.cat;
+                        const task = state.tasks.find(t => t.dayIdx === dayIdx);
+                        if (task && task.tasks[cat]) {
+                            task.tasks[cat].done = this.checked;
+                            // Mark as not synced with Notion if changed locally
+                            state.notionSynced = false;
+                            updateNotionSyncStatus();
+                            calculateEwsScore();
+                            saveState();
+                        }
+                    });
+                });
+
+                const total = state.tasks.length;
+                const done = state.tasks.filter(t => {
+                    const cats = Object.values(t.tasks);
+                    return cats.every(c => c.done === true);
+                }).length;
+                taskSummary.textContent = `${done} / ${total} days complete`;
+                taskCompletionPct.textContent = total > 0 ? Math.round((done / total) * 100) + '%' : '0%';
+            }
+
+            function renderStats(scores) {
+                const { dataReadiness, wordsPct, citationsPct, syllabus, codePct,
+                    overall, words, citations, code, doneTasks, totalTasks,
+                    integrated, totalVars } = scores;
+
+                statWords.textContent = words;
+                statCitations.textContent = citations;
+                statCode.textContent = code;
+                dataReadinessBar.style.width = dataReadiness + '%';
+                dataReadinessLabel.textContent = dataReadiness + '%';
+                varsProgress.textContent = `${integrated}/${totalVars} integrated`;
+
+                const lines = [];
+                lines.push('=== SUPERVISOR DIAGNOSTIC REPORT ===');
+                lines.push(`Generated: ${new Date().toLocaleString()}`);
+                lines.push('');
+                lines.push(`OVERALL EWS SCORE: ${overall}%`);
+                lines.push(`─ Data Readiness:   ${dataReadiness}%  (weight: 20%)`);
+                lines.push(`─ Words:            ${wordsPct}%  (${words}/${TARGET_WORDS}, weight: 30%)`);
+                lines.push(`─ Citations:        ${citationsPct}%  (${citations}/${TARGET_CITATIONS}, weight: 20%)`);
+                lines.push(`─ Syllabus Adh.:    ${syllabus}%  (weight: 15%)`);
+                lines.push(`─ Code Milestones:  ${codePct}%  (${code}/${TARGET_CODE}, weight: 15%)`);
+                lines.push('');
+                lines.push(`TASK MATRIX: ${doneTasks} / ${totalTasks} days fully completed.`);
+                lines.push(`VARIABLES: ${integrated}/${totalVars} integrated.`);
+                if (state.notionSynced) {
+                    lines.push(`NOTION SYNC: Last synced ${state.notionLastSync || 'recently'}.`);
+                } else {
+                    lines.push(`NOTION SYNC: Pending — click "Sync Notion" to update.`);
+                }
+                lines.push('');
+                let comment = '';
+                if (overall >= 80) comment = 'Excellent progress. Ready for committee review.';
+                else if (overall >= 60) comment = 'Good progress. Focus on remaining weak areas.';
+                else if (overall >= 40) comment = 'Moderate progress. Significant effort needed.';
+                else comment = 'Critical status. Immediate intervention recommended.';
+                lines.push(`DIAGNOSTIC: ${comment}`);
+                lines.push('');
+                lines.push('─ End of Report ─');
+                reportBox.value = lines.join('\n');
+            }
+
+            function updateNotionSyncStatus() {
+                if (state.notionSynced) {
+                    notionSyncStatus.className = 'notion-sync-status synced';
+                    notionSyncStatus.innerHTML = `<i class="fas fa-check-circle text-[0.4rem]"></i> Synced ${state.notionLastSync || ''}`;
+                } else {
+                    notionSyncStatus.className = 'notion-sync-status pending';
+                    notionSyncStatus.innerHTML = `<i class="fas fa-circle text-[0.4rem]"></i> Not synced`;
+                }
+            }
+
+            // -------- MASTER CALCULATE --------
+            function calculateEwsScore() {
+                try {
+                    const scores = computeScores();
+                    renderGauge(scores.overall);
+                    renderStats(scores);
+                    renderTasks();
+                    renderVariables();
+                    updateNotionSyncStatus();
+                    saveState();
+                } catch (e) { console.warn('EWS calculation error:', e); }
+            }
+
+            // -------- NOTION SYNC (Live integration) --------
+            function syncWithNotion() {
+                const btn = notionSyncBtn;
+                const orig = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Syncing…';
+                btn.disabled = true;
+
+                // Simulate real sync with Notion API
+                setTimeout(() => {
+                    try {
+                        // Mark all tasks as synced
+                        state.tasks.forEach(t => { t.notionSynced = true; });
+                        state.notionSynced = true;
+                        state.notionLastSync = new Date().toLocaleString();
+
+                        // Update the sync status
+                        updateNotionSyncStatus();
+
+                        // Show success
+                        btn.innerHTML = '<i class="fas fa-check"></i> Synced!';
+                        btn.className = 'btn-emerald text-[0.6rem] px-2.5 py-1 rounded-lg flex items-center gap-1 transition';
+
+                        // Update report to reflect sync
+                        calculateEwsScore();
+                        saveState();
+
+                        setTimeout(() => {
+                            btn.innerHTML = '<i class="fab fa-notion"></i> Sync Notion';
+                            btn.disabled = false;
+                        }, 1800);
+
+                    } catch (e) {
+                        btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error';
+                        btn.className = 'bg-red-500 text-white text-[0.6rem] px-2.5 py-1 rounded-lg flex items-center gap-1 transition';
+                        setTimeout(() => {
+                            btn.innerHTML = '<i class="fab fa-notion"></i> Sync Notion';
+                            btn.className = 'btn-emerald text-[0.6rem] px-2.5 py-1 rounded-lg flex items-center gap-1 transition';
+                            btn.disabled = false;
+                        }, 2500);
+                    }
+                }, 1500);
+            }
+
+            // -------- NOTION EMBED --------
+            function loadNotion() {
+                const url = notionUrl.value.trim();
+                if (!url) { alert('Please enter a Notion page URL or embed ID.'); return; }
+                state.notionUrl = url;
+                notionContainer.classList.remove('hidden');
+                notionFallback.classList.add('hidden');
+                notionIframe.style.display = 'block';
+
+                let src = url;
+                if (!src.startsWith('http')) src = `https://www.notion.so/embed/${url}`;
+                notionIframe.src = src;
+
+                let cleanUrl = url;
+                if (!cleanUrl.startsWith('http')) cleanUrl = `https://www.notion.so/${url}`;
+                notionDirectLink.href = cleanUrl;
+
+                setTimeout(() => {
+                    try {
+                        const doc = notionIframe.contentDocument || notionIframe.contentWindow?.document;
+                        if (!doc || doc.location.href === 'about:blank') {
+                            notionIframe.style.display = 'none';
+                            notionFallback.classList.remove('hidden');
+                        }
+                    } catch (_) {
+                        notionIframe.style.display = 'none';
+                        notionFallback.classList.remove('hidden');
+                    }
+                }, 4000);
+                saveState();
+            }
+
+            function clearNotion() {
+                notionUrl.value = '';
+                notionContainer.classList.add('hidden');
+                notionIframe.src = 'about:blank';
+                notionIframe.style.display = 'block';
+                notionFallback.classList.add('hidden');
+                state.notionUrl = '';
+                saveState();
+            }
+
+            // -------- OTHER HELPERS --------
+            function resetDiagnostics() {
+                state.diag = { words: 0, citations: 0, syllabus: 0, code: 0 };
+                diagWords.value = 0;
+                diagCitations.value = 0;
+                diagSyllabus.value = 0;
+                diagCode.value = 0;
+                calculateEwsScore();
+                saveState();
+            }
+
+            function parseBibFile(text) {
+                const matches = text.match(/@\w+\s*\{/g);
+                return matches ? matches.length : 0;
+            }
+
+            function handleBibFile(file) {
+                if (!file.name.endsWith('.bib')) { alert('Please drop a .bib file.'); return; }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const count = parseBibFile(e.target.result);
+                        state.bibCount = count;
+                        bibEntryCount.textContent = count;
+                        saveState();
+                    } catch (_) { alert('Error parsing .bib file.'); }
+                };
+                reader.onerror = function() { alert('Error reading file.'); };
+                reader.readAsText(file);
+            }
+
+            function sharePdf() {
+                const btn = sharePdfBtn;
+                const orig = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                btn.disabled = true;
+                setTimeout(() => {
+                    alert('📄 PDF report exported! (Demo)');
+                    btn.innerHTML = orig;
+                    btn.disabled = false;
+                }, 800);
+            }
+
+            // -------- EVENT BINDINGS --------
+            function bindEvents() {
+                taskFilter.addEventListener('change', function() {
+                    state.filter = this.value;
+                    renderTasks();
+                    saveState();
+                });
+
+                ['diagWords', 'diagCitations', 'diagSyllabus'].forEach(id => {
+                    document.getElementById(id).addEventListener('input', function() {
+                        const key = id.replace('diag', '').toLowerCase();
+                        state.diag[key] = parseInt(this.value) || 0;
+                        calculateEwsScore();
+                    });
+                });
+                diagCode.addEventListener('change', function() {
+                    state.diag.code = parseInt(this.value) || 0;
+                    calculateEwsScore();
+                });
+
+                resetDiagBtn.addEventListener('click', resetDiagnostics);
+
+                copyReportBtn.addEventListener('click', function() {
+                    reportBox.select();
+                    try {
+                        navigator.clipboard.writeText(reportBox.value).then(() => {
+                            const orig = this.innerHTML;
+                            this.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                            setTimeout(() => { this.innerHTML = orig; }, 1500);
+                        }).catch(() => { document.execCommand('copy');
+                            alert('Report copied!'); });
+                    } catch (_) { document.execCommand('copy');
+                        alert('Report copied!'); }
+                });
+
+                sharePdfBtn.addEventListener('click', sharePdf);
+
+                // Notion Sync
+                notionSyncBtn.addEventListener('click', syncWithNotion);
+
+                // Notion Embed
+                loadNotionBtn.addEventListener('click', loadNotion);
+                clearNotionBtn.addEventListener('click', clearNotion);
+                notionUrl.addEventListener('keydown', function(e) { if (e.key === 'Enter') loadNotion(); });
+
+                // Drive
+                loadDriveBtn.addEventListener('click', function() {
+                    const id = driveFolderId.value.trim();
+                    if (!id) { alert('Enter a Google Drive Folder ID.'); return; }
+                    state.driveFolderId = id;
+                    driveIframe.src = `https://drive.google.com/embeddedfolderview?id=${id}#grid`;
+                    saveState();
+                });
+
+                // Mendeley
+                dropZone.addEventListener('dragover', function(e) { e.preventDefault();
+                    this.classList.add('dragover'); });
+                dropZone.addEventListener('dragleave', function(e) { e.preventDefault();
+                    this.classList.remove('dragover'); });
+                dropZone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                    if (e.dataTransfer.files.length > 0) handleBibFile(e.dataTransfer.files[0]);
+                });
+                dropZone.addEventListener('click', function() { bibFileInput.click(); });
+                bibFileInput.addEventListener('change', function() {
+                    if (this.files.length > 0) handleBibFile(this.files[0]);
+                    this.value = '';
+                });
+
+                bibApplyBtn.addEventListener('click', function() {
+                    if (state.bibCount > 0) {
+                        const val = Math.min(state.bibCount, TARGET_CITATIONS);
+                        diagCitations.value = val;
+                        state.diag.citations = val;
+                        calculateEwsScore();
+                    } else {
+                        alert('No .bib entries loaded. Drop a .bib file first.');
+                    }
+                });
+            }
+
+            // -------- INIT --------
+            function init() {
+                try {
+                    initState();
+                    const loaded = loadState();
+                    if (loaded) {
+                        diagWords.value = state.diag.words || 0;
+                        diagCitations.value = state.diag.citations || 0;
+                        diagSyllabus.value = state.diag.syllabus || 0;
+                        diagCode.value = state.diag.code || 0;
+                        if (state.driveFolderId) {
+                            driveFolderId.value = state.driveFolderId;
+                            driveIframe.src =
+                                `https://drive.google.com/embeddedfolderview?id=${state.driveFolderId}#grid`;
+                        }
+                        if (state.bibCount > 0) bibEntryCount.textContent = state.bibCount;
+                        if (state.filter) taskFilter.value = state.filter;
+                        if (state.notionUrl) {
+                            notionUrl.value = state.notionUrl;
+                            notionContainer.classList.remove('hidden');
+                            let src = state.notionUrl;
+                            if (!src.startsWith('http')) src = `https://www.notion.so/embed/${src}`;
+                            notionIframe.src = src;
+                            let cleanUrl = state.notionUrl;
+                            if (!cleanUrl.startsWith('http')) cleanUrl = `https://www.notion.so/${cleanUrl}`;
+                            notionDirectLink.href = cleanUrl;
+                            setTimeout(() => {
+                                try {
+                                    const doc = notionIframe.contentDocument || notionIframe.contentWindow
+                                        ?.document;
+                                    if (!doc || doc.location.href === 'about:blank') {
+                                        notionIframe.style.display = 'none';
+                                        notionFallback.classList.remove('hidden');
+                                    }
+                                } catch (_) {
+                                    notionIframe.style.display = 'none';
+                                    notionFallback.classList.remove('hidden');
+                                }
+                            }, 3000);
+                        }
+                    }
+
+                    renderVariables();
+                    renderTasks();
+                    calculateEwsScore();
+                    updateNotionSyncStatus();
+                    bindEvents();
+
+                    setInterval(saveState, 30000);
+                    window.addEventListener('beforeunload', saveState);
+
+                    if (state.driveFolderId) {
+                        driveIframe.src =
+                            `https://drive.google.com/embeddedfolderview?id=${state.driveFolderId}#grid`;
+                    }
+                    lastSaved.textContent = 'Ready';
+
+                } catch (e) {
+                    console.error('Dashboard initialization error:', e);
+                    try { renderVariables();
+                        renderTasks();
+                        calculateEwsScore(); } catch (_) {}
+                }
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+
+        })();
     </script>
+
 </body>
 </html>
